@@ -1,0 +1,13 @@
+body {
+  background-color: rgba(1,1,1,1);
+  background: url("mic_headphone.jpg") no-repeat right center fixed ; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  
+}
+
+.lookable_text {
+	/*color: orange;*/
+}

@@ -7,9 +7,60 @@
   <link rel="stylesheet" type="text/css" href="/static/style/all.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/bootstrap_core.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/form_validation.css" media="all" />
-
+  <link href="../static/style/grid.css" rel="stylesheet">
 
   <title>Home</title>
+
+  <style>
+  .circleicon {
+    position: relative;
+    width: 4rem;
+    height: 4rem;
+    background: white;
+    border: solid;
+    border-color: green;
+    border-radius: 50%;
+    right: -5%;
+    bottom: 2rem;
+  }
+
+  .circleicontext {
+    position: relative;
+    left: 30%;
+    bottom: -30%;
+    color: black;
+  }
+
+  .result-img {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .result-details {
+    padding-left: 5%;
+  }
+
+  .result-details-name {
+    font-weight: bold;
+  }
+
+  .result-details-author {
+    font-style:italic;
+    color: gray;
+    margin-top: 0rem;
+  }
+
+  .result-details-hr {
+    width: 50%;
+  }
+
+  .result-details-description {
+    height: inherit;
+    white-space: nowrap;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+  }
+  </style>
 </head>
 
 <body>
@@ -23,7 +74,7 @@
 
     <div class="col-md-8 order-md-1">
 <!--       <h4 class="mb-3">Billing address</h4>
- -->      <form class="needs-validation" novalidate="">
+ -->      <form class="needs-validation" novalidate="" method="GET">
 <!--         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="firstName">First name</label>
@@ -64,7 +115,7 @@
 
         <div class="mb-3">
           <label for="address">Podcast Name</label>
-          <input type="text" class="form-control" id="address" placeholder="Myths and Legends" required="">
+          <input type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
           <div class="invalid-feedback">
             Please enter a podcast name
           </div>
@@ -169,7 +220,42 @@
         <button class="btn btn-primary btn-lg btn-block" type="submit">Search for Podcast</button>
       </form>
     </div>
-
+    {% if data %}
+<hr />
+    <div class="py-5 text-center">
+      <h2>Recommended Podcasts</h2>
+      <p class="lead">Here are some podcasts that you might like.</p>
+    </div>
+    {% for d in data %} 
+      <div class="row mb-5">
+      <div class="circleicon" 
+        {% if d[7]|int < 30 %} style="border-color: red;" {% endif %}
+        {% if d[7]|int < 60 %} style="border-color: orange;" {% endif %}
+        {% if d[7]|int < 30 %} style="border-color: green;" {% endif %}
+      >
+        <div class="circleicontext">{{d[7]}}%</div>
+      </div>
+        <div class="result-img"><img class="result-img" src={{ "../static/style/" + d[0] }}/></div>
+        <div class="col-8 themed-grid-col">
+          <div class="row mb-0 result-details">
+            <span class="result-details-name"> {{d[1]}}</span>
+          </div>
+          <div class="row mb-1 result-details">
+            <span class="result-details-author"> {{d[2]}}</span>
+          </div>
+          <div class="row mb-3 result-details">
+            <span class="result-details-description"> {{d[3]}}</span>
+          </div>
+          <div class="row mb-2 result-details">
+            <span class="result-details-episode">Episodes: {{d[4]}}  |  Avg. Duration: {{d[5]}} min  |  Similarity: {{d[7]}}%</span>
+          </div>
+          <div class="row mb-2 result-details">
+            <span class="result-details-link">Listen Here: <a href={{d[6]}}>{{d[6]}}</a></span>
+          </div>
+        </div>
+      </div> 
+    {% endfor %}
+    {% endif %}
 
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <!-- <p class="mb-1">© 2017-2019 Company Name</p>
