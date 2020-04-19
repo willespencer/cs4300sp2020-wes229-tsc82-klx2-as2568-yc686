@@ -62,12 +62,8 @@
     margin-top: 0rem;
   }
 
-  .result-details-hr {
-    width: 50%;
-  }
 
   .result-details-description {
-    height: inherit;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -84,38 +80,38 @@
         <p class="lead">Please fill out the form below to find a podcast.</p>
       </div>
       <div class="col-md-8 order-md-1">
-      <form class="needs-validation" novalidate="" method="GET">
-        <div class="mb-3">
-          <label for="address">I Want to Find a Podcast Like</label>
-          <input type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
-          <div class="invalid-feedback">
-            Please enter a podcast name
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="country">Genre</label>
-            <select class="custom-select d-block w-100" id="country" required="">
-              <option value="">Choose...</option>
-              <option>Food</option>
-            </select>
+        <form class="needs-validation" novalidate="" method="GET">
+          <div class="mb-3">
+            <label for="address">I Want to Find a Podcast Like</label>
+            <input type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
             <div class="invalid-feedback">
-              Please select a valid genre.
+              Please enter a podcast name
             </div>
           </div>
-          <div class="col-md-6 mb-3">
-            <label for="state">Optimal Episode Duration</label>
-            <select class="custom-select d-block w-100" id="state" required="">
-              <option value="">Choose...</option>
-              <option>25 ~ 50 min</option>
-            </select>
-            <div class="invalid-feedback">
-              Please provide a valid duration.
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="country">Genre</label>
+              <select class="custom-select d-block w-100" id="country">
+                <option value="">Choose...</option>
+                <option>Food</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid genre.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="state">Optimal Episode Duration</label>
+              <select class="custom-select d-block w-100" id="state">
+                <option value="">Choose...</option>
+                <option>25 ~ 50 min</option>
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid duration.
+              </div>
             </div>
           </div>
-        </div>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Search for Podcast</button>
-      </form>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Search for Podcast</button>
+        </form>
     </div>
     {% if data %}
 <hr />
@@ -124,7 +120,7 @@
       <p class="lead">Here are some podcasts that you might like.</p>
     </div>
     {% for d in data %} 
-      <div class="row mb-5">
+    <div class="row mb-5">
       <div class="circleicon" 
         {% if d.similarity|int < 30 %} style="border-color: red;" {% endif %}
         {% if d.similarity|int < 60 %} style="border-color: orange;" {% endif %}
@@ -132,27 +128,27 @@
       >
         <div class="circleicontext">{{d.similarity}}%</div>
       </div>
-        <div class="result-img"><img class="result-img" src={{ "../static/style/" + d.pic }}/></div>
-        <div class="col-8 themed-grid-col">
-          <div class="row mb-0 result-details">
-            <span class="result-details-name"> {{d.name}}</span>
-          </div>
-          <div class="row mb-1 result-details">
-            <span class="result-details-author"> {{d.author}}</span>
-          </div>
-          <div class="row mb-3 result-details">
-            <span class="result-details-description"> {{d.description}}</span>
-          </div>
-          <div class="row mb-2 result-details">
-            <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  Similarity: {{d.similarity}}%</span>
-          </div>
-          <div class="row mb-2 result-details">
-            <span class="result-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
-          </div>
+      <div class="result-img"><img class="result-img" src={{ "../static/style/" + d.pic }}/></div>
+      <div class="col-8 themed-grid-col">
+        <div class="row mb-0 result-details">
+          <span class="result-details-name"> {{d.name}}</span>
         </div>
-      {% endfor %}
-      {% endif %}
-
+        <div class="row mb-1 result-details">
+          <span class="result-details-author"> {{d.author}}</span>
+        </div>
+        <div class="row mb-3 result-details">
+          <span class="result-details-description"> {{d.description}}</span>
+        </div>
+        <div class="row mb-2 result-details">
+          <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  Similarity: {{d.similarity}}%</span>
+        </div>
+        <div class="row mb-2 result-details">
+          <span class="result-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
     <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
     </footer> -->
     </div>
