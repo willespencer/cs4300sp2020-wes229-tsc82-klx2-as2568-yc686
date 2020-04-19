@@ -42,7 +42,7 @@ def search():
 		"similarities": [("Duration", "15"), ("No. Episodes", "10"), ("Description", "0")]
 	}]
 	data = [["myth.jpg", "Myths and Legends", "Anne", "Jason Weiser tells stories from myths, legends, and folklore that have shaped cultures throughout history. Some, like the stories of Aladdin, King Arthur, and Hercules are stories you think you know, but with surprising origins. Others are stories you might not have heard, but really should. All the stories are sourced from world folklore, but retold for modern ears. These are stories of wizards, knights, Vikings, dragons, princesses, and kings from the time when the world beyond the map was a dangerous and wonderful place.", "40", "20", "https://www.stitcher.com/podcast/jason-weiser/myths-and-legnen", "99"], ["coffee.jpg", "Coffee", "Joe", "A podcast about coffee.", "100", "15", "https://www.stitcher.com/podcast/studio71/coffee-talk-2", "5"]]
-	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list)
+	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, show_modal=False)
 
 @irsystem.route('/modal')
 def modal():

@@ -15,71 +15,224 @@
   <title>Home</title>
 
   <style>
-  .main {
-    background-color: rgba(0, 0, 0, .4);
-    color: white;
-    width: 100vw;
-    height: 100vh;
-    overflow: scroll;
-  }
+    .main {
+      background-color: rgba(0, 0, 0, .4);
+      color: white;
+      width: 100vw;
+      height: 100vh;
+      overflow: scroll;
+    }
 
-  .circleicon {
-    position: relative;
-    width: 4rem;
-    height: 4rem;
-    background: white;
-    border: solid;
-    border-color: green;
-    border-radius: 50%;
-    right: -5%;
-    bottom: 2rem;
-  }
+    .result-hr {
+      border-color: white;
+    }
 
-  .circleicontext {
-    position: relative;
-    left: 30%;
-    bottom: -30%;
-    color: black;
-  }
+    .circleicon {
+      position: relative;
+      width: 4rem;
+      height: 4rem;
+      background: white;
+      border: solid;
+      border-color: green;
+      border-radius: 50%;
+      right: -5%;
+      bottom: 2rem;
 
-  .result-box {
-    color: black;
-    background-color: rgba(255, 255, 255, .8);
-    border: 1px solid black;
-  }
+      text-align: center;
+      line-height: 4rem;
+      color:black;
+    }
 
-  .result-img {
-    width: 12rem;
-    height: 12rem;
-  }
+    .result-box {
+      color: black;
+      background-color: rgba(255, 255, 255, .8);
+      border: 1px solid black;
+    }
 
-  .result-details {
-    padding-left: 5%;
-    color: black;
-  }
+    .result-img {
+      width: 12rem;
+      height: 12rem;
+    }
 
-  .result-details-name {
-    font-weight: bold;
-  }
+    .result-details {
+      padding-left: 5%;
+      color: black;
+    }
 
-  .result-details-author {
-    font-style:italic;
-    color: gray;
-    margin-top: 0rem;
-  }
+    .result-details-name {
+      font-weight: bold;
+    }
+
+    .result-details-author {
+      font-style:italic;
+      color: gray;
+      margin-top: 0rem;
+    }
 
 
-  .result-details-description {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    .result-details-description {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+  <style>
+    .modal-content{
+      padding: 2%;
+      color: black;
+      
+
+      position: absolute;
+      width: 60%;
+      z-index: 1;
+      top: 5%;
+      right: 19%;
+    }
+    .modal-content-top {
+      display:flex;
+      flex-direction: row;
+    }
+    .modal-content-top-left-img {
+      width: 12rem;
+      height: 12rem;
+    }
+    .modal-content-top-right {
+      display: flex;
+      flex-direction: column;
+      padding-left: 2%;
+      justify-content: space-evenly;
+    }
+    .modal-details-name {
+      font-weight: bold;
+      font-size: larger;
+    }
+    .modal-details-author {
+      font-style:italic;
+      color: gray;
+      margin-top: 0rem;
+    }
+    .modal-content-hr {
+      width: 15%;
+    }
+    .modal-content-bottom {
+      display: flex;
+      flex-direction: column;
+      margin-top: 2%;
+      padding-left: 2%;
+      justify-content: space-evenly;
+    }
+    .modal-details-genres {
+      display: flex;
+      flex-direction: row;
+      margin-top: 2%;
+    }
+    .modal-details-genres-genre-wrapper {
+      display:flex;
+      flex-direction: row;
+      width: 30%;
+    }
+    .modal-details-genre {
+      width: fit-content;
+      border: solid;
+      border-color: lightgreen;
+      padding: 1%;
+      margin-left: 2%;
+    }
+    .modal-details-similarities {
+      display:flex;
+      flex-direction: column;
+      margin-top: 2%;
+    }
+    .modal-details-similarities-similarity-wrapper {
+      display:flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+    .modal-details-similarity-wrapper {
+      display:flex;
+      flex-direction: column;
+      text-align: center;
+    }
+    .modal-details-similarity-circle {
+      width: 4rem;
+      height: 4rem;
+      background: white;
+      border: solid;
+      border-color: green;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 4rem;
+    }
   </style>
 </head>
 
 <body>
   <div class="main">
     <div class="container">
+
+      {% if data and show_modal %}
+      {% for d in data[0:1] %} 
+      <div class="modal-content">
+        <div class="modal-content-top">
+          <div class="modal-content-top-left">
+            <img class="modal-content-top-left-img" src={{ "../static/style/" + d.pic }}/>
+          </div>
+          <div class="modal-content-top-right">
+            <div class="modal-content-top-right-details">
+              <span class="modal-details-name">{{d.name}}</span>
+            </div>
+            <div class="modal-content-top-right-details">
+              <span class="modal-details-author">{{d.author}}</span>
+            </div>
+            <div class="modal-content-top-right-details">
+              <span class="modal-details-episodes">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min</span>
+            </div>
+            <div class="modal-content-top-right-details">
+              <span class="modal-details-ratings">Similarity: {{d.similarity}}%  |  iTunes Rating: {{d.iTunes}}/5.0</span>
+            </div>
+            <div class="modal-content-top-right-details">
+              <span class="modal-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
+            </div>
+          </div>
+        </div>
+        <hr class="modal-content-hr" />
+        <div class="modal-content-bottom">
+          <div class="modal-details-description">Description: {{d.description}}</div>
+          {% if d.genres %}
+          <div class="modal-details-genres">
+            <div class="modal-details-genres-label">Genres: </div>
+            <div class="modal-details-genres-genre-wrapper">
+              {% for g in d.genres %}
+              <div class="modal-details-genre">{{g}}</div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          <div class="modal-details-similarities">
+            <div class="modal-details-similarities-label">Similarity Breakdown: </div>
+            <div class="modal-details-similarities-similarity-wrapper">
+              {% for s in d.similarities %}
+              <div class="modal-details-similarity-wrapper">
+                <div class="modal-details-similarity-circle" 
+                {% if s[1]|int < 30 %} style="border-color: red;" {% endif %}
+                {% if s[1]|int < 60 %} style="border-color: orange;" {% endif %}
+                {% if s[1]|int < 30 %} style="border-color: green;" {% endif %}
+                >
+                  <div class="modal-details-similarity-circle-text">{{s[1]}}%</div>
+                </div>
+                <div class="modal-details-similarity-label">{{s[0]}}</div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+    <!-- TODO: Figure out if we need content wrapper div-->
+      <div class="content-wrapper">
+
       <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1>Find the Pea to your Podcast</h1>
@@ -95,6 +248,7 @@
             </div>
           </div>
           <div class="py-3 text-center" id="advanced-search-button">Advanced Search (Genre, Episode Duration) Coming Soon</div>
+          <!-- TODO: Advanced search form -->
           <!-- <div class="row" id="advanced-search">
             <div class="col-md-6 mb-3">
               <label for="country">Genre</label>
@@ -121,7 +275,7 @@
         </form>
     </div>
     {% if data %}
-<hr />
+  <hr class="result-hr" />
     <div class="py-5 text-center">
       <h2>Recommended Podcasts</h2>
       <p class="lead">Here are some podcasts that you might like.</p>
@@ -156,6 +310,10 @@
     </div>
     {% endfor %}
     {% endif %}
+
+<!-- TODO: Figure out if we need content wrapper div-->
+  </div>
+
     <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
     </footer> -->
     </div>
