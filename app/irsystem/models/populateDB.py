@@ -18,10 +18,6 @@ with open('merged_podcasts.json') as json_data:
 
     table_name = "podcasts"
 
-values_str = ""
-
-# enumerate over the records' values
-records = record_dict.values()
 # nval_list = [[x] for x in range(len(list(records)[0]))]
 # for i, record in enumerate(records):
 
@@ -40,9 +36,9 @@ records = record_dict.values()
 # print(str(tuple(nval_list[0])))
 # # print("val_list: " + str(len(val_list)))
 
-# for row in val_list:
-#     values_str += str(tuple(row)) + ",\n"
 
+# enumerate over the records' values
+records = record_dict.values()
 val_list = [[] for x in range(len(records))]
 # enumerate over the records' values
 for i, record in enumerate(records):
@@ -58,19 +54,11 @@ for i, record in enumerate(records):
         val_list[i].append(str(val))
 
     # print("val_list: " + str(len(val_list[i])))
-
-
 # print(str(val_list[1]))
-
-
 # for i, val in enumerate(val_list):
 #     val_list[i] = tuple(val_list[i])
 
-# remove the last comma and end SQL with a semicolon
-values_str = values_str[:-2] + ";"
-
 try:
-    # declare a new PostgreSQL connection object
     conn = connect(
         dbname="pea_podcast",
         user="postgres",
@@ -88,17 +76,10 @@ except (Exception, Error) as err:
     conn = None
     cur = None
 
-# print(val_list[0])
-
 # only attempt to execute SQL if cursor is valid
 if cur != None:
 
     try:
-        # args_str = ','.join(map(bytes.decode,
-        #                         (cur.mogrify(
-        #                             "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", x)
-        #                             for x in tuple(val_list))))
-        # cur.execute("INSERT INTO podcasts VALUES " + args_str)
 
         for i in range(len(list(records)[0])):
             cur.execute(
