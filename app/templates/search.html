@@ -3,6 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
+  <script type="text/javascript" src="/static/scripts/jquery-3.4.1.slim.min.js"></script>
+  <script type="text/javascript" src="/static/scripts/bootstrap_core.js"></script>
+  <script type="text/javascript" src="/static/scripts/form-validation.js"></script>
   <!-- connecting html files to css files -->
   <link rel="stylesheet" type="text/css" href="/static/style/all.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/bootstrap_core.css" media="all" />
@@ -15,6 +18,9 @@
   .main {
     background-color: rgba(0, 0, 0, .4);
     color: white;
+    width: 100vw;
+    height: 100vh;
+    overflow: scroll;
   }
 
   .circleicon {
@@ -76,7 +82,7 @@
     <div class="container">
       <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h2>Find the Pea to your Podcast</h2>
+        <h1>Find the Pea to your Podcast</h1>
         <p class="lead">Please fill out the form below to find a podcast.</p>
       </div>
       <div class="col-md-8 order-md-1">
@@ -88,7 +94,8 @@
               Please enter a podcast name
             </div>
           </div>
-          <div class="row">
+          <div class="py-3 text-center" id="advanced-search-button">Advanced Search (Genre, Episode Duration) Coming Soon</div>
+          <!-- <div class="row" id="advanced-search">
             <div class="col-md-6 mb-3">
               <label for="country">Genre</label>
               <select class="custom-select d-block w-100" id="country">
@@ -109,7 +116,7 @@
                 Please provide a valid duration.
               </div>
             </div>
-          </div>
+          </div> -->
           <button class="btn btn-primary btn-lg btn-block" type="submit">Search for Podcast</button>
         </form>
     </div>
@@ -153,9 +160,6 @@
     </footer> -->
     </div>
   </div>
-<script type="text/javascript" src="/static/scripts/jquery-3.4.1.slim.min.js"></script>
-<script type="text/javascript" src="/static/scripts/bootstrap_core.js"></script>
-<script type="text/javascript" src="/static/scripts/form-validation.js"></script>
 </body>
 
 </html>
