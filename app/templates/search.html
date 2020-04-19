@@ -57,7 +57,7 @@
   .result-details-description {
     height: inherit;
     white-space: nowrap;
-    overflow-y: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
   </style>
@@ -114,7 +114,7 @@
         </div> -->
 
         <div class="mb-3">
-          <label for="address">Podcast Name</label>
+          <label for="address">I Want to Find a Podcast Like</label>
           <input type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
           <div class="invalid-feedback">
             Please enter a podcast name
@@ -229,28 +229,28 @@
     {% for d in data %} 
       <div class="row mb-5">
       <div class="circleicon" 
-        {% if d[7]|int < 30 %} style="border-color: red;" {% endif %}
-        {% if d[7]|int < 60 %} style="border-color: orange;" {% endif %}
-        {% if d[7]|int < 30 %} style="border-color: green;" {% endif %}
+        {% if d.similarity|int < 30 %} style="border-color: red;" {% endif %}
+        {% if d.similarity|int < 60 %} style="border-color: orange;" {% endif %}
+        {% if d.similarity|int < 30 %} style="border-color: green;" {% endif %}
       >
-        <div class="circleicontext">{{d[7]}}%</div>
+        <div class="circleicontext">{{d.similarity}}%</div>
       </div>
-        <div class="result-img"><img class="result-img" src={{ "../static/style/" + d[0] }}/></div>
+        <div class="result-img"><img class="result-img" src={{ "../static/style/" + d.pic }}/></div>
         <div class="col-8 themed-grid-col">
           <div class="row mb-0 result-details">
-            <span class="result-details-name"> {{d[1]}}</span>
+            <span class="result-details-name"> {{d.name}}</span>
           </div>
           <div class="row mb-1 result-details">
-            <span class="result-details-author"> {{d[2]}}</span>
+            <span class="result-details-author"> {{d.author}}</span>
           </div>
           <div class="row mb-3 result-details">
-            <span class="result-details-description"> {{d[3]}}</span>
+            <span class="result-details-description"> {{d.description}}</span>
           </div>
           <div class="row mb-2 result-details">
-            <span class="result-details-episode">Episodes: {{d[4]}}  |  Avg. Duration: {{d[5]}} min  |  Similarity: {{d[7]}}%</span>
+            <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  Similarity: {{d.similarity}}%</span>
           </div>
           <div class="row mb-2 result-details">
-            <span class="result-details-link">Listen Here: <a href={{d[6]}}>{{d[6]}}</a></span>
+            <span class="result-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
           </div>
         </div>
       </div> 

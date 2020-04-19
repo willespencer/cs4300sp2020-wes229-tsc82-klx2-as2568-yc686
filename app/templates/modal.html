@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- connecting html files to css files -->
+  <link rel="stylesheet" type="text/css" href="/static/style/all.css" media="all" />
+  <link rel="stylesheet" type="text/css" href="/static/style/bootstrap_core.css" media="all" />
+  <link rel="stylesheet" type="text/css" href="/static/style/form_validation.css" media="all" />
+  <link href="../static/style/grid.css" rel="stylesheet">
+
+  <title>Modal</title>
+
+  <style>
+    .container {
+      margin-top:10%;
+    }
+    .modal-content{
+      padding: 2%;
+    }
+    .modal-content-top {
+      display:flex;
+      flex-direction: row;
+    }
+    .modal-content-top-left-img {
+      width: 12rem;
+      height: 12rem;
+    }
+    .modal-content-top-right {
+      display: flex;
+      flex-direction: column;
+      padding-left: 2%;
+      justify-content: space-evenly;
+    }
+    .modal-details-name {
+      font-weight: bold;
+      font-size: large;
+    }
+    .modal-details-author {
+      font-style:italic;
+      color: gray;
+      margin-top: 0rem;
+    }
+    .modal-content-hr {
+      width: 15%;
+    }
+    .modal-content-bottom {
+      display: flex;
+      flex-direction: column;
+      margin-top: 2%;
+      padding-left: 2%;
+      justify-content: space-evenly;
+    }
+    .modal-details-genres {
+      display: flex;
+      flex-direction: row;
+      margin-top: 2%;
+    }
+    .modal-details-genres-genre-wrapper {
+      display:flex;
+      flex-direction: row;
+      width: 30%;
+    }
+    .modal-details-genre {
+      width: fit-content;
+      border: solid;
+      border-color: lightgreen;
+      padding: 1%;
+      margin-left: 2%;
+    }
+    .modal-details-similarities {
+      display:flex;
+      flex-direction: column;
+      margin-top: 2%;
+    }
+    .modal-details-similarities-similarity-wrapper {
+      display:flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+    .modal-details-similarity-wrapper {
+      display:flex;
+      flex-direction: column;
+      text-align: center;
+    }
+    .modal-details-similarity-circle {
+      width: 4rem;
+      height: 4rem;
+      background: white;
+      border: solid;
+      border-color: green;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 4rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="modal-content">
+      <div class="modal-content-top">
+        <div class="modal-content-top-left">
+          <img class="modal-content-top-left-img" src={{ "../static/style/" + data.pic }}/>
+        </div>
+        <div class="modal-content-top-right">
+          <div class="modal-content-top-right-details">
+            <span class="modal-details-name">{{data.name}}</span>
+          </div>
+          <div class="modal-content-top-right-details">
+            <span class="modal-details-author">{{data.author}}</span>
+          </div>
+          <div class="modal-content-top-right-details">
+            <span class="modal-details-episodes">Episodes: {{data.episode_count}}  |  Avg. Duration: {{data.avg_episode_duration}} min</span>
+          </div>
+          <div class="modal-content-top-right-details">
+            <span class="modal-details-ratings">Similarity: {{data.similarity}}%  |  iTunes Rating: {{data.iTunes}}/5.0</span>
+          </div>
+          <div class="modal-content-top-right-details">
+            <span class="modal-details-link">Listen Here: <a href={{data.link}}>{{data.link}}</a></span>
+          </div>
+        </div>
+      </div>
+      <hr class="modal-content-hr" />
+      <div class="modal-content-bottom">
+        <div class="modal-details-description">Description: {{data.description}}</div>
+        {% if data.genres %}
+        <div class="modal-details-genres">
+          <div class="modal-details-genres-label">Genres: </div>
+          <div class="modal-details-genres-genre-wrapper">
+            {% for g in data.genres %}
+            <div class="modal-details-genre">{{g}}</div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        <div class="modal-details-similarities">
+          <div class="modal-details-similarities-label">Similarity Breakdown: </div>
+          <div class="modal-details-similarities-similarity-wrapper">
+            {% for s in data.similarities %}
+            <div class="modal-details-similarity-wrapper">
+              <div class="modal-details-similarity-circle" 
+              {% if s[1]|int < 30 %} style="border-color: red;" {% endif %}
+              {% if s[1]|int < 60 %} style="border-color: orange;" {% endif %}
+              {% if s[1]|int < 30 %} style="border-color: green;" {% endif %}
+              >
+                <div class="modal-details-similarity-circle-text">{{s[1]}}%</div>
+              </div>
+              <div class="modal-details-similarity-label">{{s[0]}}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="container">
+    <div class="row mb-5">
+      <div class="row mb-0">
+        <div class="col-1 themed-grid-col modal-img-wrapper"><img class="modal-img" src={{ "../static/style/" + data.pic }}/></div>
+        <div class="col-2 themed-grid-col">
+          <div class="row mb-0 modal-details">
+            <span class="modal-details-name"> {{data.name}}</span>
+          </div>
+          <div class="row mb-1 modal-details">
+            <span class="modal-details-author"> {{data.author}}</span>
+          </div>
+          <div class="row mb-3 modal-details">
+            <span class="modal-details-description"> {{data.description}}</span>
+          </div>
+          <div class="row mb-2 modal-details">
+            <span class="modal-details-episode">Episodes: {{data.episode_count}}  |  Avg. Duration: {{data.avg_episode_duration}} min  |  Similarity: {{data.similarity}}%</span>
+          </div>
+          <div class="row mb-2 modal-details">
+            <span class="modal-details-link">Listen Here: <a href={{data.link}}>{{data.link}}</a></span>
+          </div>
+        </div>
+      </div> 
+      <div class="row mb-5 modal-description">
+        <div class="col-3 themed-grid-col">
+          <div class="row mb-0 modal-details">
+            <span class="modal-details-name"> {{data.name}}</span>
+          </div>
+          <div class="row mb-1 modal-details">
+            <span class="modal-details-author"> {{data.author}}</span>
+          </div>
+          <div class="row mb-3 modal-details">
+            <span class="modal-details-description"> {{data.description}}</span>
+          </div>
+          <div class="row mb-2 modal-details">
+            <span class="modal-details-episode">Episodes: {{data.episode_count}}  |  Avg. Duration: {{data.avg_episode_duration}} min  |  Similarity: {{data.similarity}}%</span>
+          </div>
+          <div class="row mb-2 modal-details">
+            <span class="modal-details-link">Listen Here: <a href={{data.link}}>{{data.link}}</a></span>
+          </div>
+        </div>
+      </div> 
+    </div>
+</div> -->
+<script type="text/javascript" src="/static/scripts/jquery-3.4.1.slim.min.js"></script>
+<script type="text/javascript" src="/static/scripts/bootstrap_core.js"></script>
+<script type="text/javascript" src="/static/scripts/form-validation.js"></script>
+</body>
+
+</html>
+
+
+<!-- Example template -->
+<!-- <html>
+    <head>
+        <link rel="stylesheet" href="/static/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/main.css">
+    </head>
+    <body>
+        <div class="topcorner">
+            <p>Project Name: {{ name }}</p>
+            <p>Student Name: ({{ netid }})</p>
+        </div>
+        <form class="form-inline global-search">
+            <h1 style="font-size: 55px; font-family:Futura; color: #4285F4">
+                C
+                <span style="color: #EA4335; ">S</span>
+                <span style="color: #FBBC05; ">4</span>
+                3
+                <span style="color: #34A853; ">0</span>
+                <span style="color: #EA4335; ">0</span>
+            </h1>
+            
+            <br><br>
+            
+            <div class="form-group">
+                <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
+            </div>
+            <button type="submit" class="btn btn-info"> Go! </button>
+        </form>
+        <form class="form-inline global-search">
+        {% if data %}
+            <h1>{{output_message}}</h1>
+            {% for d in data %}  
+                <br>
+                <p>{{d}}</p>
+            {% endfor %}
+        {% endif %}
+        </form>
+    </body>
+
+</html> -->
