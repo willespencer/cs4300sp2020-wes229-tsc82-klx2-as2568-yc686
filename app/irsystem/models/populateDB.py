@@ -1,52 +1,12 @@
 import json
+import csv
 import sys
 import datetime
+import psycopg2
+from psycopg2 import connect, Error
 
-
-with open('../../../data/merged_podcasts.json') as json_data:
-
-    record_dict = json.load(json_data)
-    table_name = "podcasts"
-
-# nval_list = [[x] for x in range(len(list(records)[0]))]
-# for i, record in enumerate(records):
-
-#     for v, key in enumerate(record):
-#         val = record[key]
-#         if type(val) == list:
-#             val = ';'.join(map(str, val))
-#             val = str(val).replace('"', '')
-#         if type(val) == str:
-#             if ("http:" not in str(val)):
-#                 val = str(val).replace('"', '\'')
-#                 val = str(val).replace('\'', '')
-#             val = str(val)
-#         nval_list[v].append(val)
-
-# print(str(tuple(nval_list[0])))
-# # print("val_list: " + str(len(val_list)))
-
-
-# enumerate over the records' values
-records = record_dict.values()
-val_list = [[] for x in range(len(records))]
-# enumerate over the records' values
-for i, record in enumerate(records):
-
-    # append each value to a new list of values
-    for v, key in enumerate(record):
-        val = record[key]
-        if type(val) == list:
-            val = ';'.join(map(str, val))
-            val = str(val).replace('"', '')
-        elif type(val) == str:
-            val = str((val)).replace('"', '')
-        val_list[i].append(str(val))
-
-    # print("val_list: " + str(len(val_list[i])))
-# print(str(val_list[1]))
-# for i, val in enumerate(val_list):
-#     val_list[i] = tuple(val_list[i])
+update_podcasts = False
+update_reviews = True
 
 try:
     conn = connect(
@@ -69,21 +29,62 @@ except (Exception, Error) as err:
 # only attempt to execute SQL if cursor is valid
 if cur != None:
 
-    try:
+    if update_podcasts:
 
-        for i in range(len(list(records)[0])):
-            cur.execute(
-                """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                (i, datetime.datetime.now(), datetime.datetime.now(),
-                 val_list[5][i], val_list[4][i], val_list[12][i],  val_list[7][i],  val_list[8][i],  val_list[3][i],  val_list[6][i],
-                 val_list[9][i], val_list[0][i], val_list[11][i], val_list[2][i], val_list[1][i], val_list[10][i]))
-        conn.commit()
+        with open('data/merged_podcasts.json') as json_data:
+            record_dict = json.load(json_data)
+            table_name = "podcasts"
 
-        print('\nfinished INSERT INTO execution')
+        # enumerate over the records' values
+        records = record_dict.values()
+        val_list = [[] for x in range(len(records))]
+        # enumerate over the records' values
+        for i, record in enumerate(records):
 
-    except (Exception, Error) as error:
-        print("\nexecute_sql() error:", error)
-        conn.rollback()
+            # append each value to a new list of values
+            for v, key in enumerate(record):
+                val = record[key]
+                if type(val) == list:
+                    val = ';'.join(map(str, val))
+                    val = str(val).replace('"', '')
+                elif type(val) == str:
+                    val = str((val)).replace('"', '')
+                val_list[i].append(str(val))
+
+        try:
+            for i in range(len(list(records)[0])):
+                cur.execute(
+                    """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                    (i, datetime.datetime.now(), datetime.datetime.now(),
+                     val_list[5][i], val_list[4][i], val_list[12][i],  val_list[7][i],  val_list[8][i],  val_list[3][i],  val_list[6][i],
+                     val_list[9][i], val_list[0][i], val_list[11][i], val_list[2][i], val_list[1][i], val_list[10][i]))
+            conn.commit()
+
+            print('\nfinished INSERT INTO execution')
+
+        except (Exception, Error) as error:
+            print("\nexecute_sql() error:", error)
+            conn.rollback()
+
+    if update_reviews:
+        with open('data/reviews.csv', newline='') as f:
+            reader = csv.reader(f)
+            next(reader)  # Skip the header row.
+
+            try:
+                for row in reader:
+                    # each row is a list
+                    cur.execute(
+                        """INSERT INTO reviews VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                        (row[0], datetime.datetime.now(), datetime.datetime.now(), row[1], row[2], row[3], row[4]))
+
+                conn.commit()
+
+                print('\nfinished INSERT INTO execution')
+
+            except (Exception, Error) as error:
+                print("\nexecute_sql() error:", error)
+                conn.rollback()
 
     # close the cursor and connection
     cur.close()
