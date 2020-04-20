@@ -10,6 +10,7 @@ class Reviews(Base):
     review_text = db.Column(db.String, nullable=False)
 
     def __init__(self, **kwargs):
+        super(Reviews, self).__init__(**kwargs)
         self.pod_name = kwargs.get('pod_name', None)
         self.review_name = kwargs.get('review_name', None)
         self.review_rating = kwargs.get('review_rating', None)

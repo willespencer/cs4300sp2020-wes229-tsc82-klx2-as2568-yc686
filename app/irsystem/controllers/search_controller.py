@@ -11,10 +11,17 @@ net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Ch
 @irsystem.route('/', methods=['GET'])
 def search():
 	query = request.args.get('podcast_search')
+	print(query)
+
 	if not query:
 		data_dict_list = []
 	else:
 		result = Podcasts.query.filter_by(name = 'Fresh Air').first()
+		podcast_info = Podcasts.query.filter_by(name=query).first_or_404()
+		all_podcasts = Podcasts.query.all()
+		print(all_podcasts)
+		
+		review_info = Reviews.query.filter_by(name=query).first_or_404()
 		output_message = "Your search: " + query
 		data = range(5)
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=data)
@@ -44,3 +51,4 @@ def search():
 	# 	"similarities": [("Duration", "15"), ("No. Episodes", "10"), ("Description", "0")]
 	# }]
 	# return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, show_modal=False)
+
