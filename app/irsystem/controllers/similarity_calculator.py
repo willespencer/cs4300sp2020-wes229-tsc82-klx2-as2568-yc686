@@ -24,26 +24,29 @@ def tokenize(text):
     # YOUR CODE HERE
     return re.findall("[A-Za-z]+", text.lower())
 
-def bool_and_sim_score(query, podcast_description):
+def bool_and_sim_score(query, podcast_dict):
     """Returns a float giving the boolean and similarity of 
     """
     # YOUR CODE HERE
     query_set = set(tokenize(query))
-    podcast_description_set = set(tokenize(podcast_description))
-    return len(query_set & podcast_description_set)
+    podcast_description_set = set(tokenize(podcast_dict["description"]))
+    score = len(query_set & podcast_description_set)
+    podcast_dict["similarities"] = [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", score)]
+    podcast_dict["similarity"] = score
+    return score
 
 def get_ranked_podcast(query, podcast_lst):
     # podcast_title_lst is a list of dictionaries, and each dictionary represents a podcast
     # Returns a tuple of (score, podcast_data), so it will be an (int, dict) type
-    description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
-    score_lst = list(map(lambda x: (bool_and_sim_score(query, x[0]), x[1]), description_lst))
+    # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
+    score_lst = list(map(lambda x: (bool_and_sim_score(query, x), x), podcast_lst))
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
-    return sorted_lst[:20]
-
+    ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
+    return ranked_podcast_lst[:20]
 
 def main():
     print("The following is the score...")
-    print(get_ranked_podcast("Hello this is a test", [{"description": "Hello"}, {"description": "Hello a test."}, {"description": "Hello a"}]))
+    print(get_ranked_podcast("Hello this is a test", [{"description": "Hello", "similarities": []}, {"description": "Hello a test.", "similarities": []}, {"description": "Hello a", "similarities": []}]))
 
 main()
 # def get_top_rankings(query, )
