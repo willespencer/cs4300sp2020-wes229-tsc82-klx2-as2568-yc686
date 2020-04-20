@@ -42,7 +42,7 @@ def get_ranked_podcast(query, podcast_lst):
     score_lst = list(map(lambda x: (bool_and_sim_score(query, x), x), podcast_lst))
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
-    return ranked_podcast_lst[:2]
+    return ranked_podcast_lst[:20]
 
 def main():
     print("The following is the score...")
