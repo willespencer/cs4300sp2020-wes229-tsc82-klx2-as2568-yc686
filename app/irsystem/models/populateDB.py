@@ -5,8 +5,8 @@ import datetime
 import psycopg2
 from psycopg2 import connect, Error
 
-update_podcasts = False
-update_reviews = True
+update_podcasts = True
+update_reviews = False
 
 try:
     conn = connect(
@@ -45,8 +45,14 @@ if cur != None:
             for v, key in enumerate(record):
                 val = record[key]
                 if type(val) == list:
-                    val = ';'.join(map(str, val))
-                    val = str(val).replace('"', '')
+                    avg_ep_dur = 0
+                    if type(val[0]) == float or type(val[0]) == int:
+                        sum_ep_dur = sum(val)
+                        avg_ep_dur = sum_ep_dur / len(val)
+                        val = avg_ep_dur
+                    else:
+                        val = ';'.join(map(str, val))
+                        val = str(val).replace('"', '')
                 elif type(val) == str:
                     val = str((val)).replace('"', '')
                 val_list[i].append(str(val))
@@ -54,10 +60,10 @@ if cur != None:
         try:
             for i in range(len(list(records)[0])):
                 cur.execute(
-                    """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                    """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                     (i, datetime.datetime.now(), datetime.datetime.now(),
-                     val_list[5][i], val_list[4][i], val_list[12][i],  val_list[7][i],  val_list[8][i],  val_list[3][i],  val_list[6][i],
-                     val_list[9][i], val_list[0][i], val_list[11][i], val_list[2][i], val_list[1][i], val_list[10][i]))
+                     val_list[0][i], val_list[1][i], val_list[2][i],  val_list[3][i],  val_list[4][i],  val_list[5][i],  val_list[6][i],
+                     val_list[7][i], val_list[8][i], val_list[9][i], val_list[10][i]))
             conn.commit()
 
             print('\nfinished INSERT INTO execution')
