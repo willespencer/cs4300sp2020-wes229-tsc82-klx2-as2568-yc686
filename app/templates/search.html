@@ -12,6 +12,119 @@
   <link rel="stylesheet" type="text/css" href="/static/style/form_validation.css" media="all" />
   <link href="../static/style/grid.css" rel="stylesheet">
 
+  <script>
+    let podcastTitles = ["Theresa Podcast", "Test Podcast", "Totally Cool Podcast", "Will Podcast"];
+    function submitPodcast() {
+      inputTitle = document.getElementById("podcastInput").value
+      if(!podcastTitles.includes(inputTitle)) {
+        document.getElementById("errorMessage").style.display = "block";
+      } else {
+        // TODO: search if the title is valid!
+        document.getElementById("errorMessage").style.display = "none";
+      }
+    }
+
+    function autocomplete(inp, arr) {
+      /*the autocomplete function takes two arguments,
+      the text field element and an array of possible autocompleted values:*/
+      var currentFocus;
+      /*execute a function when someone writes in the text field:*/
+      inp.addEventListener("input", function(e) {
+          var a, b, i, val = this.value;
+          /*close any already open lists of autocompleted values*/
+          closeAllLists();
+          if (!val) { return false;}
+          currentFocus = -1;
+          /*create a DIV element that will contain the items (values):*/
+          a = document.createElement("DIV");
+          a.setAttribute("id", this.id + "autocomplete-list");
+          a.setAttribute("class", "autocomplete-items");
+          /*append the DIV element as a child of the autocomplete container:*/
+          this.parentNode.appendChild(a);
+          /*for each item in the array...*/
+          for (i = 0; i < arr.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+              /*create a DIV element for each matching element:*/
+              b = document.createElement("DIV");
+              /*make the matching letters bold:*/
+              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+              b.innerHTML += arr[i].substr(val.length);
+              /*insert a input field that will hold the current array item's value:*/
+              b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+              /*execute a function when someone clicks on the item value (DIV element):*/
+                  b.addEventListener("click", function(e) {
+                  /*insert the value for the autocomplete text field:*/
+                  inp.value = this.getElementsByTagName("input")[0].value;
+                  /*close the list of autocompleted values,
+                  (or any other open lists of autocompleted values:*/
+                  closeAllLists();
+              });
+              a.appendChild(b);
+            }
+          }
+      });
+      /*execute a function presses a key on the keyboard:*/
+      inp.addEventListener("keydown", function(e) {
+          var x = document.getElementById(this.id + "autocomplete-list");
+          if (x) x = x.getElementsByTagName("div");
+          if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+            decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+              /*and simulate a click on the "active" item:*/
+              if (x) x[currentFocus].click();
+            }
+          }
+      });
+      function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+      }
+      function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+      function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            x[i].parentNode.removeChild(x[i]);
+          }
+        }
+      }
+      /*execute a function when someone clicks in the document:*/
+      document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+      });
+    }
+    window.addEventListener('load', function () {
+      autocomplete(document.getElementById("podcastInput"), podcastTitles);
+    })
+  </script>
+
   <title>Home</title>
 
   <style>
@@ -81,7 +194,7 @@
     .modal-content{
       padding: 2%;
       color: black;
-      
+
 
       position: absolute;
       width: 60%;
@@ -164,6 +277,48 @@
       text-align: center;
       line-height: 4rem;
     }
+    .invalid-feedback {
+      color: #a53545;
+      font-weight: 700;
+    }
+    .inputWrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    .autocomplete {
+      /*the container must be positioned relative:*/
+      position: relative;
+      display: inline-block;
+    }
+    input[type=submit] {
+      background-color: DodgerBlue;
+    }
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
+      color: black;
+    }
+    .autocomplete-items div:hover {
+      /*when hovering an item:*/
+      background-color: #e9e9e9;
+    }
+    .autocomplete-active {
+      /*when navigating through the items using the arrow keys:*/
+      background-color: #e9e9e9 !important;
+    }
   </style>
 </head>
 
@@ -172,7 +327,7 @@
     <div class="container">
 
       {% if data and show_modal %}
-      {% for d in data[0:1] %} 
+      {% for d in data[0:1] %}
       <div class="modal-content">
         <div class="modal-content-top">
           <div class="modal-content-top-left">
@@ -219,7 +374,7 @@
             <div class="modal-details-similarities-similarity-wrapper">
               {% for s in d.similarities %}
               <div class="modal-details-similarity-wrapper">
-                <div class="modal-details-similarity-circle" 
+                <div class="modal-details-similarity-circle"
                 {% if s[1]|int < 30 %} style="border-color: red;" {% endif %}
                 {% if s[1]|int < 60 %} style="border-color: orange;" {% endif %}
                 {% if s[1]|int < 30 %} style="border-color: green;" {% endif %}
@@ -245,12 +400,14 @@
         <p class="lead">Please fill out the form below to find a podcast.</p>
       </div>
       <div class="col-md-8 order-md-1">
-        <form class="needs-validation" novalidate="" method="GET">
-          <div class="mb-3">
+        <!-- <form class="needs-validation" novalidate="" method="GET"> -->
+          <div class="mb-3 inputWrapper">
             <label for="address">I Want to Find a Podcast Like</label>
-            <input type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
-            <div class="invalid-feedback">
-              Please enter a podcast name
+            <div class="autocomplete">
+              <input id="podcastInput" type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
+            </div>
+            <div id="errorMessage" class="invalid-feedback">
+              Please enter a valid podcast name
             </div>
           </div>
           <div class="py-3 text-center" id="advanced-search-button">Advanced Search (Genre, Episode Duration) Coming Soon</div>
@@ -277,8 +434,8 @@
               </div>
             </div>
           </div> -->
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Search for Podcast</button>
-        </form>
+          <button class="btn btn-primary btn-lg btn-block" onclick="submitPodcast()">Search for Podcast</button>
+        <!-- </form> -->
     </div>
     {% if data %}
   <hr class="result-hr" />
@@ -286,9 +443,9 @@
       <h2>Recommended Podcasts</h2>
       <p class="lead">Here are some podcasts that you might like.</p>
     </div>
-    {% for d in data %} 
+    {% for d in data %}
     <div class="row mb-5">
-      <div class="circleicon" 
+      <div class="circleicon"
         {% if d.similarity|int < 30 %} style="border-color: red;" {% endif %}
         {% if d.similarity|int < 60 %} style="border-color: orange;" {% endif %}
         {% if d.similarity|int < 30 %} style="border-color: green;" {% endif %}
