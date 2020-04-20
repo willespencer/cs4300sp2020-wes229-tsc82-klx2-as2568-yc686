@@ -61,6 +61,7 @@
 
     .result-details-name {
       font-weight: bold;
+      font-size: larger;
     }
 
     .result-details-author {
@@ -175,15 +176,20 @@
       <div class="modal-content">
         <div class="modal-content-top">
           <div class="modal-content-top-left">
+            {% if d.pic == "placeholder.jpg" %}
             <img class="modal-content-top-left-img" src={{ "../static/style/" + d.pic }}/>
+            {% endif %}
+            {% if d.pic != "placeholder.jpg" %}
+            <img class="modal-content-top-left-img" src={{ d.pic }}/>
+            {% endif %}
           </div>
           <div class="modal-content-top-right">
             <div class="modal-content-top-right-details">
               <span class="modal-details-name">{{d.name}}</span>
             </div>
-            <div class="modal-content-top-right-details">
+            <!-- <div class="modal-content-top-right-details">
               <span class="modal-details-author">{{d.author}}</span>
-            </div>
+            </div> -->
             <div class="modal-content-top-right-details">
               <span class="modal-details-episodes">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min</span>
             </div>
@@ -289,14 +295,19 @@
       >
         <div class="circleicontext">{{d.similarity}}%</div>
       </div>
+      {% if d.pic == "placeholder.jpg" %}
       <div class="result-img"><img class="result-img" src={{ "../static/style/" + d.pic }}/></div>
+      {% endif %}
+      {% if d.pic != "placeholder.jpg" %}
+      <div class="result-img"><img class="result-img" src={{ d.pic }}/></div>
+      {% endif %}
       <div class="col-8 themed-grid-col">
-        <div class="row mb-0 result-details">
+        <div class="row mb-1 result-details">
           <span class="result-details-name"> {{d.name}}</span>
         </div>
-        <div class="row mb-1 result-details">
+        <!-- <div class="row mb-1 result-details">
           <span class="result-details-author"> {{d.author}}</span>
-        </div>
+        </div> -->
         <div class="row mb-3 result-details">
           <span class="result-details-description"> {{d.description}}</span>
         </div>
@@ -314,8 +325,9 @@
 <!-- TODO: Figure out if we need content wrapper div-->
   </div>
 
-    <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
-    </footer> -->
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+    </footer>
     </div>
   </div>
 </body>
