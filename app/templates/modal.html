@@ -1,0 +1,60 @@
+<div class="modal-content">
+  <div class="modal-content-top">
+    <div class="modal-content-top-left">
+      {% if d.pic == "placeholder.jpg" %}
+      <img class="modal-content-top-left-img" src={{ "../static/style/" + d.pic }}/>
+      {% endif %}
+      {% if d.pic != "placeholder.jpg" %}
+      <img class="modal-content-top-left-img" src={{ d.pic }}/>
+      {% endif %}
+    </div>
+    <div class="modal-content-top-right">
+      <div class="modal-content-top-right-details">
+        <span class="modal-details-name">{{d.name}}</span>
+      </div>
+      <!-- <div class="modal-content-top-right-details">
+        <span class="modal-details-author">{{d.author}}</span>
+      </div> -->
+      <div class="modal-content-top-right-details">
+        <span class="modal-details-episodes">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min</span>
+      </div>
+      <div class="modal-content-top-right-details">
+        <span class="modal-details-ratings">Similarity: {{d.similarity}}%  |  iTunes Rating: {{d.iTunes}}/5.0</span>
+      </div>
+      <div class="modal-content-top-right-details">
+        <span class="modal-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
+      </div>
+    </div>
+  </div>
+  <hr class="modal-content-hr" />
+  <div class="modal-content-bottom">
+    <div class="modal-details-description">Description: {{d.description}}</div>
+    {% if d.genres %}
+    <div class="modal-details-genres">
+      <div class="modal-details-genres-label">Genres: </div>
+      <div class="modal-details-genres-genre-wrapper">
+        {% for g in d.genres %}
+        <div class="modal-details-genre">{{g}}</div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="modal-details-similarities">
+      <div class="modal-details-similarities-label">Similarity Breakdown: </div>
+      <div class="modal-details-similarities-similarity-wrapper">
+        {% for s in d.similarities %}
+        <div class="modal-details-similarity-wrapper">
+          <div class="modal-details-similarity-circle"
+          {% if s[1]|int < 30 %} style="border-color: red;" {% endif %}
+          {% if s[1]|int < 60 %} style="border-color: orange;" {% endif %}
+          {% if s[1]|int < 30 %} style="border-color: green;" {% endif %}
+          >
+            <div class="modal-details-similarity-circle-text">{{s[1]}}%</div>
+          </div>
+          <div class="modal-details-similarity-label">{{s[0]}}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

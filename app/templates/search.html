@@ -3,186 +3,396 @@
 
 <head>
   <meta charset="UTF-8">
+  <script type="text/javascript" src="/static/scripts/jquery-3.4.1.slim.min.js"></script>
+  <script type="text/javascript" src="/static/scripts/bootstrap_core.js"></script>
+  <script type="text/javascript" src="/static/scripts/form-validation.js"></script>
   <!-- connecting html files to css files -->
   <link rel="stylesheet" type="text/css" href="/static/style/all.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/bootstrap_core.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/form_validation.css" media="all" />
+  <link href="../static/style/grid.css" rel="stylesheet">
 
+  <script>
+    let podcastTitles = ["Theresa Podcast", "Test Podcast", "Totally Cool Podcast", "Will Podcast"];
+    function submitPodcast() {
+      inputTitle = document.getElementById("podcastInput").value
+      if(!podcastTitles.includes(inputTitle)) {
+        document.getElementById("errorMessage").style.display = "block";
+        document.getElementById("podcastInput").value = '';
+      } else {
+        // TODO: search if the title is valid!
+        document.getElementById("errorMessage").style.display = "none";
+      }
+    }
+
+    function autocomplete(inp, arr) {
+      /*the autocomplete function takes two arguments,
+      the text field element and an array of possible autocompleted values:*/
+      var currentFocus;
+      /*execute a function when someone writes in the text field:*/
+      inp.addEventListener("input", function(e) {
+          var a, b, i, val = this.value;
+          /*close any already open lists of autocompleted values*/
+          closeAllLists();
+          if (!val) { return false;}
+          currentFocus = -1;
+          /*create a DIV element that will contain the items (values):*/
+          a = document.createElement("DIV");
+          a.setAttribute("id", this.id + "autocomplete-list");
+          a.setAttribute("class", "autocomplete-items");
+          /*append the DIV element as a child of the autocomplete container:*/
+          this.parentNode.appendChild(a);
+          /*for each item in the array...*/
+          for (i = 0; i < arr.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+              /*create a DIV element for each matching element:*/
+              b = document.createElement("DIV");
+              /*make the matching letters bold:*/
+              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+              b.innerHTML += arr[i].substr(val.length);
+              /*insert a input field that will hold the current array item's value:*/
+              b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+              /*execute a function when someone clicks on the item value (DIV element):*/
+                  b.addEventListener("click", function(e) {
+                  /*insert the value for the autocomplete text field:*/
+                  inp.value = this.getElementsByTagName("input")[0].value;
+                  /*close the list of autocompleted values,
+                  (or any other open lists of autocompleted values:*/
+                  closeAllLists();
+              });
+              a.appendChild(b);
+            }
+          }
+      });
+      /*execute a function presses a key on the keyboard:*/
+      inp.addEventListener("keydown", function(e) {
+          var x = document.getElementById(this.id + "autocomplete-list");
+          if (x) x = x.getElementsByTagName("div");
+          if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+            decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+              /*and simulate a click on the "active" item:*/
+              if (x) x[currentFocus].click();
+            }
+          }
+      });
+      function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+      }
+      function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+      function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            x[i].parentNode.removeChild(x[i]);
+          }
+        }
+      }
+      /*execute a function when someone clicks in the document:*/
+      document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+      });
+    }
+    window.addEventListener('load', function () {
+      autocomplete(document.getElementById("podcastInput"), podcastTitles);
+    })
+  </script>
 
   <title>Home</title>
+
+  <style>
+    .main {
+      background-color: rgba(0, 0, 0, .4);
+      color: white;
+      width: 100vw;
+      height: 100vh;
+      overflow: scroll;
+    }
+
+    .result-hr {
+      border-color: white;
+    }
+
+    .circleicon {
+      position: relative;
+      width: 4rem;
+      height: 4rem;
+      background: white;
+      border: solid;
+      border-color: green;
+      border-radius: 50%;
+      right: -5%;
+      bottom: 2rem;
+
+      text-align: center;
+      line-height: 4rem;
+      color:black;
+    }
+
+    .result-box {
+      color: black;
+      background-color: rgba(255, 255, 255, .8);
+      border: 1px solid black;
+    }
+
+    .result-img {
+      width: 12rem;
+      height: 12rem;
+    }
+
+    .result-details {
+      padding-left: 5%;
+      color: black;
+    }
+
+    .result-details-name {
+      font-weight: bold;
+      font-size: larger;
+    }
+
+    .result-details-author {
+      font-style:italic;
+      color: gray;
+      margin-top: 0rem;
+    }
+
+
+    .result-details-description {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+  <style>
+    .modal-content{
+      padding: 2%;
+      color: black;
+
+
+      position: absolute;
+      width: 60%;
+      z-index: 1;
+      top: 5%;
+      right: 19%;
+    }
+    .modal-content-top {
+      display:flex;
+      flex-direction: row;
+    }
+    .modal-content-top-left-img {
+      width: 12rem;
+      height: 12rem;
+    }
+    .modal-content-top-right {
+      display: flex;
+      flex-direction: column;
+      padding-left: 2%;
+      justify-content: space-evenly;
+    }
+    .modal-details-name {
+      font-weight: bold;
+      font-size: larger;
+    }
+    .modal-details-author {
+      font-style:italic;
+      color: gray;
+      margin-top: 0rem;
+    }
+    .modal-content-hr {
+      width: 15%;
+    }
+    .modal-content-bottom {
+      display: flex;
+      flex-direction: column;
+      margin-top: 2%;
+      padding-left: 2%;
+      justify-content: space-evenly;
+    }
+    .modal-details-genres {
+      display: flex;
+      flex-direction: row;
+      margin-top: 2%;
+    }
+    .modal-details-genres-genre-wrapper {
+      display:flex;
+      flex-direction: row;
+      width: 30%;
+    }
+    .modal-details-genre {
+      width: fit-content;
+      border: solid;
+      border-color: lightgreen;
+      padding: 1%;
+      margin-left: 2%;
+    }
+    .modal-details-similarities {
+      display:flex;
+      flex-direction: column;
+      margin-top: 2%;
+    }
+    .modal-details-similarities-similarity-wrapper {
+      display:flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+    .modal-details-similarity-wrapper {
+      display:flex;
+      flex-direction: column;
+      text-align: center;
+    }
+    .modal-details-similarity-circle {
+      width: 4rem;
+      height: 4rem;
+      background: white;
+      border: solid;
+      border-color: green;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 4rem;
+    }
+    .invalid-feedback {
+      color: #a53545;
+      font-weight: 700;
+    }
+    .inputWrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    .autocomplete {
+      /*the container must be positioned relative:*/
+      position: relative;
+      display: inline-block;
+    }
+    input[type=submit] {
+      background-color: DodgerBlue;
+    }
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
+      color: black;
+    }
+    .autocomplete-items div:hover {
+      /*when hovering an item:*/
+      background-color: #e9e9e9;
+    }
+    .autocomplete-active {
+      /*when navigating through the items using the arrow keys:*/
+      background-color: #e9e9e9 !important;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="container">
-  <div class="py-5 text-center">
-    <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h2>Find the Pea to your Podcast</h2>
-    <p class="lead">Please fill out the form below to find a podcast.</p>
-  </div>
-
-
-    <div class="col-md-8 order-md-1">
-<!--       <h4 class="mb-3">Billing address</h4>
- -->      <form class="needs-validation" novalidate="">
-<!--         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="firstName">First name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
-            <div class="invalid-feedback">
-              Valid first name is required.
+  <div class="main">
+    <div class="container">
+      {% if data and show_modal %}
+      {% for d in data[0:1] %}
+        {% include 'modal.html' %}
+      {% endfor %}
+      {% endif %}
+    <!-- TODO: Figure out if we need content wrapper div-->
+      <div class="content-wrapper">
+      <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1>Find the Pea to your Podcast</h1>
+        <p class="lead">Please fill out the form below to find a podcast.</p>
+      </div>
+      <div class="col-md-8 order-md-1">
+        <form class="needs-validation" novalidate="" method="GET">
+          <div class="mb-3 inputWrapper">
+            <label for="address">I Want to Find a Podcast Like</label>
+            <div class="autocomplete">
+              <input id="podcastInput" type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
+            </div>
+            <div id="errorMessage" class="invalid-feedback">
+              Please enter a valid podcast name
             </div>
           </div>
-          <div class="col-md-6 mb-3">
-            <label for="lastName">Last name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
-            <div class="invalid-feedback">
-              Valid last name is required.
+          <div class="py-3 text-center" id="advanced-search-button">Advanced Search (Genre, Episode Duration) Coming Soon</div>
+          <!-- TODO: Advanced search form -->
+          <!-- <div class="row" id="advanced-search">
+            <div class="col-md-6 mb-3">
+              <label for="country">Genre</label>
+              <select class="custom-select d-block w-100" id="country">
+                <option value="">Choose...</option>
+                <option>Food</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid genre.
+              </div>
             </div>
-          </div>
-        </div> -->
-
-<!--         <div class="mb-3">
-          <label for="username">Username</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">@</span>
-            </div>
-            <input type="text" class="form-control" id="username" placeholder="Username" required="">
-            <div class="invalid-feedback" style="width: 100%;">
-              Your username is required.
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="email">Email <span class="text-muted">(Optional)</span></label>
-          <input type="email" class="form-control" id="email" placeholder="you@example.com">
-          <div class="invalid-feedback">
-            Please enter a valid email address for shipping updates.
-          </div>
-        </div> -->
-
-        <div class="mb-3">
-          <label for="address">Podcast Name</label>
-          <input type="text" class="form-control" id="address" placeholder="Myths and Legends" required="">
-          <div class="invalid-feedback">
-            Please enter a podcast name
-          </div>
-        </div>
-
-<!--         <div class="mb-3">
-          <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-          <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-        </div> -->
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="country">Genre</label>
-            <select class="custom-select d-block w-100" id="country" required="">
-              <option value="">Choose...</option>
-              <option>Food</option>
-            </select>
-            <div class="invalid-feedback">
-              Please select a valid genre.
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="state">Optimal Episode Duration</label>
-            <select class="custom-select d-block w-100" id="state" required="">
-              <option value="">Choose...</option>
-              <option>25 ~ 50 min</option>
-            </select>
-            <div class="invalid-feedback">
-              Please provide a valid duration.
-            </div>
-          </div>
-          <!-- <div class="col-md-6 mb-3">
-            <label for="zip">Zip</label>
-            <input type="text" class="form-control" id="zip" placeholder="" required="">
-            <div class="invalid-feedback">
-              Zip code required.
+            <div class="col-md-6 mb-3">
+              <label for="state">Optimal Episode Duration</label>
+              <select class="custom-select d-block w-100" id="state">
+                <option value="">Choose...</option>
+                <option>25 ~ 50 min</option>
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid duration.
+              </div>
             </div>
           </div> -->
-        </div>
-
-<!--         <hr class="mb-4">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="same-address">
-          <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="save-info">
-          <label class="custom-control-label" for="save-info">Save this information for next time</label>
-        </div>
-        <hr class="mb-4">
-
-        <h4 class="mb-3">Payment</h4>
-
-        <div class="d-block my-3">
-          <div class="custom-control custom-radio">
-            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="">
-            <label class="custom-control-label" for="credit">Credit card</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="">
-            <label class="custom-control-label" for="debit">Debit card</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
-            <label class="custom-control-label" for="paypal">PayPal</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="cc-name">Name on card</label>
-            <input type="text" class="form-control" id="cc-name" placeholder="" required="">
-            <small class="text-muted">Full name as displayed on card</small>
-            <div class="invalid-feedback">
-              Name on card is required
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="cc-number">Credit card number</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required="">
-            <div class="invalid-feedback">
-              Credit card number is required
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 mb-3">
-            <label for="cc-expiration">Expiration</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
-            <div class="invalid-feedback">
-              Expiration date required
-            </div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="cc-cvv">CVV</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
-            <div class="invalid-feedback">
-              Security code required
-            </div>
-          </div>
-        </div> -->
-        <hr class="mb-4">
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Search for Podcast</button>
-      </form>
+          <button class="btn btn-primary btn-lg btn-block" onclick="submitPodcast()">Search for Podcast</button>
+        </form>
     </div>
-
-
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <!-- <p class="mb-1">© 2017-2019 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul> -->
-  </footer>
-</div>
-<script type="text/javascript" src="/static/scripts/jquery-3.4.1.slim.min.js"></script>
-<script type="text/javascript" src="/static/scripts/bootstrap_core.js"></script>
-<script type="text/javascript" src="/static/scripts/form-validation.js"></script>
+    {% if data %}
+    <hr class="result-hr" />
+    <div class="py-5 text-center">
+      <h2>Recommended Podcasts</h2>
+      <p class="lead">Here are some podcasts that you might like.</p>
+    </div>
+    {% for d in data %}
+      {% include 'result.html' %}
+    {% endfor %}
+    {% endif %}
+<!-- TODO: Figure out if we need content wrapper div-->
+    </div>
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+      Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+    </footer>
+    </div>
+  </div>
 </body>
 
 </html>
@@ -208,9 +418,9 @@
                 <span style="color: #34A853; ">0</span>
                 <span style="color: #EA4335; ">0</span>
             </h1>
-            
+
             <br><br>
-            
+
             <div class="form-group">
                 <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
             </div>
@@ -219,7 +429,7 @@
         <form class="form-inline global-search">
         {% if data %}
             <h1>{{output_message}}</h1>
-            {% for d in data %}  
+            {% for d in data %}
                 <br>
                 <p>{{d}}</p>
             {% endfor %}

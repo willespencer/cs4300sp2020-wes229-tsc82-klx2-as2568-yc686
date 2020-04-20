@@ -1,0 +1,32 @@
+<div class="row mb-5">
+  <div class="circleicon"
+    {% if d.similarity|int < 30 %} style="border-color: red;" {% endif %}
+    {% if d.similarity|int < 60 %} style="border-color: orange;" {% endif %}
+    {% if d.similarity|int < 30 %} style="border-color: green;" {% endif %}
+  >
+    <div class="circleicontext">{{d.similarity}}%</div>
+  </div>
+  {% if d.pic == "placeholder.jpg" %}
+  <div class="result-img"><img class="result-img" src={{ "../static/style/" + d.pic }}/></div>
+  {% endif %}
+  {% if d.pic != "placeholder.jpg" %}
+  <div class="result-img"><img class="result-img" src={{ d.pic }}/></div>
+  {% endif %}
+  <div class="col-8 themed-grid-col">
+    <div class="row mb-1 result-details">
+      <span class="result-details-name"> {{d.name}}</span>
+    </div>
+    <!-- <div class="row mb-1 result-details">
+      <span class="result-details-author"> {{d.author}}</span>
+    </div> -->
+    <div class="row mb-3 result-details">
+      <span class="result-details-description"> {{d.description}}</span>
+    </div>
+    <div class="row mb-2 result-details">
+      <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  Similarity: {{d.similarity}}%</span>
+    </div>
+    <div class="row mb-2 result-details">
+      <span class="result-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
+    </div>
+  </div>
+</div>

@@ -7,14 +7,40 @@ from app.irsystem.models.reviews import Reviews
 project_name = "Find the Pea to your Podcast"
 net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Chan: yc686, Akira Shindo: as2568"
 
+
 @irsystem.route('/', methods=['GET'])
 def search():
-	query = request.args.get('search')
+	query = request.args.get('podcast_search')
 	if not query:
-		data = []
-		output_message = ''
+		data_dict_list = []
 	else:
 		result = Podcasts.query.filter_by(name = 'Fresh Air').first()
 		output_message = "Your search: " + query
 		data = range(5)
 	return render_template('search.html', name=project_name, netid=net_id, output_message=output_message, data=data)
+
+	# 	data_dict_list = [{
+	# 	"pic": "http://is1.mzstatic.com/image/thumb/Music118/v4/8e/52/e1/8e52e12c-1bf4-0d48-8aeb-97d7a0c55582/source/100x100bb.jpg",
+	# 	"name": "Myths and Legends",
+	# 	"description": "Jason Weiser tells stories from myths, legends, and folklore that have shaped cultures throughout history. Some, like the stories of Aladdin, King Arthur, and Hercules are stories you think you know, but with surprising origins. Others are stories you might not have heard, but really should. All the stories are sourced from world folklore, but retold for modern ears. These are stories of wizards, knights, Vikings, dragons, princesses, and kings from the time when the world beyond the map was a dangerous and wonderful place.",
+	# 	"episode_count": "40",
+	# 	"avg_episode_duration": "20",
+	# 	"link": "https://www.stitcher.com/podcast/jason-weiser/myths-and-legnen",
+	# 	"similarity": "99",
+	# 	"rating": "4.0",
+	# 	"genres": ["Literature", "Fantasy"],
+	# 	"similarities": [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", "100")]
+	# },
+	# {
+	# 	"pic": "placeholder.jpg",
+	# 	"name": "Coffee",
+	# 	"description": "A podcast about coffee",
+	# 	"episode_count": "100",
+	# 	"avg_episode_duration": "15",
+	# 	"link": "https://www.stitcher.com/podcast/studio71/coffee-talk-2",
+	# 	"similarity": "5",
+	# 	"rating": "1.5",
+	# 	"genres": ["Food"],
+	# 	"similarities": [("Duration", "15"), ("No. Episodes", "10"), ("Description", "0")]
+	# }]
+	# return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, show_modal=False)
