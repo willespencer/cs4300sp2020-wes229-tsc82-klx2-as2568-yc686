@@ -18,6 +18,7 @@
       inputTitle = document.getElementById("podcastInput").value
       if(!podcastTitles.includes(inputTitle)) {
         document.getElementById("errorMessage").style.display = "block";
+        document.getElementById("podcastInput").value = '';
       } else {
         // TODO: search if the title is valid!
         document.getElementById("errorMessage").style.display = "none";
@@ -325,82 +326,20 @@
 <body>
   <div class="main">
     <div class="container">
-
       {% if data and show_modal %}
       {% for d in data[0:1] %}
-      <div class="modal-content">
-        <div class="modal-content-top">
-          <div class="modal-content-top-left">
-            {% if d.pic == "placeholder.jpg" %}
-            <img class="modal-content-top-left-img" src={{ "../static/style/" + d.pic }}/>
-            {% endif %}
-            {% if d.pic != "placeholder.jpg" %}
-            <img class="modal-content-top-left-img" src={{ d.pic }}/>
-            {% endif %}
-          </div>
-          <div class="modal-content-top-right">
-            <div class="modal-content-top-right-details">
-              <span class="modal-details-name">{{d.name}}</span>
-            </div>
-            <!-- <div class="modal-content-top-right-details">
-              <span class="modal-details-author">{{d.author}}</span>
-            </div> -->
-            <div class="modal-content-top-right-details">
-              <span class="modal-details-episodes">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min</span>
-            </div>
-            <div class="modal-content-top-right-details">
-              <span class="modal-details-ratings">Similarity: {{d.similarity}}%  |  iTunes Rating: {{d.iTunes}}/5.0</span>
-            </div>
-            <div class="modal-content-top-right-details">
-              <span class="modal-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
-            </div>
-          </div>
-        </div>
-        <hr class="modal-content-hr" />
-        <div class="modal-content-bottom">
-          <div class="modal-details-description">Description: {{d.description}}</div>
-          {% if d.genres %}
-          <div class="modal-details-genres">
-            <div class="modal-details-genres-label">Genres: </div>
-            <div class="modal-details-genres-genre-wrapper">
-              {% for g in d.genres %}
-              <div class="modal-details-genre">{{g}}</div>
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
-          <div class="modal-details-similarities">
-            <div class="modal-details-similarities-label">Similarity Breakdown: </div>
-            <div class="modal-details-similarities-similarity-wrapper">
-              {% for s in d.similarities %}
-              <div class="modal-details-similarity-wrapper">
-                <div class="modal-details-similarity-circle"
-                {% if s[1]|int < 30 %} style="border-color: red;" {% endif %}
-                {% if s[1]|int < 60 %} style="border-color: orange;" {% endif %}
-                {% if s[1]|int < 30 %} style="border-color: green;" {% endif %}
-                >
-                  <div class="modal-details-similarity-circle-text">{{s[1]}}%</div>
-                </div>
-                <div class="modal-details-similarity-label">{{s[0]}}</div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      </div>
+        {% include 'modal.html' %}
       {% endfor %}
       {% endif %}
-
     <!-- TODO: Figure out if we need content wrapper div-->
       <div class="content-wrapper">
-
       <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1>Find the Pea to your Podcast</h1>
         <p class="lead">Please fill out the form below to find a podcast.</p>
       </div>
       <div class="col-md-8 order-md-1">
-        <!-- <form class="needs-validation" novalidate="" method="GET"> -->
+        <form class="needs-validation" novalidate="" method="GET">
           <div class="mb-3 inputWrapper">
             <label for="address">I Want to Find a Podcast Like</label>
             <div class="autocomplete">
@@ -435,53 +374,20 @@
             </div>
           </div> -->
           <button class="btn btn-primary btn-lg btn-block" onclick="submitPodcast()">Search for Podcast</button>
-        <!-- </form> -->
+        </form>
     </div>
     {% if data %}
-  <hr class="result-hr" />
+    <hr class="result-hr" />
     <div class="py-5 text-center">
       <h2>Recommended Podcasts</h2>
       <p class="lead">Here are some podcasts that you might like.</p>
     </div>
     {% for d in data %}
-    <div class="row mb-5">
-      <div class="circleicon"
-        {% if d.similarity|int < 30 %} style="border-color: red;" {% endif %}
-        {% if d.similarity|int < 60 %} style="border-color: orange;" {% endif %}
-        {% if d.similarity|int < 30 %} style="border-color: green;" {% endif %}
-      >
-        <div class="circleicontext">{{d.similarity}}%</div>
-      </div>
-      {% if d.pic == "placeholder.jpg" %}
-      <div class="result-img"><img class="result-img" src={{ "../static/style/" + d.pic }}/></div>
-      {% endif %}
-      {% if d.pic != "placeholder.jpg" %}
-      <div class="result-img"><img class="result-img" src={{ d.pic }}/></div>
-      {% endif %}
-      <div class="col-8 themed-grid-col">
-        <div class="row mb-1 result-details">
-          <span class="result-details-name"> {{d.name}}</span>
-        </div>
-        <!-- <div class="row mb-1 result-details">
-          <span class="result-details-author"> {{d.author}}</span>
-        </div> -->
-        <div class="row mb-3 result-details">
-          <span class="result-details-description"> {{d.description}}</span>
-        </div>
-        <div class="row mb-2 result-details">
-          <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  Similarity: {{d.similarity}}%</span>
-        </div>
-        <div class="row mb-2 result-details">
-          <span class="result-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
-        </div>
-      </div>
-    </div>
+      {% include 'result.html' %}
     {% endfor %}
     {% endif %}
-
 <!-- TODO: Figure out if we need content wrapper div-->
-  </div>
-
+    </div>
     <footer class="my-5 pt-5 text-muted text-center text-small">
       Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
     </footer>
