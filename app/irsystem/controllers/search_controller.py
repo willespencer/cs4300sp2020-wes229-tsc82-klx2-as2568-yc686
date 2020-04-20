@@ -21,6 +21,9 @@ def search():
 
 	podcast = request.args.get('podcast_search')
 
+	#TODO: set podcast_names = all_podcast_names
+	podcast_names = ["Theresa Podcast", "Test Podcast", "Totally Cool Podcast", "Will Podcast"]
+	
 	if not podcast:
 		data_dict_list = []
 	else:
@@ -61,8 +64,8 @@ def search():
 			all_reviews.append(review_dict)
 		# print(all_reviews[0])
 
-		# calculates similarity scores
-		# data_dict_list = get_ranked_podcast(query, all_podcasts)
+		# # calculates similarity scores
+		# # data_dict_list = get_ranked_podcast(query, all_podcasts)
 
 		data_dict_list = [{
 		"pic": "http://is1.mzstatic.com/image/thumb/Music118/v4/8e/52/e1/8e52e12c-1bf4-0d48-8aeb-97d7a0c55582/source/100x100bb.jpg",
@@ -87,5 +90,5 @@ def search():
 		"genres": ["Food"],
 		"similarities": [("Duration", "15"), ("No. Episodes", "10"), ("Description", "0")]
 		}]
-	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, show_modal=False)
+	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=False)
 

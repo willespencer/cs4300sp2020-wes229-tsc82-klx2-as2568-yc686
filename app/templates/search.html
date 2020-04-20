@@ -13,7 +13,7 @@
   <link href="../static/style/grid.css" rel="stylesheet">
 
   <script>
-    let podcastTitles = ["Theresa Podcast", "Test Podcast", "Totally Cool Podcast", "Will Podcast"];
+    let podcastTitles = JSON.parse('{{podcast_names | tojson }}');
     function submitPodcast() {
       inputTitle = document.getElementById("podcastInput").value
       if(!podcastTitles.includes(inputTitle)) {
