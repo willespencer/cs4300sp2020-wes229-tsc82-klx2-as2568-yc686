@@ -22,7 +22,7 @@ def search():
 	podcast = request.args.get('podcast_search')
 
 	#TODO: set podcast_names = all_podcast_names
-	podcast_names = ["Theresa Podcast", "Test Podcast", "Totally Cool Podcast", "Will Podcast"]
+	podcast_names = all_podcast_names
 	
 	if not podcast:
 		data_dict_list = []
