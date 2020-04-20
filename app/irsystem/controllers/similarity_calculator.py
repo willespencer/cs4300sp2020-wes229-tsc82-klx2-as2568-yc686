@@ -48,5 +48,5 @@ def main():
     print("The following is the score...")
     print(get_ranked_podcast("Hello this is a test", [{"description": "Hello", "similarities": []}, {"description": "Hello a test.", "similarities": []}, {"description": "Hello a", "similarities": []}]))
 
-main()
+# main()
 # def get_top_rankings(query, )
