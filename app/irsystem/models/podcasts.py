@@ -18,6 +18,7 @@ class Podcasts(Base):
     podcast_url = db.Column(db.VARCHAR, nullable=False)
 
     def __init__(self, **kwargs):
+        super(Podcasts, self).__init__(**kwargs)
         self.name = kwargs.get('name', None)
         self.rating_volume = kwargs.get('rating_volume', None)
         self.rating = kwargs.get('rating', None)
@@ -31,7 +32,7 @@ class Podcasts(Base):
         self.podcast_url = kwargs.get('podcast_url', None)
 
     def __repr__(self):
-        return str(self.__dict__)
+        return '<Podcast %r>' % self.name
 
 
 class PodcastSchema(ModelSchema):
