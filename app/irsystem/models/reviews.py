@@ -17,7 +17,7 @@ class Reviews(Base):
         self.review_text = kwargs.get('review_text', None)
 
     def __repr__(self):
-        return '<Review %r>' % self.pod_name
+        return str(self.__dict__)
 
 
 class ReviewsSchema(ModelSchema):

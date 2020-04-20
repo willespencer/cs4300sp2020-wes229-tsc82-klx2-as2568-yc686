@@ -32,7 +32,7 @@ class Podcasts(Base):
         self.podcast_url = kwargs.get('podcast_url', None)
 
     def __repr__(self):
-        return '<Podcast %r>' % self.name
+        return str(self.__dict__)
 
 
 class PodcastSchema(ModelSchema):
