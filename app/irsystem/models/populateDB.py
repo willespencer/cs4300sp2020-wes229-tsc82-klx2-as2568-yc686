@@ -1,21 +1,11 @@
 import json
 import sys
 import datetime
-from psycopg2 import connect, Error
 
 
-with open('merged_podcasts.json') as json_data:
+with open('../../../data/merged_podcasts.json') as json_data:
 
     record_dict = json.load(json_data)
-
-    # columns = list(["name", "rating_volume", "rating", "genre",
-    #                 "description_x", "artwork",
-    #                 "genres", "ep_count",
-    #                 "ep_durations",
-    #                 "itunes_URL",
-    #                 "deed_URL",
-    #                 "podcast_URL", "description_y"])
-
     table_name = "podcasts"
 
 # nval_list = [[x] for x in range(len(list(records)[0]))]
