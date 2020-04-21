@@ -25,8 +25,10 @@
     <div class="row mb-2 result-details">
       <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  Similarity: {{d.similarity}}%</span>
     </div>
+    {% if d.link != "None" %}
     <div class="row mb-2 result-details">
       <span class="result-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
     </div>
+    {% endif %}
   </div>
 </div>

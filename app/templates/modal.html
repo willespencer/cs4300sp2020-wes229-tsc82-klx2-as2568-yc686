@@ -23,9 +23,11 @@
       <div class="modal-content-top-right-details">
         <span class="modal-details-ratings">Similarity: {{d.similarity}}%  |  iTunes Rating: {{d.iTunes}}/5.0</span>
       </div>
+      {% if d.link != "None" %}
       <div class="modal-content-top-right-details">
         <span class="modal-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
       </div>
+      {% endif %}
     </div>
   </div>
   <hr class="modal-content-hr" />
