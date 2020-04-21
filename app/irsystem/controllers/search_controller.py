@@ -19,7 +19,8 @@ def search():
 		all_podcast_names.append(result.name)
 	# print(all_podcast_names)
 
-	podcast = request.args.get('podcast_search')
+	# user input query
+	query = request.args.get('podcast_search')
 
 	podcast_names = all_podcast_names
 	
