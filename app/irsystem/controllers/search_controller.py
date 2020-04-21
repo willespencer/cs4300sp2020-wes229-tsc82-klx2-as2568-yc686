@@ -23,7 +23,7 @@ def search():
 	query = request.args.get('podcast_search')
 
 	podcast_names = all_podcast_names
-	
+
 	if not podcast:
 		data_dict_list = []
 	else:
@@ -43,14 +43,14 @@ def search():
 				pod_dict['pic'] = result.artwork
 			else:
 				pod_dict['pic'] = "placeholder.jpg"
-			
+
 			pod_dict['genres'] = (result.genres).split(';')
 			all_podcasts.append(pod_dict)
 		# print(all_podcasts[0])
 
 		#replace 'Fresh Air' with podcast once the all_podcast_names are intergrated as valid inputs
 		# query_podcast_info = Podcasts.query.filter_by(name='Fresh Air').first_or_404()
-		query_reviews = Reviews.query.filter_by(pod_name='Fresh Air').all()
+		query_reviews = Reviews.query.filter_by(pod_name=query).all()
 
 		query_podcast_info = Podcasts.query.filter_by(name=query).first_or_404()
 		query_dict = {
@@ -65,7 +65,7 @@ def search():
 			query_dict['pic'] = query_podcast_info.artwork
 		else:
 			query_dict['pic'] = "placeholder.jpg"
-			
+
 		query_dict['genres'] = (query_podcast_info.genres).split(';')
 
 		#formatting list of podcast reviews dicts for query
@@ -106,5 +106,16 @@ def search():
 		# "genres": ["Food"],
 		# "similarities": [("Duration", "15"), ("No. Episodes", "10"), ("Description", "0")]
 		# }]
-	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=False)
 
+	# remove querried podcast from showing in result list
+	index_of_podcast = 0
+	found = False
+	for i in range(len(data_dict_list)):
+		if(data_dict_list[i].name == query):
+			index_of_podcast = i
+			found = True
+			break
+	if(found):
+		data_dict_list.pop(index_of_podcast)
+
+	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=False)
