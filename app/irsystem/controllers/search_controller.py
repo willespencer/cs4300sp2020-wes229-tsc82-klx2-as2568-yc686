@@ -118,4 +118,4 @@ def search():
 	if(found):
 		data_dict_list.pop(index_of_podcast)
 
-	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=False)
+	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=True)

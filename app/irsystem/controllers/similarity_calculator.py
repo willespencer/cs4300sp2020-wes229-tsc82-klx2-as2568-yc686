@@ -27,9 +27,9 @@ def tokenize(text):
 def make_word_blob(podcast_dict, review_lst):
     word_blob = []
     word_blob = word_blob + tokenize(podcast_dict["description"])
-    relevant_review_lst = list(filter(lambda x: x["pod_name"] == podcast_dict["name"], review_lst))
-    for each_review in relevant_review_lst:
-        word_blob = word_blob + tokenize(each_review["rev_text"])
+    # relevant_review_lst = list(filter(lambda x: x["pod_name"] == podcast_dict["name"], review_lst))
+    # for each_review in relevant_review_lst:
+    #     word_blob = word_blob + tokenize(each_review["rev_text"])
     return word_blob
 
 
