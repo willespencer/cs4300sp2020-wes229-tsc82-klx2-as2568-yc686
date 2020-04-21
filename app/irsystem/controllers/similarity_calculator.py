@@ -24,29 +24,45 @@ def tokenize(text):
     # YOUR CODE HERE
     return re.findall("[A-Za-z]+", text.lower())
 
-def bool_and_sim_score(query, podcast_dict):
+def make_word_blob(podcast_dict, review_lst):
+    word_blob = []
+    word_blob = word_blob + tokenize(podcast_dict["description"])
+    relevant_review_lst = list(filter(lambda x: x["pod_name"] == podcast_dict["name"], review_lst))
+    for each_review in relevant_review_lst:
+        word_blob = word_blob + tokenize(each_review["rev_text"])
+    return word_blob
+
+
+def bool_and_sim_score(query, podcast_dict, review_lst):
     """Returns a float giving the boolean and similarity of 
+    Step 1: Make a word blob of all the reviews and description of the query
+    Step 2: Make a word blob of all the reviews and description of the podcast_dict
+    Step 3: Do a boolean AND of the two word blobs
     """
     # YOUR CODE HERE
-    query_set = set(tokenize(query))
-    podcast_description_set = set(tokenize(podcast_dict["description"]))
-    score = len(query_set & podcast_description_set)
+    word_blob_1 = set(make_word_blob(query, review_lst))
+    word_blob_2 = set(make_word_blob(podcast_dict, review_lst))
+    score = len(word_blob_1 & word_blob_2)
     podcast_dict["similarities"] = [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", score)]
     podcast_dict["similarity"] = score
     return score
 
-def get_ranked_podcast(query, podcast_lst):
-    # podcast_title_lst is a list of dictionaries, and each dictionary represents a podcast
+def get_ranked_podcast(query, podcast_lst, review_lst):
+    # query is a dictionary representing the podcast that the user chose
+    # podcast_lst is a list of dictionaries, and each dictionary represents a podcast
+    # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
     # Returns a tuple of (score, podcast_data), so it will be an (int, dict) type
     # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
-    score_lst = list(map(lambda x: (bool_and_sim_score(query, x), x), podcast_lst))
+    score_lst = list(map(lambda x: (bool_and_sim_score(query, x, review_lst), x), podcast_lst))
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
     return ranked_podcast_lst[:20]
 
 def main():
     print("The following is the score...")
-    print(get_ranked_podcast("Hello this is a test", [{"description": "Hello", "similarities": []}, {"description": "Hello a test.", "similarities": []}, {"description": "Hello a", "similarities": []}]))
+    print(get_ranked_podcast({"name": 'query', "description": "Hello is a test"}, 
+        [{"name": 'pod_1', "description": "Hello", "similarities": []}, {"name": 'pod_2', "description": "Hello a test.", "similarities": []}, {"name": 'pod_3', "description": "Hello a", "similarities": []}],
+        [{'pod_name': 'query', 'rev_text': "podcast sucks"}, {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}]))
 
-# main()
+main()
 # def get_top_rankings(query, )
