@@ -81,7 +81,7 @@ def search():
 		# print(all_reviews[0])
 
 		# calculates similarity scores
-		# data_dict_list = get_ranked_podcast(query_dict, all_podcasts, all_reviews)
+		data_dict_list = get_ranked_podcast(query_dict, all_podcasts, all_reviews)
 
 		# data_dict_list = [{
 		# "pic": "http://is1.mzstatic.com/image/thumb/Music118/v4/8e/52/e1/8e52e12c-1bf4-0d48-8aeb-97d7a0c55582/source/100x100bb.jpg",
@@ -111,7 +111,7 @@ def search():
 	index_of_podcast = 0
 	found_query = False
 	for i in range(len(data_dict_list)):
-		if(data_dict_list[i].name == query):
+		if(data_dict_list[i]['name'] == query):
 			index_of_podcast = i
 			found_query = True
 		if(data_dict_list[i].avg_episode_duration != "None"):

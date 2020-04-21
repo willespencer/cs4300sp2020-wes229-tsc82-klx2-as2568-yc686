@@ -64,5 +64,5 @@ def main():
         [{"name": 'pod_1', "description": "Hello", "similarities": []}, {"name": 'pod_2', "description": "Hello a test.", "similarities": []}, {"name": 'pod_3', "description": "Hello a", "similarities": []}],
         [{'pod_name': 'query', 'rev_text': "podcast sucks"}, {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}]))
 
-main()
+# main()
 # def get_top_rankings(query, )
