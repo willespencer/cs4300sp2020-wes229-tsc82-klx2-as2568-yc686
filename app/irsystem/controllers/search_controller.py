@@ -24,7 +24,7 @@ def search():
 
 	podcast_names = all_podcast_names
 
-	if not podcast:
+	if not query:
 		data_dict_list = []
 	else:
 		#formatting list of podcast dicts
