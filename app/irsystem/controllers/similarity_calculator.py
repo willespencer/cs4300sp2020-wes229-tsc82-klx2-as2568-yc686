@@ -33,16 +33,16 @@ def make_word_blob(podcast_dict, review_lst):
     return word_blob
 
 
-def bool_and_sim_score(query, podcast_dict, review_lst):
-    """Returns a float giving the boolean and similarity of 
+def jaccard_sim_score(query, podcast_dict, review_lst):
+    """Returns an int percentage giving the jaccard similarity of 
     Step 1: Make a word blob of all the reviews and description of the query
     Step 2: Make a word blob of all the reviews and description of the podcast_dict
-    Step 3: Do a boolean AND of the two word blobs
+    Step 3: Do a jaccard sim of the two word blobs
     """
     # YOUR CODE HERE
     word_blob_1 = set(make_word_blob(query, review_lst))
     word_blob_2 = set(make_word_blob(podcast_dict, review_lst))
-    score = len(word_blob_1 & word_blob_2)
+    score = round(len(word_blob_1 & word_blob_2) * 100/len(word_blob_1 | word_blob_2))
     podcast_dict["similarities"] = [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", score)]
     podcast_dict["similarity"] = score
     return score
@@ -53,7 +53,7 @@ def get_ranked_podcast(query, podcast_lst, review_lst):
     # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
     # Returns a tuple of (score, podcast_data), so it will be an (int, dict) type
     # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
-    score_lst = list(map(lambda x: (bool_and_sim_score(query, x, review_lst), x), podcast_lst))
+    score_lst = list(map(lambda x: (jaccard_sim_score(query, x, review_lst), x), podcast_lst))
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
     return ranked_podcast_lst[:20]
