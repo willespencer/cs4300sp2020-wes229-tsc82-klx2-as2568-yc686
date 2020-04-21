@@ -14,7 +14,7 @@
   {% endif %}
   <div class="col-8 themed-grid-col">
     <div class="row mb-1 result-details">
-      <span class="result-details-name"> {{d.name}}</span>
+      <span class="result-details-name" onclick="displayModal(this)" data-podcast-name={{d.name}}> {{d.name}}</span>
     </div>
     <!-- <div class="row mb-1 result-details">
       <span class="result-details-author"> {{d.author}}</span>

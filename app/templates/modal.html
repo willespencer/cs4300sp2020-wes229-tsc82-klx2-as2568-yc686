@@ -1,4 +1,6 @@
-<div class="modal-content">
+<div class="modal-content" data-podcast-name={{d.name}}>
+  <div class="modal-content-inner">
+  <div class="modal-x" onclick="closeModal(this)" data-podcast-name={{d.name}}>x</div>
   <div class="modal-content-top">
     <div class="modal-content-top-left">
       {% if d.pic == "placeholder.jpg" %}
@@ -56,5 +58,6 @@
         {% endfor %}
       </div>
     </div>
+  </div>
   </div>
 </div>
