@@ -39,7 +39,7 @@ def search():
 				'link': result.itunes_url,
 				'rating': result.rating
 			}
-			if result.artwork != None:
+			if result.artwork != "None":
 				pod_dict['pic'] = result.artwork
 			else:
 				pod_dict['pic'] = "placeholder.jpg"
@@ -61,7 +61,7 @@ def search():
 			'link': query_podcast_info.itunes_url,
 			'rating': query_podcast_info.rating
 		}
-		if query_podcast_info.artwork != None:
+		if query_podcast_info.artwork != "None":
 			query_dict['pic'] = query_podcast_info.artwork
 		else:
 			query_dict['pic'] = "placeholder.jpg"
@@ -107,15 +107,18 @@ def search():
 		# "similarities": [("Duration", "15"), ("No. Episodes", "10"), ("Description", "0")]
 		# }]
 
-	# remove querried podcast from showing in result list
+	# remove querried podcast from showing in result list, and round avg durration and episode count
 	index_of_podcast = 0
-	found = False
+	found_query = False
 	for i in range(len(data_dict_list)):
 		if(data_dict_list[i]['name'] == query):
 			index_of_podcast = i
-			found = True
-			break
-	if(found):
+			found_query = True
+		if(data_dict_list[i]["avg_episode_duration"] != "None"):
+			data_dict_list[i]["avg_episode_duration"] = round(float(data_dict_list[i]["avg_episode_duration"]), 2)
+		if(data_dict_list[i]["episode_count"] != "None"):
+			data_dict_list[i]["episode_count"] = round(float(data_dict_list[i]["episode_count"]))
+	if(found_query):
 		data_dict_list.pop(index_of_podcast)
 
-	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=False)
+	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=True)
