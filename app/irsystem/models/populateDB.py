@@ -6,7 +6,7 @@ import psycopg2
 from psycopg2 import connect, Error
 
 update_podcasts = True
-update_reviews = False
+update_reviews = True
 
 try:
     conn = connect(
@@ -57,33 +57,38 @@ if cur != None:
                     val = str((val)).replace('"', '')
                 val_list[i].append(str(val))
 
-        try:
-            for i in range(len(list(records)[0])):
-                cur.execute(
-                    """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                    (i, datetime.datetime.now(), datetime.datetime.now(),
-                     val_list[0][i], val_list[1][i], val_list[2][i],  val_list[3][i],  val_list[4][i],  val_list[5][i],  val_list[6][i],
-                     val_list[7][i], val_list[8][i], val_list[9][i], val_list[10][i]))
-            conn.commit()
+        print(len(list(records)[0]))
 
-            print('\nfinished INSERT INTO execution')
+        # try:
+        #     for i in range(len(list(records)[0])):
+        #         cur.execute(
+        #             """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+        #             (i, datetime.datetime.now(), datetime.datetime.now(),
+        #              val_list[0][i], val_list[1][i], val_list[2][i],  val_list[3][i],  val_list[4][i],  val_list[5][i],  val_list[6][i],
+        #              val_list[7][i], val_list[8][i], val_list[9][i], val_list[10][i]))
+        #     conn.commit()
 
-        except (Exception, Error) as error:
-            print("\nexecute_sql() error:", error)
-            conn.rollback()
+        #     print('\nfinished INSERT INTO execution')
+
+        # except (Exception, Error) as error:
+        #     print("\nexecute_sql() error:", error)
+        #     conn.rollback()
 
     if update_reviews:
         with open('data/reviews.csv', newline='') as f:
             reader = csv.reader(f)
             next(reader)  # Skip the header row.
 
+            numReviews = 0
             try:
                 for row in reader:
                     # each row is a list
-                    cur.execute(
-                        """INSERT INTO reviews VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-                        (row[0], datetime.datetime.now(), datetime.datetime.now(), row[1], row[2], row[3], row[4]))
+                    # cur.execute(
+                    #     """INSERT INTO reviews VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                    #     (row[0], datetime.datetime.now(), datetime.datetime.now(), row[1], row[2], row[3], row[4]))
+                    numReviews += 1
 
+                print(numReviews)
                 conn.commit()
 
                 print('\nfinished INSERT INTO execution')
