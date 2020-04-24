@@ -39,7 +39,7 @@ def search():
 				'link': result.itunes_url,
 				'rating': result.rating
 			}
-			if result.artwork != None:
+			if result.artwork != "None":
 				pod_dict['pic'] = result.artwork
 			else:
 				pod_dict['pic'] = "placeholder.jpg"
@@ -61,7 +61,7 @@ def search():
 			'link': query_podcast_info.itunes_url,
 			'rating': query_podcast_info.rating
 		}
-		if query_podcast_info.artwork != None:
+		if query_podcast_info.artwork != "None":
 			query_dict['pic'] = query_podcast_info.artwork
 		else:
 			query_dict['pic'] = "placeholder.jpg"
@@ -114,10 +114,10 @@ def search():
 		if(data_dict_list[i]['name'] == query):
 			index_of_podcast = i
 			found_query = True
-		if(data_dict_list[i].avg_episode_duration != "None"):
-			data_dict_list[i].avg_episode_duration = round(float(data_dict_list[i].avg_episode_duration), 2)
-		if(data_dict_list[i].episode_count != "None"):
-			data_dict_list[i].episode_count = round(float(data_dict_list[i].episode_count))
+		if(data_dict_list[i]["avg_episode_duration"] != "None"):
+			data_dict_list[i]["avg_episode_duration"] = round(float(data_dict_list[i]["avg_episode_duration"]), 2)
+		if(data_dict_list[i]["episode_count"] != "None"):
+			data_dict_list[i]["episode_count"] = round(float(data_dict_list[i]["episode_count"]))
 	if(found_query):
 		data_dict_list.pop(index_of_podcast)
 
