@@ -57,6 +57,8 @@ if cur != None:
                     val = str((val)).replace('"', '')
                 val_list[i].append(str(val))
 
+        # print(len(list(records)[0]))
+
         try:
             for i in range(len(list(records)[0])):
                 cur.execute(
@@ -77,13 +79,16 @@ if cur != None:
             reader = csv.reader(f)
             next(reader)  # Skip the header row.
 
+            # numReviews = 0
             try:
                 for row in reader:
                     # each row is a list
                     cur.execute(
                         """INSERT INTO reviews VALUES (%s, %s, %s, %s, %s, %s, %s)""",
                         (row[0], datetime.datetime.now(), datetime.datetime.now(), row[1], row[2], row[3], row[4]))
+                    # numReviews += 1
 
+                # print(numReviews)
                 conn.commit()
 
                 print('\nfinished INSERT INTO execution')
