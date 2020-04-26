@@ -6,11 +6,9 @@ import pandas as pd
 
 # get list of podcast names, review scores, and review texts
 
-linebreak_char = 'Þ'
-
 def get_reviews(podcasts):
     reviews = []
-    for i in range(1000, len(podcasts)):
+    for i in range(len(podcasts)):
         try:
             podcast = podcasts[i]
 
@@ -19,7 +17,7 @@ def get_reviews(podcasts):
             driver.get(url)
 
             # wait for reviews to load
-            time.sleep(1)
+            time.sleep(3)
 
             ratings =  driver.find_elements_by_class_name("we-star-rating") # TODO
             titles = driver.find_elements_by_class_name("we-customer-review__title")
@@ -32,7 +30,7 @@ def get_reviews(podcasts):
 
                 title = titles[j].text
 
-                # combine paragraphs into one string with line breaks of linebreak_char
+                # combine paragraphs into one string
                 paragraphs = descriptions[j].find_elements_by_tag_name("p")
                 review_text = ""
                 for k in range(len(paragraphs)):
@@ -52,10 +50,20 @@ def get_reviews(podcasts):
 
 def get_podcasts_from_csv():
     df = pd.read_csv("merged_podcasts.csv", usecols = ['Name','iTunes_URL'])
+    df1000 = pd.read_csv("first1000reviews.csv", usecols = ['podcast name'])
+    df5000 = pd.read_csv("reviewspt2.csv", usecols = ['podcast name'])
+    df3 = pd.read_csv("reviewspt3.csv", usecols = ['podcast name'])
+    df4 = pd.read_csv("reviewspt4.csv", usecols = ['podcast name'])
+    df5 = pd.read_csv("reviewspt5.csv", usecols = ['podcast name'])
+    df6 = pd.read_csv("reviewspt6.csv", usecols = ['podcast name'])
+
+    previouslyScraped = set(df1000["podcast name"].tolist() + df5000["podcast name"].tolist() + df3["podcast name"].tolist() + df4["podcast name"].tolist() + df5["podcast name"].tolist() + df6["podcast name"].tolist())
+
     tuples = [tuple(x) for x in df.to_numpy()]
 
     # remove ones with no iTunes links (check if nan)
-    filtered = [t for t in tuples if t[1] == t[1]]
+    filtered = [t for t in tuples if t[1] == t[1] and t[0] not in previouslyScraped]
+    # print(len(filtered))
     return filtered
 
 def output_reviews_to_csv(reviews):
@@ -64,7 +72,7 @@ def output_reviews_to_csv(reviews):
 
 podcasts = get_podcasts_from_csv()
 print("Got list of podcasts")
-
+#
 webdriver = "./chromedriver"
 driver = Chrome(webdriver)
 print("Started Selenium")

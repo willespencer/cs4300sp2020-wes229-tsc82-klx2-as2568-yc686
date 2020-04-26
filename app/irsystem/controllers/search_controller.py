@@ -4,7 +4,8 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.podcasts import Podcasts
 from app.irsystem.models.reviews import Reviews
 from app.irsystem.controllers.similarity_calculator import *
-from sqlalchemy.orm import load_only
+from app.irsystem.controllers.query_db import *
+
 
 project_name = "Find the Pea to your Podcast"
 net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Chan: yc686, Akira Shindo: as2568"
@@ -12,131 +13,46 @@ net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Ch
 
 @irsystem.route('/', methods=['GET'])
 def search():
-	# queries all podcasts names
-	query_podcast_names = Podcasts.query.order_by(Podcasts.name).options(load_only("name")).all()
-	all_podcast_names = []
-	for result in query_podcast_names:
-		all_podcast_names.append(result.name)
-	# print(all_podcast_names)
+    # user input query
+    query = request.args.get('podcast_search')
 
-	# user input query
-	query = request.args.get('podcast_search')
+    # Note: the order changes everytime it's queried for some reason
+    podcast_names = getAllPodcastNames()
+    genres = getAllGenres()
 
-	# user input genre
-	genre_query = request.args.get('genre_search')
+    max_ep_dur = db.session.query(db.func.max(Podcasts.ep_durations)).scalar()
+    min_ep_dur = db.session.query(
+        db.func.min(Podcasts.ep_durations)).scalar()
+    max_ep_count = db.session.query(db.func.max(Podcasts.ep_count)).scalar()
+    min_ep_count = db.session.query(
+        db.func.min(Podcasts.ep_count)).scalar()
 
-	# user input avg ep duration
-	avg_episode_duration_query = request.args.get('avg_ep_duration')
+    if not query:
+        data_dict_list = []
+    else:
+        # if advancedQuery enabled
+        # advancedQuery = advancedPodcastData(
+        #     "Science & Medicine", 28, 70, 60)
+        # print(advancedQuery)
+        # print(len(advancedQuery))
+      # calculates similarity scores
+        data_dict_list = get_ranked_podcast(getPodcastData(
+            query)[0], getPodcastData(), getPodcastReviews(query))
 
-	# user input min ep counts
-	min_episode_count_query = request.args.get('min_ep_count')
+    # remove querried podcast from showing in result list, and round avg durration and episode count
+    index_of_podcast = 0
+    found_query = False
+    for i in range(len(data_dict_list)):
+        if(data_dict_list[i]['name'] == query):
+            index_of_podcast = i
+            found_query = True
+        if(data_dict_list[i]["avg_episode_duration"] != "None"):
+            data_dict_list[i]["avg_episode_duration"] = round(
+                float(data_dict_list[i]["avg_episode_duration"]), 2)
+        if(data_dict_list[i]["episode_count"] != "None"):
+            data_dict_list[i]["episode_count"] = round(
+                float(data_dict_list[i]["episode_count"]))
+    if(found_query):
+        data_dict_list.pop(index_of_podcast)
 
-	# autocomplete
-	podcast_names = all_podcast_names
-	# TODO: query all genre_names from db
-	genre_names = ["Literature", "Music", "Food", "News"]
-
-	# TODO: query avg_ep_durations from db
-	avg_ep_durations = ["5-15 min", "16-30 min", "31-60 min", "61+ min"]
-
-	# TODO: query min_ep_counts from db
-	min_ep_counts = ["5", "10", "20", "50", "100", "200"]
-
-	if not query:
-		data_dict_list = []
-	else:
-		#formatting list of podcast dicts
-		query_all_podcasts = Podcasts.query.all()
-		all_podcasts = []
-		for result in query_all_podcasts:
-			pod_dict = {
-				'name': result.name,
-				'description': result.description,
-				'episode_count': result.ep_count,
-				'avg_episode_duration': result.ep_durations,
-				'link': result.itunes_url,
-				'rating': result.rating
-			}
-			if result.artwork != "None":
-				pod_dict['pic'] = result.artwork
-			else:
-				pod_dict['pic'] = "placeholder.jpg"
-
-			pod_dict['genres'] = (result.genres).split(';')
-			all_podcasts.append(pod_dict)
-		# print(all_podcasts[0])
-
-		#replace 'Fresh Air' with podcast once the all_podcast_names are intergrated as valid inputs
-		# query_podcast_info = Podcasts.query.filter_by(name='Fresh Air').first_or_404()
-		query_reviews = Reviews.query.filter_by(pod_name=query).all()
-
-		query_podcast_info = Podcasts.query.filter_by(name=query).first_or_404()
-		query_dict = {
-			'name': query_podcast_info.name,
-			'description': query_podcast_info.description,
-			'episode_count': query_podcast_info.ep_count,
-			'avg_episode_duration': query_podcast_info.ep_durations,
-			'link': query_podcast_info.itunes_url,
-			'rating': query_podcast_info.rating
-		}
-		if query_podcast_info.artwork != "None":
-			query_dict['pic'] = query_podcast_info.artwork
-		else:
-			query_dict['pic'] = "placeholder.jpg"
-
-		query_dict['genres'] = (query_podcast_info.genres).split(';')
-
-		#formatting list of podcast reviews dicts for query
-		all_reviews = []
-		for review in query_reviews:
-			review_dict = {
-				'pod_name': review.pod_name,
-				'rev_name': review.review_name,
-				'rev_rating': review.review_rating,
-				'rev_text': review.review_text
-			}
-			all_reviews.append(review_dict)
-		# print(all_reviews[0])
-
-		# calculates similarity scores
-		data_dict_list = get_ranked_podcast(query_dict, all_podcasts, all_reviews)
-
-		# data_dict_list = [{
-		# "pic": "http://is1.mzstatic.com/image/thumb/Music118/v4/8e/52/e1/8e52e12c-1bf4-0d48-8aeb-97d7a0c55582/source/100x100bb.jpg",
-		# "name": "Myths and Legends",
-		# "description": "Jason Weiser tells stories from myths, legends, and folklore that have shaped cultures throughout history. Some, like the stories of Aladdin, King Arthur, and Hercules are stories you think you know, but with surprising origins. Others are stories you might not have heard, but really should. All the stories are sourced from world folklore, but retold for modern ears. These are stories of wizards, knights, Vikings, dragons, princesses, and kings from the time when the world beyond the map was a dangerous and wonderful place.",
-		# "episode_count": "40",
-		# "avg_episode_duration": "20",
-		# "link": "https://www.stitcher.com/podcast/jason-weiser/myths-and-legnen",
-		# "similarity": "99",
-		# "rating": "4.0",
-		# "genres": ["Literature", "Fantasy"],
-		# "similarities": [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", "100")]},
-		# {
-		# "pic": "placeholder.jpg",
-		# "name": "Coffee",
-		# "description": "A podcast about coffee",
-		# "episode_count": "100",
-		# "avg_episode_duration": "15",
-		# "link": "https://www.stitcher.com/podcast/studio71/coffee-talk-2",
-		# "similarity": "5",
-		# "rating": "1.5",
-		# "genres": ["Food"],
-		# "similarities": [("Duration", "15"), ("No. Episodes", "10"), ("Description", "0")]
-		# }]
-
-	# remove querried podcast from showing in result list, and round avg durration and episode count
-	index_of_podcast = 0
-	found_query = False
-	for i in range(len(data_dict_list)):
-		if(data_dict_list[i]['name'] == query):
-			index_of_podcast = i
-			found_query = True
-		if(data_dict_list[i]["avg_episode_duration"] != "None"):
-			data_dict_list[i]["avg_episode_duration"] = round(float(data_dict_list[i]["avg_episode_duration"]), 2)
-		if(data_dict_list[i]["episode_count"] != "None"):
-			data_dict_list[i]["episode_count"] = round(float(data_dict_list[i]["episode_count"]))
-	if(found_query):
-		data_dict_list.pop(index_of_podcast)
-
-	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, genre_names=genre_names, avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts, show_modal=True)
+    return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=True)
