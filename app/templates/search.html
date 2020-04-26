@@ -14,7 +14,7 @@
 
   <script>
     let podcastTitles = JSON.parse('{{podcast_names | tojson }}');
-    let podcastGenres = JSON.parse('{{genre_names | tojson }}');
+    let podcastGenres = JSON.parse('{{genres | tojson }}');
 
     function submitPodcast() {
       inputTitle = document.getElementById("podcastInput").value
@@ -28,11 +28,9 @@
         document.getElementById("errorMessage").style.display = "none";
       }
 
-      if(!podcastGenres.includes(inputGenre)) {
+      if((inputGenre !== '') && (!podcastGenres.includes(inputGenre))) {
         document.getElementById("genre_errorMessage").style.display = "block";
-        document.getElementById("podcastInput").value = '';
       } else {
-        // TODO: search if the title is valid?
         document.getElementById("genre_errorMessage").style.display = "none";
       }
 
