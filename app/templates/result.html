@@ -7,14 +7,14 @@
     <div class="circleicontext">{{d.similarity}}%</div>
   </div>
   {% if d.pic == "placeholder.jpg" %}
-  <div class="result-img"><img class="result-img" src={{ "../static/style/" + d.pic }}/></div>
+  <div class="result-img" style="background-image: url('../static/style/{{ d.pic }}');"/></div>
   {% endif %}
   {% if d.pic != "placeholder.jpg" %}
-  <div class="result-img"><img class="result-img" src={{ d.pic }}/></div>
+  <div class="result-img" style="background-image: url('{{ d.pic }}');"/></div>
   {% endif %}
   <div class="col-8 themed-grid-col">
     <div class="row mb-1 result-details">
-      <span class="result-details-name" onclick="displayModal(this)" data-podcast-name={{d.name}}> {{d.name}}</span>
+      <span class="result-details-name"> {{d.name}}</span>
     </div>
     <!-- <div class="row mb-1 result-details">
       <span class="result-details-author"> {{d.author}}</span>
@@ -30,5 +30,8 @@
       <span class="result-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
     </div>
     {% endif %}
+    <div class="row mb-2 result-details">
+      <button type="button" class="btn btn-primary result-button" onclick="displayModal(this)" data-podcast-name={{d.name}}>Learn more</button>
+    </div>
   </div>
 </div>

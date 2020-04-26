@@ -163,6 +163,26 @@
       overflow: scroll;
     }
 
+    .btn-primary {
+      background-color: #79CDCD !important;
+      border-color: #79CDCD !important;
+    }
+
+    .btn-primary:focus {
+      background-color: #5F9F9F !important;
+      border-color: #5F9F9F !important;
+    }
+
+    .btn-primary:hover {
+      background-color: #5F9F9F !important;
+      border-color: #5F9F9F !important;
+    }
+
+    .btn-primary:active {
+      background-color: #5F9F9F !important;
+      border-color: #5F9F9F !important;
+    }
+
     .result-hr {
       border-color: white;
     }
@@ -191,7 +211,9 @@
 
     .result-img {
       width: 12rem;
-      height: 12rem;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
     }
 
     .result-details {
@@ -202,12 +224,6 @@
     .result-details-name {
       font-weight: bold;
       font-size: larger;
-    }
-
-    .result-details-name:hover {
-      color: #0062cc;
-      text-decoration: underline;
-      cursor: pointer;
     }
 
     .result-details-author {
@@ -253,7 +269,7 @@
     }
     .modal-x:hover {
       cursor: pointer;
-      color: #0062cc;
+      color: #5F9F9F;
     }
     .modal-content-top {
       display:flex;
@@ -426,7 +442,7 @@
               </div>
             </div>
           </div> -->
-          <button class="btn btn-primary btn-lg btn-block" onclick="submitPodcast()">Search for Podcast</button>
+          <button class="btn btn-primary btn-lg btn-block search-button" onclick="submitPodcast()">Search for Podcast</button>
         </form>
     </div>
     {% if data %}
