@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="/static/style/all.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/bootstrap_core.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/form_validation.css" media="all" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="../static/style/grid.css" rel="stylesheet">
 
   <script>
@@ -307,7 +308,8 @@
       padding: 2%;
       color: black;
       width: 60%;
-      top: 5%;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
     }
     .modal-x {
       position: absolute;
@@ -395,6 +397,21 @@
       text-align: center;
       line-height: 4rem;
     }
+    .modal-details-reviews {
+      display:flex;
+      flex-direction: column;
+      margin-top: 2%;
+    }
+    .modal-details-reviews-wrapper {
+      display:flex;
+      flex-direction: column;
+    }
+    .modal-details-reviews-text {
+      font-size: 14px;
+    }
+    .modal-details-review-wrapper {
+      margin-top: 1rem;
+    }
     .invalid-feedback {
       color: #a53545;
       font-weight: 700;
@@ -436,6 +453,9 @@
     .autocomplete-active {
       /*when navigating through the items using the arrow keys:*/
       background-color: #e9e9e9 !important;
+    }
+    .checked {
+      color: orange;
     }
   </style>
 </head>
@@ -514,7 +534,7 @@
     <div class="py-5 text-center">
       <h2>Recommended Podcasts</h2>
       <hr class="recommended-hr" />
-      <p class="lead">You searched for podcasts similar to 
+      <p class="lead">You searched for podcasts similar to
         <span class="feedback">{{query_feedback}}</span>
         {% if genre_feedback or avg_ep_duration_feedback or min_ep_count_feedback %}
         with
