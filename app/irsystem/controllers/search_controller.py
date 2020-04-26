@@ -16,9 +16,9 @@ def search():
     # user input query
     query = request.args.get('podcast_search')
 
+    # Note: the order changes everytime it's queried for some reason
     podcast_names = getAllPodcastNames()
     genres = getAllGenres()
-    # print(genres)
 
     max_ep_dur = db.session.query(db.func.max(Podcasts.ep_durations)).scalar()
     min_ep_dur = db.session.query(
@@ -30,8 +30,11 @@ def search():
     if not query:
         data_dict_list = []
     else:
+        # if advancedQuery enabled
         # advancedQuery = advancedPodcastData(
-        #     query, max_ep_dur, min_ep_dur, None, None)
+        #     "Science & Medicine", 28, 70, 60)
+        # print(advancedQuery)
+        # print(len(advancedQuery))
       # calculates similarity scores
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], getPodcastData(), getPodcastReviews(query))
