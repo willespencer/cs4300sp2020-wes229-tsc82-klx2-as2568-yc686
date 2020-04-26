@@ -481,11 +481,17 @@
         {% if genre_feedback %}
         the genre <span class="feedback">{{genre_feedback}}</span>
         {% endif %}
+        {% if genre_feedback and avg_ep_duration_feedback %}
+        and
+        {% endif %}
         {% if avg_ep_duration_feedback %}
-        and an average episode duration of <span class="feedback">{{avg_ep_duration_feedback}}</span>
+        an average episode duration of <span class="feedback">{{avg_ep_duration_feedback}}</span>
+        {% endif %}
+        {% if (genre_feedback or avg_ep_duration_feedback) and min_ep_count_feedback %}
+        and
         {% endif %}
         {% if min_ep_count_feedback %}
-        and a minimum of <span class="feedback">{{min_ep_count_feedback}}</span>
+        a minimum of <span class="feedback">{{min_ep_count_feedback}}</span>
         {% endif %}.
       </p>
     </div>
