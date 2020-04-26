@@ -128,8 +128,8 @@ def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, 
     num_ep_score = num_ep_sim_score(query, podcast_dict, minepcount_search)
 
     total_score = description_score + review_score + duration_score + num_ep_score
-    podcast_dict["similarities"] = [("Duration", duration_score), ("No. Episodes", num_ep_score), ("Genre", "TBD"), ("Description", description_score), ("Reviews", review_score)]
-    podcast_dict["similarity"] = total_score
+    podcast_dict["similarities"] = [("Duration", str(duration_score)), ("No. Episodes", str(num_ep_score)), ("Genre", "TBD"), ("Description", str(description_score)), ("Reviews", str(review_score))]
+    podcast_dict["similarity"] = str(total_score)
     return total_score
 
 
