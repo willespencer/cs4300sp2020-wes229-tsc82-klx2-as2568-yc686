@@ -47,10 +47,14 @@ def jaccard_sim_score(query, podcast_dict, review_lst):
     podcast_dict["similarity"] = score
     return score
 
-def get_ranked_podcast(query, podcast_lst, review_lst):
+def get_ranked_podcast(query, podcast_lst, review_lst, genre_search=False, avgepdur_search=False, minepcount_search=False):
     # query is a dictionary representing the podcast that the user chose
     # podcast_lst is a list of dictionaries, and each dictionary represents a podcast
     # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
+    # genre_search is a boolean that indicates whether a user is searching for a specific genre
+    # avgepdur_search is a boolean that indicates whether a user is searching for a specific episode duration
+    # minepcount_search is a boolean that indicates whether a user is searching for a specific minimum episode count
+    
     # Returns a tuple of (score, podcast_data), so it will be an (int, dict) type
     # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
     score_lst = list(map(lambda x: (jaccard_sim_score(query, x, review_lst), x), podcast_lst))
