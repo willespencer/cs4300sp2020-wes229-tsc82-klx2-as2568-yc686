@@ -16,6 +16,17 @@
     let podcastTitles = JSON.parse('{{podcast_names | tojson }}');
     let podcastGenres = JSON.parse('{{genres | tojson }}');
 
+    function toggleAdvancedSearch() {
+      console.log("clicked");
+      currentAdvancedSearchDisplay = document.getElementById("advanced-search").style.display;
+      console.log(currentAdvancedSearchDisplay);
+      if (currentAdvancedSearchDisplay === "flex") {
+        document.getElementById("advanced-search").style.display = "none";
+      } else {
+        document.getElementById("advanced-search").style.display = "flex";
+      }
+    }
+
     function submitPodcast() {
       inputTitle = document.getElementById("podcastInput").value
       inputGenre = document.getElementById("genreInput").value
@@ -173,6 +184,28 @@
       width: 100vw;
       height: 100vh;
       overflow: scroll;
+    }
+
+    .advanced-search-button-wrapper {
+      width: 100%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+
+    #advanced-search-button {
+      width: 25%;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    #advanced-search-button:hover, #advanced-search-button:active {
+      border-bottom: 1px solid #ffffff;
+      padding-bottom: 0.5px;
+    }
+
+    #advanced-search {
+      display: none;
     }
 
     .result-hr {
@@ -433,8 +466,9 @@
               Please enter a valid podcast name
             </div>
           </div>
-          <div class="py-3 text-center" id="advanced-search-button">Advanced Search</div>
-          <!-- TODO: Advanced search form -->
+          <div class="py-3 advanced-search-button-wrapper">
+            <div id="advanced-search-button" onclick="toggleAdvancedSearch()"><p class="lead">Advanced Search</p></div>
+          </div>
           <div class="row" id="advanced-search">
             <div class="col-md-6 mb-3">
               <div class="mb-3 inputWrapper">
@@ -480,7 +514,6 @@
     <div class="py-5 text-center">
       <h2>Recommended Podcasts</h2>
       <hr class="recommended-hr" />
-      <!-- <p class="lead">Here are some podcasts that you might like.</p> -->
       <p class="lead">You searched for podcasts similar to 
         <span class="feedback">{{query_feedback}}</span>
         {% if genre_feedback or avg_ep_duration_feedback or min_ep_count_feedback %}
@@ -507,7 +540,6 @@
       {% include 'result.html' %}
     {% endfor %}
     {% endif %}
-<!-- TODO: Figure out if we need content wrapper div-->
     </div>
     <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
       Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
