@@ -48,7 +48,7 @@ def advancedPodcastData(genre=None, min_ep_count=0, max_ep_duration=None, min_ep
             'episode_count': result.ep_count,
             'avg_episode_duration': result.ep_durations,
             'link': result.itunes_url,
-            'rating': result.rating
+            'rating': str(round(float(result.rating), 1))
         }
         if result.artwork != "None":
             pod_dict['pic'] = result.artwork
@@ -77,7 +77,7 @@ def getPodcastData(query="all"):
             'episode_count': result.ep_count,
             'avg_episode_duration': result.ep_durations,
             'link': result.itunes_url,
-            'rating': result.rating
+            'rating': str(round(float(result.rating), 1))
         }
         if result.artwork != "None":
             pod_dict['pic'] = result.artwork
