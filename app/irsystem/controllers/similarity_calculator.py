@@ -76,7 +76,7 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_search=False, avgep
         duration_score = 0
         epcount_score = 0
         review_score = 0
-        podcast["similarities"] = [("Duration",duration_score), ("No. Episodes",epcount_score), ("Genre",genre_score), ("Description",score), ("Reviews", review_score)] 
+        podcast["similarities"] = [("Duration",duration_score), ("No. Episodes",epcount_score), ("Genre",genre_score), ("Description",description_score), ("Reviews", review_score)] 
         total_score = .35 * genre_score + .35 * description_score + .1*duration_score + .1*epcount_score + .1*review_score
         podcast["similarity"] = round(total_score)
         score_lst.append((total_score, podcast))
