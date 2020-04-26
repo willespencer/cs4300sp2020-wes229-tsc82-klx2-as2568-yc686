@@ -14,8 +14,12 @@
 
   <script>
     let podcastTitles = JSON.parse('{{podcast_names | tojson }}');
+    let podcastGenres = JSON.parse('{{genre_names | tojson }}');
+
     function submitPodcast() {
       inputTitle = document.getElementById("podcastInput").value
+      inputGenre = document.getElementById("genreInput").value
+
       if(!podcastTitles.includes(inputTitle)) {
         document.getElementById("errorMessage").style.display = "block";
         document.getElementById("podcastInput").value = '';
@@ -23,6 +27,15 @@
         // TODO: search if the title is valid?
         document.getElementById("errorMessage").style.display = "none";
       }
+
+      if(!podcastGenres.includes(inputGenre)) {
+        document.getElementById("genre_errorMessage").style.display = "block";
+        document.getElementById("podcastInput").value = '';
+      } else {
+        // TODO: search if the title is valid?
+        document.getElementById("genre_errorMessage").style.display = "none";
+      }
+
     }
 
     function displayModal(nameObj) {
@@ -149,6 +162,7 @@
     }
     window.addEventListener('load', function () {
       autocomplete(document.getElementById("podcastInput"), podcastTitles);
+      autocomplete(document.getElementById("genreInput"), podcastGenres);
     })
   </script>
 
@@ -394,38 +408,53 @@
       <div class="col-md-8 order-md-1">
         <form class="needs-validation" novalidate="" method="GET">
           <div class="mb-3 inputWrapper">
-            <label for="address">I Want to Find a Podcast Like</label>
+            <label for="podcastInput">I Want to Find a Podcast Like</label>
             <div class="autocomplete">
-              <input id="podcastInput" type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
+              <input id="podcastInput" type="text" class="form-control" placeholder="Myths and Legends" required="" name="podcast_search">
             </div>
             <div id="errorMessage" class="invalid-feedback">
               Please enter a valid podcast name
             </div>
           </div>
-          <div class="py-3 text-center" id="advanced-search-button">Advanced Search (Genre, Episode Duration) Coming Soon</div>
+          <div class="py-3 text-center" id="advanced-search-button">Advanced Search</div>
           <!-- TODO: Advanced search form -->
-          <!-- <div class="row" id="advanced-search">
+          <div class="row" id="advanced-search">
             <div class="col-md-6 mb-3">
-              <label for="country">Genre</label>
-              <select class="custom-select d-block w-100" id="country">
-                <option value="">Choose...</option>
-                <option>Food</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid genre.
+              <div class="mb-3 inputWrapper">
+              <label for="genreInput">Genre</label>
+              <div class="autocomplete">
+                <input id="genreInput" type="text" class="form-control" placeholder="Literature" name="genre_search">
+              </div>
+              <div id="genre_errorMessage" class="invalid-feedback">
+                Please enter a valid genre
+              </div>
               </div>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="state">Optimal Episode Duration</label>
-              <select class="custom-select d-block w-100" id="state">
+            <div class="col-md-3 mb-3">
+              <label for="avg_ep_duration">Average Episode Duration</label>
+              <select class="custom-select d-block w-100" id="avg_ep_duration" name="avg_ep_duration">
                 <option value="">Choose...</option>
-                <option>25 ~ 50 min</option>
+                {% for avg_ep_duration in avg_ep_durations %}
+                <option value="{{avg_ep_duration}}">{{avg_ep_duration}}</option>
+                {% endfor %}
               </select>
               <div class="invalid-feedback">
                 Please provide a valid duration.
               </div>
             </div>
-          </div> -->
+            <div class="col-md-3 mb-3">
+              <label for="min_ep_count">Minimum Episode Count</label>
+              <select class="custom-select d-block w-100" id="min_ep_count" name="min_ep_count">
+                <option value="">Choose...</option>
+                {% for min_ep_count in min_ep_counts %}
+                <option vale="{{min_ep_count}}">{{min_ep_count}}</option>
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid minimum number of episodes.
+              </div>
+            </div>
+          </div>
           <button class="btn btn-primary btn-lg btn-block" onclick="submitPodcast()">Search for Podcast</button>
         </form>
     </div>

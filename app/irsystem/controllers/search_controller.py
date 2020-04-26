@@ -22,7 +22,25 @@ def search():
 	# user input query
 	query = request.args.get('podcast_search')
 
+	# user input genre
+	genre_query = request.args.get('genre_search')
+
+	# user input avg ep duration
+	avg_episode_duration_query = request.args.get('avg_ep_duration')
+
+	# user input min ep counts
+	min_episode_count_query = request.args.get('min_ep_count')
+
+	# autocomplete
 	podcast_names = all_podcast_names
+	# TODO: query all genre_names from db
+	genre_names = ["Literature", "Music", "Food", "News"]
+
+	# TODO: query avg_ep_durations from db
+	avg_ep_durations = ["5-15 min", "16-30 min", "31-60 min", "61+ min"]
+
+	# TODO: query min_ep_counts from db
+	min_ep_counts = ["5", "10", "20", "50", "100", "200"]
 
 	if not query:
 		data_dict_list = []
@@ -121,4 +139,4 @@ def search():
 	if(found_query):
 		data_dict_list.pop(index_of_podcast)
 
-	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, show_modal=True)
+	return render_template('search.html', name=project_name, netid=net_id, data=data_dict_list, podcast_names=podcast_names, genre_names=genre_names, avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts, show_modal=True)
