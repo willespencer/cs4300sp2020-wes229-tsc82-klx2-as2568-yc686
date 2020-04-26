@@ -54,7 +54,7 @@ def jaccard_sim_score(query, podcast_dict, review_lst):
     word_blob_1 = set(make_word_blob(query, review_lst))
     word_blob_2 = set(make_word_blob(podcast_dict, review_lst))
     score = round(len(word_blob_1 & word_blob_2) * 100/len(word_blob_1 | word_blob_2))
-    podcast_dict["similarities"] = {"Duration":"TBD", "No. Episodes":"TBD", "Genre":"TBD", "Description":score}
+    podcast_dict["similarities"] = [("Duration","TBD"), ("No. Episodes","TBD"), ("Genre","TBD"), ("Description",score)]
     podcast_dict["similarity"] = score
     return score
 
@@ -76,7 +76,7 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_search=False, avgep
         duration_score = 0
         epcount_score = 0
         review_score = 0
-        podcast["similarities"] = {"Duration":duration_score, "No. Episodes":epcount_score, "Genre":genre_score, "Description":score} 
+        podcast["similarities"] = [("Duration",duration_score), ("No. Episodes",epcount_score), ("Genre",genre_score), ("Description",score), ("Reviews", review_score)] 
         total_score = .35 * genre_score + .35 * description_score + .1*duration_score + .1*epcount_score + .1*review_score
         podcast["similarity"] = total_score
         score_lst.append((total_score, podcast))
