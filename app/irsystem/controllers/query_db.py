@@ -1,6 +1,5 @@
 from . import *
 from app.irsystem.models.podcasts import Podcasts
-from app.irsystem.models.reviews import Reviews
 from sqlalchemy.orm import load_only
 from sqlalchemy import func, intersect
 
@@ -91,18 +90,40 @@ def getPodcastData(query="all"):
 
 
 def getPodcastReviews(query):
-    query_reviews = Reviews.query.filter_by(pod_name=query).all()
+    query_result = Podcasts.query.filter_by(name=query).all()
 
     # formatting list of podcast reviews dicts for query
     all_reviews = []
-    for review in query_reviews:
-        review_dict = {
-            'pod_name': review.pod_name,
-            'rev_name': review.review_name,
-            'rev_rating': review.review_rating,
-            'rev_text': review.review_text
+    for result in query_result:
+        review_dict_1 = {
+            'pod_name': result.name,
+            'rev_text': result.review_1,
+            'rev_rating': result.score_1
         }
-        all_reviews.append(review_dict)
-    # print(all_reviews[0])
+        all_reviews.append(review_dict_1)
+        review_dict_2 = {
+            'pod_name': result.name,
+            'rev_text': result.review_2,
+            'rev_rating': result.score_2
+        }
+        all_reviews.append(review_dict_2)
+        review_dict_3 = {
+            'pod_name': result.name,
+            'rev_text': result.review_3,
+            'rev_rating': result.score_3
+        }
+        all_reviews.append(review_dict_3)
+        review_dict_4 = {
+            'pod_name': result.name,
+            'rev_text': result.review_4,
+            'rev_rating': result.score_4
+        }
+        all_reviews.append(review_dict_4)
+        review_dict_5 = {
+            'pod_name': result.name,
+            'rev_text': result.review_5,
+            'rev_rating': result.score_5
+        }
+        all_reviews.append(review_dict_5)
 
     return all_reviews

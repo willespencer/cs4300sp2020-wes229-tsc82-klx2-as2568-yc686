@@ -27,4 +27,3 @@ from app.irsystem import irsystem
 from app.accounts.models.user import *
 from app.accounts.models.session import *
 from app.irsystem.models.podcasts import *
-from app.irsystem.models.reviews import *
