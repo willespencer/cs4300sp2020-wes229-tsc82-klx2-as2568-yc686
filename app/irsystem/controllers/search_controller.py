@@ -48,6 +48,18 @@ def search():
     avg_ep_duration_query = cleanAvgEpDurationQuery(avg_ep_duration_query_uncleaned)
     min_ep_count_query = cleanMinEpCountQuery(min_ep_count_query_uncleaned)
 
+    # advancedQuery dict tracks whether advancedQuery fields are filled
+    # advancedQueryDict["genre"] = True if genre has been inputted
+    advancedQueryDict = {
+        "genre": genre_query != None,
+        "avg_ep_duration": avg_ep_duration_query[0] != None and avg_ep_duration_query[1] != 0,
+        "min_ep_count": min_ep_count_query != 0
+    }
+
+    # TODO: comment out to see breaking change for advancedPodcastData
+    # advancedQueryIsEnabled = advancedQueryDict["genre"] or advancedQueryDict["avg_ep_duration"] or advancedQueryDict["min_ep_count"]
+    advancedQueryIsEnabled = False
+
     # Note: the order changes everytime it's queried for some reason
     podcast_names = getAllPodcastNames()
     genres = getAllGenres()
@@ -71,6 +83,10 @@ def search():
     if not query:
         data_dict_list = []
     else:
+        if advancedQueryIsEnabled:
+            podcast_lst = advancedPodcastData(genre_query, min_ep_count_query, avg_ep_duration_query[0], avg_ep_duration_query[1])
+        else:
+            podcast_lst = getPodcastData()
         # if advancedQuery enabled
         # advancedQuery = advancedPodcastData(
         #     "Science & Medicine", 28, 70, 60)
@@ -78,7 +94,10 @@ def search():
         # print(len(advancedQuery))
       # calculates similarity scores
         data_dict_list = get_ranked_podcast(getPodcastData(
-            query)[0], getPodcastData(), getPodcastReviews(query))
+            query)[0], podcast_lst, getPodcastReviews(query),
+            advancedQueryDict["genre"],
+            advancedQueryDict["avg_ep_duration"],
+            advancedQueryDict["min_ep_count"])
 
     # remove querried podcast from showing in result list, and round avg durration and episode count
     index_of_podcast = 0
