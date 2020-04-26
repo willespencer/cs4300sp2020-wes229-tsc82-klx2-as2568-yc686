@@ -2,7 +2,6 @@ from . import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.podcasts import Podcasts
-from app.irsystem.models.reviews import Reviews
 from app.irsystem.controllers.similarity_calculator import *
 from app.irsystem.controllers.query_db import *
 
@@ -26,6 +25,10 @@ def search():
     max_ep_count = db.session.query(db.func.max(Podcasts.ep_count)).scalar()
     min_ep_count = db.session.query(
         db.func.min(Podcasts.ep_count)).scalar()
+    # print(max_ep_count)
+    # print(min_ep_count)
+    # print(max_ep_dur)
+    # print(min_ep_dur)
 
     if not query:
         data_dict_list = []
@@ -35,7 +38,8 @@ def search():
         #     "Science & Medicine", 28, 70, 60)
         # print(advancedQuery)
         # print(len(advancedQuery))
-      # calculates similarity scores
+
+        # calculates similarity scores
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], getPodcastData(), getPodcastReviews(query))
 
