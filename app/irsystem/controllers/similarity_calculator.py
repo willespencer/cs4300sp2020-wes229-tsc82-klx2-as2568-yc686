@@ -148,7 +148,10 @@ def main():
         [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": 6, "avg_episode_duration": 11}, 
         {"name": 'pod_2', "description": "Hello a test.", "episode_count": 4, "avg_episode_duration": 9}, 
         {"name": 'pod_3', "description": "Hello a", "episode_count": 8, "avg_episode_duration": 5}],
-        [{'pod_name': 'query', 'rev_text': "podcast sucks"}, {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}]):
+        [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
+        {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
+        {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
+        {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}]):
         print(each_elem)
 
 main()
