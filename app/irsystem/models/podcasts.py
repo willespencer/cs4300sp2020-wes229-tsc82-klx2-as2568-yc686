@@ -7,15 +7,15 @@ class Podcasts(Base):
 
     name = db.Column(db.String, nullable=False)
     rating_volume = db.Column(db.VARCHAR, nullable=False)
-    rating = db.Column(db.VARCHAR, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String, nullable=False)
     artwork = db.Column(db.VARCHAR, nullable=False)
     genres = db.Column(db.String, nullable=False)
-    ep_count = db.Column(db.VARCHAR, nullable=False)
-    ep_durations = db.Column(db.VARCHAR, nullable=False)
+    ep_count = db.Column(db.Integer, nullable=False)
+    ep_durations = db.Column(db.Integer, nullable=False)
     itunes_url = db.Column(db.VARCHAR, nullable=False)
-    feed_url = db.Column(db.VARCHAR, nullable=False)
-    podcast_url = db.Column(db.VARCHAR, nullable=False)
+    feed_url = db.Column(db.VARCHAR, nullable=True)
+    podcast_url = db.Column(db.VARCHAR, nullable=True)
 
     def __init__(self, **kwargs):
         super(Podcasts, self).__init__(**kwargs)

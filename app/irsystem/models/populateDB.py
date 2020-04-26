@@ -55,7 +55,7 @@ if cur != None:
                         val = str(val).replace('"', '')
                 elif type(val) == str:
                     val = str((val)).replace('"', '')
-                val_list[i].append(str(val))
+                val_list[i].append(val)
 
         # print(len(list(records)[0]))
 
