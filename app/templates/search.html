@@ -242,6 +242,7 @@
     #advanced-search-button:hover, #advanced-search-button:active {
       border-bottom: 1px solid #ffffff;
       padding-bottom: 0.5px;
+      height: 46px;
     }
 
     #advanced-search {
@@ -416,12 +417,15 @@
     .modal-details-similarities-similarity-wrapper {
       display:flex;
       flex-direction: row;
-      justify-content: space-evenly;
+      justify-content: space-around;
+      margin-top: .5rem
     }
     .modal-details-similarity-wrapper {
       display:flex;
       flex-direction: column;
       text-align: center;
+      width: 64px;
+      align-items: center;
     }
     .modal-details-similarity-circle {
       width: 4rem;
@@ -579,7 +583,7 @@
                 Please provide a valid minimum number of episodes.
               </div>
             </div>
-          </div> 
+          </div>
           <button class="btn btn-primary btn-lg btn-block search-button" onclick="submitPodcast()">Search for Podcast</button>
         </form>
     </div>
