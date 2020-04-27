@@ -93,13 +93,13 @@ def search():
 
         # accum a list of all reviews for every podcast in podcast_lst and the query podcast
         review_lst = []
-        review_list = review_lst + getPodcastReviews(query)
+        review_lst = review_lst + getPodcastReviews(query)
         for podcast in podcast_lst:
-            review_list = review_lst + getPodcastReviews(podcast["name"])
+            review_lst = review_lst + getPodcastReviews(podcast["name"])
 
-        print(review_list[:2])
+        print(review_lst[:2])
         data_dict_list = get_ranked_podcast(getPodcastData(
-            query)[0], podcast_lst, review_list,
+            query)[0], podcast_lst, review_lst,
             genre_query,
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
