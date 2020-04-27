@@ -35,7 +35,7 @@ def search():
     else:
         # if advancedQuery enabled
         # advancedQuery = advancedPodcastData(
-        #     "Science & Medicine", 28, 70, 60)
+        #     "Literature", 10, 10, 5)
         # print(advancedQuery)
         # print(len(advancedQuery))
 
