@@ -22,7 +22,7 @@ def cleanAvgEpDurationQuery(avg_ep_duration_query):
     else:
         max_ep_duration_query = None
         min_ep_duration_query = 0
-    
+
     return (max_ep_duration_query, min_ep_duration_query)
 
 def cleanMinEpCountQuery(min_ep_count_query):
@@ -39,7 +39,7 @@ def search():
     avg_ep_duration_query_uncleaned = request.args.get('avg_ep_duration')
     min_ep_count_query_uncleaned = request.args.get('min_ep_count')
 
-    # user inputs and cleaning. 
+    # user inputs and cleaning.
     # Handles case if genre, avg_ep_duration, min_ep_count not inputted
     query = query_uncleaned
     genre_query = cleanGenreQuery(genre_query_uncleaned)
@@ -82,7 +82,7 @@ def search():
     print("min_ep_dur", min_ep_dur)
     print("max_ep_count", max_ep_count)
     print("min_ep_count", min_ep_count)
-    
+
     if not query:
         data_dict_list = []
     else:
@@ -108,6 +108,7 @@ def search():
     index_of_podcast = 0
     found_query = False
     for i in range(len(data_dict_list)):
+        data_dict_list[i]['reviews'] = getPodcastReviews(data_dict_list[i]['name'])
         if(data_dict_list[i]['name'] == query):
             index_of_podcast = i
             found_query = True
@@ -120,9 +121,9 @@ def search():
     if(found_query):
         data_dict_list.pop(index_of_podcast)
 
-    return render_template('search.html', name=project_name, netid=net_id, 
-    data=data_dict_list, podcast_names=podcast_names, genres=genres, 
-    avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts, 
+    return render_template('search.html', name=project_name, netid=net_id,
+    data=data_dict_list, podcast_names=podcast_names, genres=genres,
+    avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts,
     query_feedback=query_uncleaned, genre_feedback=genre_query_uncleaned,
     avg_ep_duration_feedback=avg_ep_duration_query_uncleaned,
     min_ep_count_feedback=min_ep_count_query_uncleaned, show_modal=True)
