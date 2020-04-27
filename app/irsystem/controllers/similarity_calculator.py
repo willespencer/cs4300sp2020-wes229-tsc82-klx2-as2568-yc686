@@ -137,7 +137,7 @@ def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, 
     review_score = round(reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100)
     duration_score = round(duration_sim_score(query, podcast_dict, avepdur_search) * 100)
     num_ep_score = round(num_ep_sim_score(query, podcast_dict, minepcount_search) * 100)
-    genre_score = round(genre_sim_score(query, podcast, genre_search)) # already 100%
+    genre_score = round(genre_sim_score(query, podcast_dict, genre_search)) # already 100%
 
     
     total_score = .35 * genre_score + .35 * description_score + .1*duration_score + .1*num_ep_score + .1*review_score
