@@ -37,8 +37,6 @@ def genre_sim_score(query, podcast_dict, genre_query, genre_search):
 
     query is a dictionary containing information about the query podcast
     """
-    print("query_genres", query["genres"])
-    print("genre_query", genre_query)
     if genre_query != None:
         query_genres = set(query["genres"] + [genre_query])
     else:
@@ -184,20 +182,3 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, genre_search
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
     return ranked_podcast_lst[:20]
-
-# def main():
-#     print("The following is the score...")
-#     print("The query description is: Hello this is a test")
-#     for each_elem in get_ranked_podcast(
-#         {"name": 'query', "description": "Hello this is a test", "episode_count": "5", "avg_episode_duration": "10"}, 
-#         [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None"}, 
-#         {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9"}, 
-#         {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500"}],
-#         [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
-#         {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
-#         {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
-#         {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}]):
-#         print(each_elem)
-
-# main()
-# def get_top_rankings(query, )
