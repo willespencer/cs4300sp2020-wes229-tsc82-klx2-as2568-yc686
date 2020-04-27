@@ -48,6 +48,25 @@
 
     }
 
+    function toggleReviews(nameObj) {
+      let name = nameObj.getAttribute("data-podcast-name")
+      let text = nameObj.innerHTML
+      modals = document.getElementsByClassName("modal-content");
+      for(let i = 0; i < modals.length; i++) {
+        if(modals[i].getAttribute("data-podcast-name") == name) {
+          if(text == 'Read More') {
+            nameObj.innerHTML = "Read Less";
+            document.getElementsByClassName("modal-details-reviews")[i].style.height = "auto";
+            document.getElementsByClassName("fadeout")[i].style.background = "transparent";
+          } else {
+            nameObj.innerHTML = "Read More";
+            document.getElementsByClassName("modal-details-reviews")[i].style.height = "200px";
+            document.getElementsByClassName("fadeout")[i].style.background = "-webkit-linear-gradient(rgba(255, 255, 255, 0) 0%,rgba(255, 255, 255, 1) 100%)";
+          }
+        }
+      }
+    }
+
     function displayModal(nameObj) {
       let name = nameObj.getAttribute("data-podcast-name")
       modals = document.getElementsByClassName("modal-content");
@@ -354,6 +373,7 @@
       margin-top: 2%;
       padding-left: 2%;
       justify-content: space-evenly;
+      margin-bottom: -5rem;
     }
     .modal-details-genres {
       display: flex;
@@ -401,16 +421,34 @@
       display:flex;
       flex-direction: column;
       margin-top: 2%;
+
+      height: 200px;
+      overflow: hidden;
+      position: relative;
     }
     .modal-details-reviews-wrapper {
       display:flex;
       flex-direction: column;
+      margin-top: .5rem
     }
     .modal-details-reviews-text {
       font-size: 14px;
     }
+    .modal-details-reviews-button {
+      position: absolute;
+      bottom: 1rem;
+    }
     .modal-details-review-wrapper {
-      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .fadeout {
+      position: relative;
+      bottom: 8rem;
+      height: 8rem;
+      background: -webkit-linear-gradient(
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 1) 100%
+          );
     }
     .invalid-feedback {
       color: #a53545;
