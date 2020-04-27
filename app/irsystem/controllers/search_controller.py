@@ -99,6 +99,7 @@ def search():
         # calculates similarity scores
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], podcast_lst, getPodcastReviews(query),
+            genre_query,
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
             advancedQueryDict["min_ep_count"])

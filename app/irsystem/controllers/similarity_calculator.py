@@ -32,12 +32,17 @@ def make_word_blob(podcast_dict, review_lst):
     #     word_blob = word_blob + tokenize(each_review["rev_text"])
     return word_blob
 
-def genre_sim_score(query, podcast_dict, genre_search):
+def genre_sim_score(query, podcast_dict, genre_query, genre_search):
     """ Returns the jaccard similarity of the genres of two podcasts
 
     query is a dictionary containing information about the query podcast
     """
-    query_genres = set(query["genres"])
+    print("query_genres", query["genres"])
+    print("genre_query", genre_query)
+    if genre_query != None:
+        query_genres = set(query["genres"] + [genre_query])
+    else:
+        query_genres = set(query["genres"])
     podcast_genres = set(podcast_dict["genres"])
     score = len(query_genres & podcast_genres)/len(query_genres | podcast_genres)
     if genre_search and score < .5: 
@@ -131,7 +136,7 @@ def num_ep_sim_score(query, podcast_dict, is_adv_search):
         podcast_count = float(podcast_dict["episode_count"])
         return max(0, 1 - (abs(query_count - podcast_count) / query_count))
 
-def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, minepcount_search):
+def update_score(query, podcast_dict, review_lst, genre_query, genre_search, avepdur_search, minepcount_search):
     total_score = 0
     description_score = round((description_cosine_sim_score(query, podcast_dict) * 100), 1)
     # review_score = int(round(reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100))
@@ -139,7 +144,7 @@ def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, 
 
     duration_score = round((duration_sim_score(query, podcast_dict, avepdur_search) * 100), 1)
     num_ep_score = round((num_ep_sim_score(query, podcast_dict, minepcount_search) * 100), 1)
-    genre_score = round(genre_sim_score(query, podcast_dict, genre_search), 1) # already 100%
+    genre_score = round(genre_sim_score(query, podcast_dict, genre_query, genre_search), 1) # already 100%
 
     
     total_score = round(.35 * genre_score + .35 * description_score + .1*duration_score + .1*num_ep_score + .1*review_score)
@@ -149,17 +154,18 @@ def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, 
     return total_score
 
 
-def get_ranked_podcast(query, podcast_lst, review_lst, genre_search=False, avepdur_search=False, minepcount_search=False):
+def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, genre_search=False, avepdur_search=False, minepcount_search=False):
     # query is a dictionary representing the podcast that the user chose
     # podcast_lst is a list of dictionaries, and each dictionary represents a podcast
     # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
+    # genre_query is the queried genre in advanced search. It is None if the user did not input one.
     # genre_search is a boolean that indicates whether a user is searching for a specific genre
     # avgepdur_search is a boolean that indicates whether a user is searching for a specific episode duration
     # minepcount_search is a boolean that indicates whether a user is searching for a specific minimum episode count
     
     # Returns a tuple of (score, podcast_data), so it will be an (int, dict) type
     # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
-    score_lst = list(map(lambda x: (update_score(query, x, review_lst, genre_search, avepdur_search, minepcount_search), x), podcast_lst))
+    score_lst = list(map(lambda x: (update_score(query, x, review_lst, genre_query, genre_search, avepdur_search, minepcount_search), x), podcast_lst))
     
     # KATHLEEN
     # score_lst = []
