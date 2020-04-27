@@ -63,34 +63,30 @@
     <div class="modal-details-reviews">
       <div class="modal-details-reviews-label">Reviews: </div>
       <div class="modal-details-reviews-wrapper">
+        {% for r in d.reviews %}
         <div class="modal-details-review-wrapper">
           <div class="modal-details-reviews-score">
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
+            <span class="fa fa-star
+            {% if r.rev_rating|int >= 1 %} checked {% endif %}"
+            ></span>
+            <span class="fa fa-star
+            {% if r.rev_rating|int >= 2 %} checked {% endif %}"
+            ></span>
+            <span class="fa fa-star
+            {% if r.rev_rating|int >= 3 %} checked {% endif %}"
+            ></span>
+            <span class="fa fa-star
+            {% if r.rev_rating|int >= 4 %} checked {% endif %}"
+            ></span>
+            <span class="fa fa-star
+            {% if r.rev_rating|int >= 5 %} checked {% endif %}"
+            ></span>
           </div>
           <div class="modal-details-reviews-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec aliquam mauris, eu auctor augue. Nunc ac magna a ex porttitor porta a nec dolor. Donec porttitor porttitor nunc, quis accumsan est elementum ut. Ut a elit sapien. Mauris id ante tempus, rhoncus justo nec, vestibulum leo. Vestibulum at enim feugiat, malesuada enim eget, tincidunt urna. Nunc sed lectus orci. Aenean lobortis lectus sed elit fringilla, ac vehicula quam molestie.
-
-            Suspendisse et lacus justo. Vestibulum vitae lorem lectus. Suspendisse et turpis quis eros luctus scelerisque. Fusce vulputate, neque non volutpat vehicula, eros dolor sodales odio, feugiat facilisis diam quam vitae magna. Praesent ut turpis volutpat, suscipit augue nec, varius est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed erat lorem, vestibulum at urna nec, consectetur mattis nulla. In ac justo a orci rhoncus malesuada.
+            {{r.rev_text}}
           </div>
         </div>
-        <div class="modal-details-review-wrapper">
-          <div class="modal-details-reviews-score">
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-          </div>
-          <div class="modal-details-reviews-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec aliquam mauris, eu auctor augue. Nunc ac magna a ex porttitor porta a nec dolor. Donec porttitor porttitor nunc, quis accumsan est elementum ut. Ut a elit sapien. Mauris id ante tempus, rhoncus justo nec, vestibulum leo. Vestibulum at enim feugiat, malesuada enim eget, tincidunt urna. Nunc sed lectus orci. Aenean lobortis lectus sed elit fringilla, ac vehicula quam molestie.
-
-            Suspendisse et lacus justo. Vestibulum vitae lorem lectus. Suspendisse et turpis quis eros luctus scelerisque. Fusce vulputate, neque non volutpat vehicula, eros dolor sodales odio, feugiat facilisis diam quam vitae magna. Praesent ut turpis volutpat, suscipit augue nec, varius est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed erat lorem, vestibulum at urna nec, consectetur mattis nulla. In ac justo a orci rhoncus malesuada.
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
     <div class="fadeout"></div>
