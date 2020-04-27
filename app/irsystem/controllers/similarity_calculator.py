@@ -74,8 +74,8 @@ def description_cosine_sim_score(query, podcast_dict):
         query_vec[idx] = query_word_lst.count(each_word)
         podcast_vec[idx] = podcast_word_lst.count(each_word)
 
-    numerator = query_vec.dot(podcast_vec)
-    denominator = LA.norm(query_vec) * LA.norm(podcast_vec)
+    numerator = query_vec.dot(podcast_vec) + 1
+    denominator = LA.norm(query_vec) * LA.norm(podcast_vec) + 1
     score = numerator / denominator
     # podcast_dict["similarities"] = [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", score), ("Reviews", "TBD")]
     # podcast_dict["similarity"] = score
@@ -104,8 +104,8 @@ def reviews_cosine_sim_score(query, podcast_dict, review_lst):
         query_vec[idx] = query_word_lst.count(each_word)
         podcast_vec[idx] = podcast_word_lst.count(each_word)
 
-    numerator = query_vec.dot(podcast_vec)
-    denominator = LA.norm(query_vec) * LA.norm(podcast_vec)
+    numerator = query_vec.dot(podcast_vec) + 1
+    denominator = LA.norm(query_vec) * LA.norm(podcast_vec) + 1
     score = numerator / denominator
     # podcast_dict["similarities"] = [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", score), ("Reviews", "TBD")]
     # podcast_dict["similarity"] = score
@@ -179,19 +179,19 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_search=False, avepd
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
     return ranked_podcast_lst[:20]
 
-# def main():
-#     print("The following is the score...")
-#     print("The query description is: Hello this is a test")
-#     for each_elem in get_ranked_podcast(
-#         {"name": 'query', "description": "Hello this is a test", "episode_count": "5", "avg_episode_duration": "10"}, 
-#         [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None"}, 
-#         {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9"}, 
-#         {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500"}],
-#         [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
-#         {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
-#         {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
-#         {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}]):
-#         print(each_elem)
+def main():
+    print("The following is the score...")
+    print("The query description is: Hello this is a test")
+    for each_elem in get_ranked_podcast(
+        {"name": 'query', "description": "Hello this is a test", "episode_count": "5", "avg_episode_duration": "10"}, 
+        [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None"}, 
+        {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9"}, 
+        {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500"}],
+        [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
+        {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
+        {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
+        {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}]):
+        print(each_elem)
 
-# main()
+main()
 # def get_top_rankings(query, )
