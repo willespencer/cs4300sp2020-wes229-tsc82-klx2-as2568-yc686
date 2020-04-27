@@ -18,9 +18,7 @@
     let podcastGenres = JSON.parse('{{genres | tojson }}');
 
     function toggleAdvancedSearch() {
-      console.log("clicked");
       currentAdvancedSearchDisplay = document.getElementById("advanced-search").style.display;
-      console.log(currentAdvancedSearchDisplay);
       if (currentAdvancedSearchDisplay === "flex") {
         document.getElementById("advanced-search").style.display = "none";
       } else {
@@ -68,7 +66,9 @@
     }
 
     function displayModal(nameObj) {
-      let name = nameObj.getAttribute("data-podcast-name")
+      console.log("in displayModal");
+      let name = nameObj.getAttribute("data-podcast-name");
+      console.log(name);
       modals = document.getElementsByClassName("modal-content");
       for(let i = 0; i < modals.length; i++) {
         if(modals[i].getAttribute("data-podcast-name") == name) {
@@ -78,7 +78,7 @@
     }
 
     function closeModal(nameObj) {
-      let name = nameObj.getAttribute("data-podcast-name")
+      let name = nameObj.getAttribute("data-podcast-name");
       modals = document.getElementsByClassName("modal-content");
       for(let i = 0; i < modals.length; i++) {
         if(modals[i].getAttribute("data-podcast-name") == name) {
@@ -225,7 +225,7 @@
       background-color: #5F9F9F !important;
       border-color: #5F9F9F !important;
     }
-    
+
     .advanced-search-button-wrapper {
       width: 100%;
       text-align: center;

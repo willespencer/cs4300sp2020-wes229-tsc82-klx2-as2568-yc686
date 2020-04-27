@@ -133,14 +133,16 @@ def num_ep_sim_score(query, podcast_dict, is_adv_search):
 
 def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, minepcount_search):
     total_score = 0
-    description_score = round(description_cosine_sim_score(query, podcast_dict) * 100)
-    review_score = round(reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100)
-    duration_score = round(duration_sim_score(query, podcast_dict, avepdur_search) * 100)
-    num_ep_score = round(num_ep_sim_score(query, podcast_dict, minepcount_search) * 100)
-    genre_score = round(genre_sim_score(query, podcast_dict, genre_search)) # already 100%
+    description_score = int(round((description_cosine_sim_score(query, podcast_dict) * 100)))
+    # review_score = int(round(reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100))
+    review_score = 0
+
+    duration_score = int(round(duration_sim_score(query, podcast_dict, avepdur_search) * 100))
+    num_ep_score = int(round(num_ep_sim_score(query, podcast_dict, minepcount_search) * 100))
+    genre_score = int(round(genre_sim_score(query, podcast_dict, genre_search))) # already 100%
 
     
-    total_score = .35 * genre_score + .35 * description_score + .1*duration_score + .1*num_ep_score + .1*review_score
+    total_score = round(.35 * genre_score + .35 * description_score + .1*duration_score + .1*num_ep_score + .1*review_score)
 
     podcast_dict["similarities"] = [("Duration", str(duration_score)), ("No. Episodes", str(num_ep_score)), ("Genre", str(genre_score)), ("Description", str(description_score)), ("Reviews", str(review_score))]
     podcast_dict["similarity"] = str(total_score)
