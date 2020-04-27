@@ -90,8 +90,16 @@ def search():
         # print(len(advancedQuery))
 
         # calculates similarity scores
+
+        # accum a list of all reviews for every podcast in podcast_lst and the query podcast
+        review_lst = []
+        review_list = review_lst + getPodcastReviews(query)
+        for podcast in podcast_lst:
+            review_list = review_lst + getPodcastReviews(podcast["name"])
+
+        print(review_list[:2])
         data_dict_list = get_ranked_podcast(getPodcastData(
-            query)[0], podcast_lst, getPodcastReviews(query),
+            query)[0], podcast_lst, review_list,
             genre_query,
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
