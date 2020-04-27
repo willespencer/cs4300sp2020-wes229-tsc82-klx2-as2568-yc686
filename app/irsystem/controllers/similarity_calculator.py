@@ -108,7 +108,7 @@ def duration_sim_score(query, podcast_dict, is_adv_search):
     else:
         query_duration = float(query["avg_episode_duration"])
         podcast_duration = float(podcast_dict["avg_episode_duration"])
-        return 1 - (abs(query_duration - podcast_duration) / query_duration)
+        return max(0, 1 - (abs(query_duration - podcast_duration) / query_duration))
 
 def num_ep_sim_score(query, podcast_dict, is_adv_search):
     if is_adv_search:
@@ -118,14 +118,14 @@ def num_ep_sim_score(query, podcast_dict, is_adv_search):
     else:
         query_count = float(query["episode_count"])
         podcast_count = float(podcast_dict["episode_count"])
-        return 1 - (abs(query_count - podcast_count) / query_count)
+        return max(0, 1 - (abs(query_count - podcast_count) / query_count))
 
 def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, minepcount_search):
     total_score = 0
-    description_score = description_cosine_sim_score(query, podcast_dict)
-    review_score = reviews_cosine_sim_score(query, podcast_dict, review_lst)
-    duration_score = duration_sim_score(query, podcast_dict, avepdur_search)
-    num_ep_score = num_ep_sim_score(query, podcast_dict, minepcount_search)
+    description_score = round(description_cosine_sim_score(query, podcast_dict) * 100)
+    review_score = round(reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100)
+    duration_score = round(duration_sim_score(query, podcast_dict, avepdur_search) * 100)
+    num_ep_score = round(num_ep_sim_score(query, podcast_dict, minepcount_search) * 100)
 
     total_score = description_score + review_score + duration_score + num_ep_score
     podcast_dict["similarities"] = [("Duration", str(duration_score)), ("No. Episodes", str(num_ep_score)), ("Genre", "TBD"), ("Description", str(description_score)), ("Reviews", str(review_score))]
@@ -151,7 +151,7 @@ def main():
         {"name": 'query', "description": "Hello this is a test", "episode_count": "5", "avg_episode_duration": "10"}, 
         [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None"}, 
         {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9"}, 
-        {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "5"}],
+        {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500"}],
         [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
         {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
         {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
