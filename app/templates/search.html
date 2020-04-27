@@ -10,18 +10,60 @@
   <link rel="stylesheet" type="text/css" href="/static/style/all.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/bootstrap_core.css" media="all" />
   <link rel="stylesheet" type="text/css" href="/static/style/form_validation.css" media="all" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="../static/style/grid.css" rel="stylesheet">
 
   <script>
     let podcastTitles = JSON.parse('{{podcast_names | tojson }}');
+    let podcastGenres = JSON.parse('{{genres | tojson }}');
+
+    function toggleAdvancedSearch() {
+      console.log("clicked");
+      currentAdvancedSearchDisplay = document.getElementById("advanced-search").style.display;
+      console.log(currentAdvancedSearchDisplay);
+      if (currentAdvancedSearchDisplay === "flex") {
+        document.getElementById("advanced-search").style.display = "none";
+      } else {
+        document.getElementById("advanced-search").style.display = "flex";
+      }
+    }
+
     function submitPodcast() {
       inputTitle = document.getElementById("podcastInput").value
+      inputGenre = document.getElementById("genreInput").value
+
       if(!podcastTitles.includes(inputTitle)) {
         document.getElementById("errorMessage").style.display = "block";
         document.getElementById("podcastInput").value = '';
       } else {
         // TODO: search if the title is valid?
         document.getElementById("errorMessage").style.display = "none";
+      }
+
+      if((inputGenre !== '') && (!podcastGenres.includes(inputGenre))) {
+        document.getElementById("genre_errorMessage").style.display = "block";
+      } else {
+        document.getElementById("genre_errorMessage").style.display = "none";
+      }
+
+    }
+
+    function toggleReviews(nameObj) {
+      let name = nameObj.getAttribute("data-podcast-name")
+      let text = nameObj.innerHTML
+      modals = document.getElementsByClassName("modal-content");
+      for(let i = 0; i < modals.length; i++) {
+        if(modals[i].getAttribute("data-podcast-name") == name) {
+          if(text == 'Read More') {
+            nameObj.innerHTML = "Read Less";
+            document.getElementsByClassName("modal-details-reviews")[i].style.height = "auto";
+            document.getElementsByClassName("fadeout")[i].style.background = "transparent";
+          } else {
+            nameObj.innerHTML = "Read More";
+            document.getElementsByClassName("modal-details-reviews")[i].style.height = "200px";
+            document.getElementsByClassName("fadeout")[i].style.background = "-webkit-linear-gradient(rgba(255, 255, 255, 0) 0%,rgba(255, 255, 255, 1) 100%)";
+          }
+        }
       }
     }
 
@@ -149,6 +191,7 @@
     }
     window.addEventListener('load', function () {
       autocomplete(document.getElementById("podcastInput"), podcastTitles);
+      autocomplete(document.getElementById("genreInput"), podcastGenres);
     })
   </script>
 
@@ -181,10 +224,41 @@
     .btn-primary:active {
       background-color: #5F9F9F !important;
       border-color: #5F9F9F !important;
+    .advanced-search-button-wrapper {
+      width: 100%;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+
+    #advanced-search-button {
+      width: 25%;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    #advanced-search-button:hover, #advanced-search-button:active {
+      border-bottom: 1px solid #ffffff;
+      padding-bottom: 0.5px;
+    }
+
+    #advanced-search {
+      display: none;
     }
 
     .result-hr {
       border-color: white;
+    }
+
+    .recommended-hr {
+      border-color: white;
+      width: 25%;
+    }
+
+    .feedback {
+      border-bottom: 1px solid #ffffff;
+      padding-bottom: 3px;
+      font-weight: 500;
     }
 
     .circleicon {
@@ -224,6 +298,9 @@
     .result-details-name {
       font-weight: bold;
       font-size: larger;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .result-details-author {
@@ -237,6 +314,11 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .iTunesLogo {
+      width: 2rem;
+      height: 2rem;
     }
   </style>
   <style>
@@ -259,7 +341,8 @@
       padding: 2%;
       color: black;
       width: 60%;
-      top: 5%;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
     }
     .modal-x {
       position: absolute;
@@ -304,6 +387,7 @@
       margin-top: 2%;
       padding-left: 2%;
       justify-content: space-evenly;
+      margin-bottom: -5rem;
     }
     .modal-details-genres {
       display: flex;
@@ -313,7 +397,7 @@
     .modal-details-genres-genre-wrapper {
       display:flex;
       flex-direction: row;
-      width: 30%;
+      width: 100%;
     }
     .modal-details-genre {
       width: fit-content;
@@ -346,6 +430,39 @@
       border-radius: 50%;
       text-align: center;
       line-height: 4rem;
+    }
+    .modal-details-reviews {
+      display:flex;
+      flex-direction: column;
+      margin-top: 2%;
+
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .modal-details-reviews-wrapper {
+      display:flex;
+      flex-direction: column;
+      margin-top: .5rem
+    }
+    .modal-details-reviews-text {
+      font-size: 14px;
+    }
+    .modal-details-reviews-button {
+      position: absolute;
+      bottom: 1rem;
+    }
+    .modal-details-review-wrapper {
+      margin-bottom: 1rem;
+    }
+    .fadeout {
+      position: relative;
+      bottom: 8rem;
+      height: 8rem;
+      background: -webkit-linear-gradient(
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 1) 100%
+          );
     }
     .invalid-feedback {
       color: #a53545;
@@ -389,6 +506,9 @@
       /*when navigating through the items using the arrow keys:*/
       background-color: #e9e9e9 !important;
     }
+    .checked {
+      color: orange;
+    }
   </style>
 </head>
 
@@ -410,38 +530,54 @@
       <div class="col-md-8 order-md-1">
         <form class="needs-validation" novalidate="" method="GET">
           <div class="mb-3 inputWrapper">
-            <label for="address">I Want to Find a Podcast Like</label>
+            <label for="podcastInput">I Want to Find a Podcast Like</label>
             <div class="autocomplete">
-              <input id="podcastInput" type="text" class="form-control" id="address" placeholder="Myths and Legends" required="" name="podcast_search">
+              <input id="podcastInput" type="text" class="form-control" placeholder="Myths and Legends" required="" name="podcast_search">
             </div>
             <div id="errorMessage" class="invalid-feedback">
               Please enter a valid podcast name
             </div>
           </div>
-          <div class="py-3 text-center" id="advanced-search-button">Advanced Search (Genre, Episode Duration) Coming Soon</div>
-          <!-- TODO: Advanced search form -->
-          <!-- <div class="row" id="advanced-search">
+          <div class="py-3 advanced-search-button-wrapper">
+            <div id="advanced-search-button" onclick="toggleAdvancedSearch()"><p class="lead">Advanced Search</p></div>
+          </div>
+          <div class="row" id="advanced-search">
             <div class="col-md-6 mb-3">
-              <label for="country">Genre</label>
-              <select class="custom-select d-block w-100" id="country">
-                <option value="">Choose...</option>
-                <option>Food</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid genre.
+              <div class="mb-3 inputWrapper">
+              <label for="genreInput">Genre</label>
+              <div class="autocomplete">
+                <input id="genreInput" type="text" class="form-control" placeholder="Literature" name="genre_search">
+              </div>
+              <div id="genre_errorMessage" class="invalid-feedback">
+                Please enter a valid genre
+              </div>
               </div>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="state">Optimal Episode Duration</label>
-              <select class="custom-select d-block w-100" id="state">
+            <div class="col-md-3 mb-3">
+              <label for="avg_ep_duration">Average Episode Duration</label>
+              <select class="custom-select d-block w-100" id="avg_ep_duration" name="avg_ep_duration">
                 <option value="">Choose...</option>
-                <option>25 ~ 50 min</option>
+                {% for avg_ep_duration in avg_ep_durations %}
+                <option value="{{avg_ep_duration}}">{{avg_ep_duration}}</option>
+                {% endfor %}
               </select>
               <div class="invalid-feedback">
                 Please provide a valid duration.
               </div>
             </div>
-          </div> -->
+            <div class="col-md-3 mb-3">
+              <label for="min_ep_count">Minimum Episode Count</label>
+              <select class="custom-select d-block w-100" id="min_ep_count" name="min_ep_count">
+                <option value="">Choose...</option>
+                {% for min_ep_count in min_ep_counts %}
+                <option vale="{{min_ep_count}}">{{min_ep_count}}</option>
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid minimum number of episodes.
+              </div>
+            </div>
+          </div> 
           <button class="btn btn-primary btn-lg btn-block search-button" onclick="submitPodcast()">Search for Podcast</button>
         </form>
     </div>
@@ -449,13 +585,33 @@
     <hr class="result-hr" />
     <div class="py-5 text-center">
       <h2>Recommended Podcasts</h2>
-      <p class="lead">Here are some podcasts that you might like.</p>
+      <hr class="recommended-hr" />
+      <p class="lead">You searched for podcasts similar to
+        <span class="feedback">{{query_feedback}}</span>
+        {% if genre_feedback or avg_ep_duration_feedback or min_ep_count_feedback %}
+        with
+        {% endif %}
+        {% if genre_feedback %}
+        the genre <span class="feedback">{{genre_feedback}}</span>
+        {% endif %}
+        {% if genre_feedback and avg_ep_duration_feedback %}
+        and
+        {% endif %}
+        {% if avg_ep_duration_feedback %}
+        an average episode duration of <span class="feedback">{{avg_ep_duration_feedback}}</span>
+        {% endif %}
+        {% if (genre_feedback or avg_ep_duration_feedback) and min_ep_count_feedback %}
+        and
+        {% endif %}
+        {% if min_ep_count_feedback %}
+        a minimum of <span class="feedback">{{min_ep_count_feedback}}</span>
+        {% endif %}.
+      </p>
     </div>
     {% for d in data %}
       {% include 'result.html' %}
     {% endfor %}
     {% endif %}
-<!-- TODO: Figure out if we need content wrapper div-->
     </div>
     <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
       Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>

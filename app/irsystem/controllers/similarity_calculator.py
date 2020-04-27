@@ -32,6 +32,18 @@ def make_word_blob(podcast_dict, review_lst):
     #     word_blob = word_blob + tokenize(each_review["rev_text"])
     return word_blob
 
+def genre_sim_score(query, podcast_dict, genre_search):
+    """ Returns the jaccard similarity of the genres of two podcasts
+
+    query is a dictionary containing information about the query podcast
+    """
+    query_genres = set(query["genres"])
+    podcast_genres = set(podcast_dict["genres"])
+    score = len(query_genres & podcast_genres)/len(query_genres | podcast_genres)
+    if genre_search and score < .5: 
+        score += .5
+    return score * 100
+
 
 def jaccard_sim_score(query, podcast_dict, review_lst):
     """Returns an int percentage giving the jaccard similarity of 
@@ -39,11 +51,10 @@ def jaccard_sim_score(query, podcast_dict, review_lst):
     Step 2: Make a word blob of all the reviews and description of the podcast_dict
     Step 3: Do a jaccard sim of the two word blobs
     """
-    # YOUR CODE HERE
     word_blob_1 = set(make_word_blob(query, review_lst))
     word_blob_2 = set(make_word_blob(podcast_dict, review_lst))
     score = round(len(word_blob_1 & word_blob_2) * 100/len(word_blob_1 | word_blob_2))
-    podcast_dict["similarities"] = [("Duration", "TBD"), ("No. Episodes", "TBD"), ("Genre", "TBD"), ("Description", score)]
+    podcast_dict["similarities"] = [("Duration","TBD"), ("No. Episodes","TBD"), ("Genre","TBD"), ("Description",score)]
     podcast_dict["similarity"] = score
     return score
 
@@ -126,9 +137,12 @@ def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, 
     review_score = round(reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100)
     duration_score = round(duration_sim_score(query, podcast_dict, avepdur_search) * 100)
     num_ep_score = round(num_ep_sim_score(query, podcast_dict, minepcount_search) * 100)
+    genre_score = round(genre_sim_score(query, podcast, genre_search)) # already 100%
 
-    total_score = description_score + review_score + duration_score + num_ep_score
-    podcast_dict["similarities"] = [("Duration", str(duration_score)), ("No. Episodes", str(num_ep_score)), ("Genre", "TBD"), ("Description", str(description_score)), ("Reviews", str(review_score))]
+    
+    total_score = .35 * genre_score + .35 * description_score + .1*duration_score + .1*num_ep_score + .1*review_score
+
+    podcast_dict["similarities"] = [("Duration", str(duration_score)), ("No. Episodes", str(num_ep_score)), ("Genre", str(genre_score)), ("Description", str(description_score)), ("Reviews", str(review_score))]
     podcast_dict["similarity"] = str(total_score)
     return total_score
 
@@ -137,26 +151,45 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_search=False, avepd
     # query is a dictionary representing the podcast that the user chose
     # podcast_lst is a list of dictionaries, and each dictionary represents a podcast
     # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
+    # genre_search is a boolean that indicates whether a user is searching for a specific genre
+    # avgepdur_search is a boolean that indicates whether a user is searching for a specific episode duration
+    # minepcount_search is a boolean that indicates whether a user is searching for a specific minimum episode count
+    
     # Returns a tuple of (score, podcast_data), so it will be an (int, dict) type
     # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
     score_lst = list(map(lambda x: (update_score(query, x, review_lst, genre_search, avepdur_search, minepcount_search), x), podcast_lst))
+    
+    # KATHLEEN
+    # score_lst = []
+
+    # for podcast in podcast_lst:
+    #     genre_score = genre_sim_score(query, podcast, genre_search)
+    #     description_score = 0
+    #     duration_score = 0
+    #     epcount_score = 0
+    #     review_score = 0
+    #     podcast["similarities"] = [("Duration",duration_score), ("No. Episodes",epcount_score), ("Genre",genre_score), ("Description",description_score), ("Reviews", review_score)] 
+    #     total_score = .35 * genre_score + .35 * description_score + .1*duration_score + .1*epcount_score + .1*review_score
+    #     podcast["similarity"] = round(total_score)
+    #     score_lst.append((total_score, podcast))
+    # score_lst = list(map(lambda x: (jaccard_sim_score(query, x, review_lst), x), podcast_lst))
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
     return ranked_podcast_lst[:20]
 
-def main():
-    print("The following is the score...")
-    print("The query description is: Hello this is a test")
-    for each_elem in get_ranked_podcast(
-        {"name": 'query', "description": "Hello this is a test", "episode_count": "5", "avg_episode_duration": "10"}, 
-        [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None"}, 
-        {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9"}, 
-        {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500"}],
-        [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
-        {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
-        {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
-        {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}]):
-        print(each_elem)
+# def main():
+#     print("The following is the score...")
+#     print("The query description is: Hello this is a test")
+#     for each_elem in get_ranked_podcast(
+#         {"name": 'query', "description": "Hello this is a test", "episode_count": "5", "avg_episode_duration": "10"}, 
+#         [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None"}, 
+#         {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9"}, 
+#         {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500"}],
+#         [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
+#         {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
+#         {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
+#         {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}]):
+#         print(each_elem)
 
-main()
+# main()
 # def get_top_rankings(query, )

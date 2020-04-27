@@ -1,6 +1,6 @@
-<div class="modal-content" data-podcast-name={{d.name}}>
+<div class="modal-content" data-podcast-name="{{d.name}}">
   <div class="modal-content-inner">
-  <div class="modal-x" onclick="closeModal(this)" data-podcast-name={{d.name}}>x</div>
+  <div class="modal-x" onclick="closeModal(this)" data-podcast-name="{{d.name}}">x</div>
   <div class="modal-content-top">
     <div class="modal-content-top-left">
       {% if d.pic == "placeholder.jpg" %}
@@ -25,7 +25,7 @@
       </div>
       {% if d.link != "None" %}
       <div class="modal-content-top-right-details">
-        <span class="modal-details-link">Listen Here: <a href={{d.link}}>{{d.link}}</a></span>
+        <span class="modal-details-link">Listen Here: <a href={{d.link}} target="_blank"><span><img class="iTunesLogo" src="../static/style/iTunesLogo.png" alt="link to iTunes podcast"/></span></a></span>
       </div>
       {% endif %}
     </div>
@@ -60,6 +60,41 @@
         {% endfor %}
       </div>
     </div>
+    <div class="modal-details-reviews">
+      <div class="modal-details-reviews-label">Reviews: </div>
+      <div class="modal-details-reviews-wrapper">
+        <div class="modal-details-review-wrapper">
+          <div class="modal-details-reviews-score">
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+          </div>
+          <div class="modal-details-reviews-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec aliquam mauris, eu auctor augue. Nunc ac magna a ex porttitor porta a nec dolor. Donec porttitor porttitor nunc, quis accumsan est elementum ut. Ut a elit sapien. Mauris id ante tempus, rhoncus justo nec, vestibulum leo. Vestibulum at enim feugiat, malesuada enim eget, tincidunt urna. Nunc sed lectus orci. Aenean lobortis lectus sed elit fringilla, ac vehicula quam molestie.
+
+            Suspendisse et lacus justo. Vestibulum vitae lorem lectus. Suspendisse et turpis quis eros luctus scelerisque. Fusce vulputate, neque non volutpat vehicula, eros dolor sodales odio, feugiat facilisis diam quam vitae magna. Praesent ut turpis volutpat, suscipit augue nec, varius est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed erat lorem, vestibulum at urna nec, consectetur mattis nulla. In ac justo a orci rhoncus malesuada.
+          </div>
+        </div>
+        <div class="modal-details-review-wrapper">
+          <div class="modal-details-reviews-score">
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+          </div>
+          <div class="modal-details-reviews-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec aliquam mauris, eu auctor augue. Nunc ac magna a ex porttitor porta a nec dolor. Donec porttitor porttitor nunc, quis accumsan est elementum ut. Ut a elit sapien. Mauris id ante tempus, rhoncus justo nec, vestibulum leo. Vestibulum at enim feugiat, malesuada enim eget, tincidunt urna. Nunc sed lectus orci. Aenean lobortis lectus sed elit fringilla, ac vehicula quam molestie.
+
+            Suspendisse et lacus justo. Vestibulum vitae lorem lectus. Suspendisse et turpis quis eros luctus scelerisque. Fusce vulputate, neque non volutpat vehicula, eros dolor sodales odio, feugiat facilisis diam quam vitae magna. Praesent ut turpis volutpat, suscipit augue nec, varius est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed erat lorem, vestibulum at urna nec, consectetur mattis nulla. In ac justo a orci rhoncus malesuada.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fadeout"></div>
+    <button class="btn btn-primary modal-details-reviews-button" onclick="toggleReviews(this)" data-podcast-name="{{d.name}}">Read More</button>
   </div>
   </div>
 </div>
