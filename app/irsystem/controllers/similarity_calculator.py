@@ -103,6 +103,8 @@ def reviews_cosine_sim_score(query, podcast_dict, review_lst):
 def duration_sim_score(query, podcast_dict, is_adv_search):
     if is_adv_search:
         return 1
+    elif query["avg_episode_duration"] == "None" or podcast_dict["avg_episode_duration"] == "None":
+        return 0
     else:
         query_duration = float(query["avg_episode_duration"])
         podcast_duration = float(podcast_dict["avg_episode_duration"])
@@ -111,6 +113,8 @@ def duration_sim_score(query, podcast_dict, is_adv_search):
 def num_ep_sim_score(query, podcast_dict, is_adv_search):
     if is_adv_search:
         return 1
+    elif query["episode_count"] == "None" or podcast_dict["episode_count"] == "None":
+        return 0    
     else:
         query_count = float(query["episode_count"])
         podcast_count = float(podcast_dict["episode_count"])
@@ -124,8 +128,8 @@ def update_score(query, podcast_dict, review_lst, genre_search, avepdur_search, 
     num_ep_score = num_ep_sim_score(query, podcast_dict, minepcount_search)
 
     total_score = description_score + review_score + duration_score + num_ep_score
-    podcast_dict["similarities"] = [("Duration", duration_score), ("No. Episodes", num_ep_score), ("Genre", "TBD"), ("Description", description_score), ("Reviews", review_score)]
-    podcast_dict["similarity"] = total_score
+    podcast_dict["similarities"] = [("Duration", str(duration_score)), ("No. Episodes", str(num_ep_score)), ("Genre", "TBD"), ("Description", str(description_score)), ("Reviews", str(review_score))]
+    podcast_dict["similarity"] = str(total_score)
     return total_score
 
 
@@ -145,7 +149,7 @@ def main():
     print("The query description is: Hello this is a test")
     for each_elem in get_ranked_podcast(
         {"name": 'query', "description": "Hello this is a test", "episode_count": "5", "avg_episode_duration": "10"}, 
-        [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "11"}, 
+        [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None"}, 
         {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9"}, 
         {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "5"}],
         [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
