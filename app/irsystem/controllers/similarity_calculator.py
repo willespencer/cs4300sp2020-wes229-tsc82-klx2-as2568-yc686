@@ -103,7 +103,7 @@ def reviews_cosine_sim_score(query, podcast_dict, review_lst):
 def duration_sim_score(query, podcast_dict, is_adv_search):
     if is_adv_search:
         return 1
-    elif query["avg_episode_duration"] == "None" or podcast_dict["avg_episode_duration"] == "None":
+    elif query["avg_episode_duration"] == "None" or podcast_dict["avg_episode_duration"] == "None" or query["avg_episode_duration"] == 0 or podcast_dict["avg_episode_duration"] == 0:
         return 0
     else:
         query_duration = float(query["avg_episode_duration"])
@@ -113,7 +113,7 @@ def duration_sim_score(query, podcast_dict, is_adv_search):
 def num_ep_sim_score(query, podcast_dict, is_adv_search):
     if is_adv_search:
         return 1
-    elif query["episode_count"] == "None" or podcast_dict["episode_count"] == "None":
+    elif query["episode_count"] == "None" or podcast_dict["episode_count"] == "None" or query["episode_count"] == 0 or podcast_dict["episode_count"] == 0:
         return 0    
     else:
         query_count = float(query["episode_count"])
