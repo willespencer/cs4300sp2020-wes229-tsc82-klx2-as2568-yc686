@@ -100,14 +100,18 @@ def search():
         review_lst = list(filter(lambda x: x["pod_name"] in podcast_lst_names, review_lst))
         
     
-        # review_lst = []
-        # review_lst = review_lst + getPodcastReviews(query)
-        # for podcast in podcast_lst:
-        #     review_lst = review_lst + getPodcastReviews(podcast["name"])
 
-        # print(review_lst[:2])
+
+        pod_name_to_idx_review_dict = {}
+        for (idx, review) in enumerate(review_lst):
+            try:
+                pod_name_to_idx_review_dict[review["pod_name"]] = pod_name_to_idx_review_dict[review["pod_name"]] + [idx]
+            except KeyError:
+                pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
+
+
         data_dict_list = get_ranked_podcast(getPodcastData(
-            query)[0], podcast_lst, review_lst,
+            query)[0], podcast_lst, review_lst, pod_name_to_idx_review_dict,
             genre_query,
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
