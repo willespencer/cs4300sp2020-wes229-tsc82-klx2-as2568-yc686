@@ -97,7 +97,7 @@ def search():
         for podcast in podcast_lst:
             review_lst = review_lst + getPodcastReviews(podcast["name"])
 
-        print(review_lst[:2])
+        # print(review_lst[:2])
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], podcast_lst, review_lst,
             genre_query,
