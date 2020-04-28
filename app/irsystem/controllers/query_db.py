@@ -89,8 +89,11 @@ def getPodcastData(query="all"):
     return all_podcasts
 
 
-def getPodcastReviews(query):
-    query_result = Podcasts.query.filter_by(name=query).all()
+def getPodcastReviews(query="all"):
+    if query == "all":
+        query_result = Podcasts.query.all()
+    else:
+        query_result = Podcasts.query.filter_by(name=query).all()
 
     # formatting list of podcast reviews dicts for query
     all_reviews = []

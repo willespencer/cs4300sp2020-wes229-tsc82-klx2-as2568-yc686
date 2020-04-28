@@ -103,7 +103,7 @@ def reviews_cosine_sim_score(query, podcast_dict, review_lst):
             podcast_word_lst += ''
         else:
             podcast_word_lst = podcast_word_lst + tokenize(each_review["rev_text"])
-    word_lst = list(enumerate(list(set(query_word_lst + podcast_word_lst))))
+    word_lst = enumerate(list(set(query_word_lst + podcast_word_lst)))
     num_distinct_words = len(list(set(query_word_lst + podcast_word_lst)))
     query_vec = np.zeros(num_distinct_words)
     podcast_vec = np.zeros(num_distinct_words)
@@ -143,8 +143,8 @@ def num_ep_sim_score(query, podcast_dict, is_adv_search):
 def update_score(query, podcast_dict, review_lst, genre_query, genre_search, avepdur_search, minepcount_search):
     total_score = 0
     description_score = round((description_cosine_sim_score(query, podcast_dict) * 100), 1)
-    review_score = round((reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100), 1)
-    # review_score = 0
+    # review_score = round((reviews_cosine_sim_score(query, podcast_dict, review_lst) * 100), 1)
+    review_score = 0
 
     duration_score = round((duration_sim_score(query, podcast_dict, avepdur_search) * 100), 1)
     num_ep_score = round((num_ep_sim_score(query, podcast_dict, minepcount_search) * 100), 1)

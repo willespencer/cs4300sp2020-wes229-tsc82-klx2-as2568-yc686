@@ -92,12 +92,20 @@ def search():
         # calculates similarity scores
 
         # accum a list of all reviews for every podcast in podcast_lst and the query podcast
-        review_lst = []
-        review_lst = review_lst + getPodcastReviews(query)
-        for podcast in podcast_lst:
-            review_lst = review_lst + getPodcastReviews(podcast["name"])
+        # initially gets all podcast reviews
+        review_lst = getPodcastReviews()
+        
+        podcast_lst_names = [query] + [podcast["name"] for podcast in podcast_lst]
+        
+        review_lst = list(filter(lambda x: x["pod_name"] in podcast_lst_names, review_lst))
+        
+    
+        # review_lst = []
+        # review_lst = review_lst + getPodcastReviews(query)
+        # for podcast in podcast_lst:
+        #     review_lst = review_lst + getPodcastReviews(podcast["name"])
 
-        print(review_lst[:2])
+        # print(review_lst[:2])
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], podcast_lst, review_lst,
             genre_query,
@@ -109,7 +117,8 @@ def search():
     index_of_podcast = 0
     found_query = False
     for i in range(len(data_dict_list)):
-        data_dict_list[i]['reviews'] = getPodcastReviews(data_dict_list[i]['name'])
+
+        data_dict_list[i]['reviews'] = list(filter(lambda x: x["pod_name"] == data_dict_list[i]['name'], review_lst))
         if(data_dict_list[i]['name'] == query):
             index_of_podcast = i
             found_query = True
