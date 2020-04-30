@@ -198,6 +198,9 @@ def update_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict, g
     
     total_score = round(.45 * genre_score + .3 * description_score + .1*duration_score + .1*num_ep_score + .05*review_score)
 
+    if np.isnan(total_score):
+        total_score = -10000
+
     podcast_dict["similarities"] = [("Duration", str(duration_score)), ("No. Episodes", str(num_ep_score)), ("Genre", str(genre_score)), ("Description", str(description_score)), ("Reviews", str(review_score))]
     podcast_dict["similarity"] = str(total_score)
     return total_score
