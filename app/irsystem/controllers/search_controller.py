@@ -133,8 +133,6 @@ def search():
 
         queryPodcastData = getPodcastData(query)
 
-        print(queryPodcastData)
-
         data_dict_list = get_ranked_podcast(queryPodcastData[0],
             podcast_lst, review_lst, pod_name_to_idx_review_dict,
             genre_query,
