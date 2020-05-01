@@ -111,13 +111,15 @@
 
           /*for each item in the array...*/
           for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase() && numChildren < maxChildren) {
+            /*check if the item includes the same letters as the text field value:*/
+            if (arr[i].toUpperCase().includes(val.toUpperCase()) && numChildren < maxChildren) {
               /*create a DIV element for each matching element:*/
               b = document.createElement("DIV");
               /*make the matching letters bold:*/
-              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-              b.innerHTML += arr[i].substr(val.length);
+              valInd = arr[i].toUpperCase().indexOf(val.toUpperCase());
+              b.innerHTML = arr[i].substr(0, valInd);
+              b.innerHTML += "<strong>" + arr[i].substr(valInd, val.length) + "</strong>";
+              b.innerHTML += arr[i].substr(valInd + val.length);
               /*insert a input field that will hold the current array item's value:*/
               let newInput = document.createElement("INPUT");
               newInput.type = 'hidden';
@@ -259,6 +261,17 @@
 
     .result-hr {
       border-color: white;
+    }
+
+    #clear-search-button {
+      border-color: white;
+      color: white;
+      margin-left: 1rem;
+    }
+
+    #clear-search-button:hover, #clear-search-button:active {
+      background-color: #79CDCD;
+      border-color: #79CDCD;
     }
 
     .recommended-hr {
@@ -540,7 +553,6 @@
         {% include 'modal.html' %}
       {% endfor %}
       {% endif %}
-    <!-- TODO: Figure out if we need content wrapper div-->
       <div class="content-buttonWrapper">
         <a href="http://pea-podcast-proto1.herokuapp.com/" target="_blank"><button class="btn btn-primary btn-prototype">Prototype 1</button></a>
       </div>
@@ -606,6 +618,7 @@
     </div>
     {% if data %}
     <hr class="result-hr" />
+    <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype" id="clear-search-button">Clear Search</button></a>
     <div class="py-5 text-center">
       <h2>Recommended Podcasts</h2>
       <hr class="recommended-hr" />

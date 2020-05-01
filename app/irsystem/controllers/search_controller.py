@@ -132,6 +132,9 @@ def search():
                 pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
 
         queryPodcastData = getPodcastData(query)
+
+        print(queryPodcastData)
+
         data_dict_list = get_ranked_podcast(queryPodcastData[0],
             podcast_lst, review_lst, pod_name_to_idx_review_dict,
             genre_query,
@@ -139,10 +142,10 @@ def search():
             advancedQueryDict["avg_ep_duration"],
             advancedQueryDict["min_ep_count"])
 
-    data_dict_list = cleanData(data_dict_list, review_lst)
-    if(len(queryPodcastData) > 0):
-        queryPodcastData = cleanData(queryPodcastData, review_lst)
-    data_dict_list = removeQueryFromData(data_dict_list, query)
+        data_dict_list = cleanData(data_dict_list, review_lst)
+        if(len(queryPodcastData) > 0):
+            queryPodcastData = cleanData(queryPodcastData, review_lst)
+        data_dict_list = removeQueryFromData(data_dict_list, query)
 
     return render_template('search.html', name=project_name, netid=net_id,
     data=data_dict_list, podcast_names=podcast_names, genres=genres,
