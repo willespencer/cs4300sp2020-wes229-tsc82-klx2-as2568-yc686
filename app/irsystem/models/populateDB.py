@@ -5,7 +5,7 @@ import datetime
 import psycopg2
 from psycopg2 import connect, Error
 
-update_podcasts_and_reviews = True
+update_podcasts_and_reviews = False
 
 try:
     conn = connect(
@@ -75,9 +75,9 @@ if cur != None:
                     combinedData[name] = newData
                 numReviews += 1
 
-        print("num Reviews: " + str(numReviews))  # = 5889
-        print(combinedData["The Moth"])
-        print(len(combinedData["The Moth"]))
+        # print("num Reviews: " + str(numReviews))  # = 5889
+        # print(combinedData["The Moth"])
+        # print(len(combinedData["The Moth"]))
 
         try:
             for key in combinedData.keys():
