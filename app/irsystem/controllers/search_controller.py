@@ -4,6 +4,8 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.podcasts import Podcasts
 from app.irsystem.controllers.similarity_calculator import *
 from app.irsystem.controllers.query_db import *
+import json
+import csv
 
 project_name = "Find the Pea to your Podcast"
 net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Chan: yc686, Akira Shindo: as2568"
@@ -239,9 +241,51 @@ def search():
             except KeyError:
                 pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
 
-        inv_idx = build_inverted_index(podcast_lst)
-        idf = compute_idf(inv_idx, len(podcast_lst))
-        doc_norms = compute_doc_norms(inv_idx, idf, len(podcast_lst))
+        # inv_idx = build_inverted_index(podcast_lst)  # dict
+        # idf = compute_idf(inv_idx, len(podcast_lst))  # dict
+        # doc_norms = compute_doc_norms(inv_idx, idf, len(podcast_lst))  # list
+
+        inv_idx = {}
+        with open('data/inv_idx.csv', mode='r') as infile:
+            reader = csv.reader(infile)
+            for rows in reader:
+                term_info = rows[1].replace('\"', '').replace(
+                    '[', '').replace(']', '').split("), (")
+                for x in range(len(term_info)):
+                    doc_info = term_info[x].replace(
+                        '(', '').replace(')', '').split(", ")
+                    term_info[x] = (int(doc_info[0]), int(doc_info[1]))
+                inv_idx[rows[0]] = term_info
+        # print(inv_idx)
+
+        idf = {}
+        with open('data/idf.csv', mode='r') as infile:
+            reader = csv.reader(infile)
+            idf = {rows[0]: float(rows[1]) for rows in reader}
+
+        f = open('data/doc_norms.txt', 'r')
+        doc_norms = f.readlines()
+        f.close()
+        doc_norms = doc_norms[0]
+        doc_norms = doc_norms.replace('[', '').replace(']', '').split(", ")
+        doc_norms = [float(i) for i in doc_norms]
+        # print(doc_norms)
+
+        createDocFiles = False
+
+        if createDocFiles:
+            # write output to seperate file so we can just pull from that for our data
+            w = csv.writer(open("data/inv_idx.csv", "w"))
+            for key, val in inv_idx.items():
+                w.writerow([key, val])
+
+            h = csv.writer(open("data/idf.csv", "w"))
+            for key, val in idf.items():
+                h.writerow([key, val])
+
+            f = open("data/doc_norms.txt", "w")
+            f.write(str(doc_norms.tolist()))
+            f.close()
 
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], podcast_lst, review_lst, pod_name_to_idx_review_dict,
@@ -252,7 +296,7 @@ def search():
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
             advancedQueryDict["min_ep_count"])
-        print(data_dict_list)
+        # print(data_dict_list)
 
     # remove querried podcast from showing in result list, and round avg durration and episode count
     index_of_podcast = 0

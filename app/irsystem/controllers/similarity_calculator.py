@@ -119,6 +119,8 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
                 numerator += (query_dict[each_token]
                               * each_doc[1]) * (idf[each_token]**2)
 
+    # print(type(query_norm))
+    # print(type(doc_norms[doc_id]))
     denominator = query_norm * doc_norms[doc_id]
     score = (numerator + 0.5) / (denominator + 0.5)
     doc_id += 1
