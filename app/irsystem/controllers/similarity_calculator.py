@@ -235,7 +235,7 @@ def update_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict, g
     return total_score
 
 
-def get_ranked_podcast(query, podcast_lst, review_lst, pod_name_to_idx_review_dict, genre_query, genre_search=False, avepdur_search=False, minepcount_search=False, inv_idx, idf, doc_norms):
+def get_ranked_podcast(query, podcast_lst, review_lst, pod_name_to_idx_review_dict, genre_query, inv_idx, idf, doc_norms, genre_search=False, avepdur_search=False, minepcount_search=False):
     # query is a dictionary representing the podcast that the user chose
     # podcast_lst is a list of dictionaries, and each dictionary represents a podcast
     # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database

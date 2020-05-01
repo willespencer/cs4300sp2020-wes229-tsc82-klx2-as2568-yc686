@@ -238,13 +238,13 @@ def search():
 
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], podcast_lst, review_lst, pod_name_to_idx_review_dict,
-            genre_query,
-            advancedQueryDict["genre"],
-            advancedQueryDict["avg_ep_duration"],
-            advancedQueryDict["min_ep_count"],
+            genre_query,             
             inv_idx,
             idf, 
-            doc_norms)
+            doc_norms,
+            advancedQueryDict["genre"],
+            advancedQueryDict["avg_ep_duration"],
+            advancedQueryDict["min_ep_count"])
 
     # remove querried podcast from showing in result list, and round avg durration and episode count
     index_of_podcast = 0
