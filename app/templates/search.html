@@ -155,9 +155,9 @@
             /*and and make the current item more visible:*/
             addActive(x);
           } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-            e.preventDefault();
             if (currentFocus > -1) {
+              /*If the ENTER key is pressed, prevent the form from being submitted,*/
+              e.preventDefault();
               /*and simulate a click on the "active" item:*/
               if (x) x[currentFocus].click();
             }
@@ -566,7 +566,7 @@
         <p class="lead">Please fill out the form below to find a podcast.</p>
       </div>
       <div class="col-md-8 order-md-1">
-        <form class="needs-validation" novalidate="" method="GET">
+        <form class="needs-validation" novalidate="" method="GET" onsubmit="submitPodcast()">
           <div class="mb-3 inputWrapper">
             <label for="podcastInput">I Want to Find a Podcast Like</label>
             <div class="autocomplete">
@@ -616,7 +616,7 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-primary btn-lg btn-block search-button" onclick="submitPodcast()">Search for Podcast</button>
+          <input type="submit" class="btn btn-primary btn-lg btn-block search-button" value="Search for Podcast" />
         </form>
     </div>
     {% if data %}
