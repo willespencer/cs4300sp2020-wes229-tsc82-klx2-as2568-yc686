@@ -5,7 +5,6 @@ from app.irsystem.models.podcasts import Podcasts
 from app.irsystem.controllers.similarity_calculator import *
 from app.irsystem.controllers.query_db import *
 
-
 project_name = "Find the Pea to your Podcast"
 net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Chan: yc686, Akira Shindo: as2568"
 
@@ -33,6 +32,129 @@ def cleanMinEpCountQuery(min_ep_count_query):
         return int(min_ep_count_query[:min_ep_count_query.index(" ")])
     else:
         return 0
+
+def build_inverted_index(podcast_lst):
+    """ Builds an inverted index from the messages.
+    
+    Arguments
+    =========
+    
+    podcast_lst: list of dicts.
+        Each message in this list already has a 'toks'
+        field that contains the tokenized message.
+    
+    Returns
+    =======
+    
+    inverted_index: dict
+        For each term, the index contains 
+        a sorted list of tuples (doc_id, count_of_term_in_doc)
+        such that tuples with smaller doc_ids appear first:
+        inverted_index[term] = [(d1, tf1), (d2, tf2), ...]
+        
+    Example
+    =======
+    
+    >> test_idx = build_inverted_index([
+    ...    {'toks': ['to', 'be', 'or', 'not', 'to', 'be']},
+    ...    {'toks': ['do', 'be', 'do', 'be', 'do']}])
+    
+    >> test_idx['be']
+    [(0, 2), (1, 2)]
+    
+    >> test_idx['not']
+    [(0, 1)]
+    
+    """
+    doc_id = 0
+    word_set = {}
+    inverted_index = {}
+    for each_dict in podcast_lst:
+        word_set = set(tokenize(each_dict["description"]))
+        for each_word in word_set:
+            if each_word in inverted_index.keys():
+                inverted_index[each_word] += [(doc_id, tokenize(each_dict["description"]).count(each_word))]
+            else:
+                inverted_index[each_word] = [(doc_id, tokenize(each_dict["description"]).count(each_word))]
+        word_set.clear() 
+        doc_id += 1
+    
+    return inverted_index
+
+def compute_idf(inv_idx, n_docs, min_df=10, max_df_ratio=0.95):
+    """ Compute term IDF values from the inverted index.
+    Words that are too frequent or too infrequent get pruned.
+    
+    Hint: Make sure to use log base 2.
+    
+    Arguments
+    =========
+    
+    inv_idx: an inverted index as above
+    
+    n_docs: int,
+        The number of documents.
+        
+    min_df: int,
+        Minimum number of documents a term must occur in.
+        Less frequent words get ignored. 
+        Documents that appear min_df number of times should be included.
+    
+    max_df_ratio: float,
+        Maximum ratio of documents a term can occur in.
+        More frequent words get ignored.
+    
+    Returns
+    =======
+    
+    idf: dict
+        For each term, the dict contains the idf value.
+        
+    """
+    
+    # YOUR CODE HERE
+    idf = {}
+    for word, lst in inv_idx.items():
+        if min_df <= len(lst) and len(lst) <= (max_df_ratio * n_docs):
+            idf[word] = math.log2(n_docs / (1 + len(lst)))
+    return idf
+
+def compute_doc_norms(index, idf, n_docs):
+    """ Precompute the euclidean norm of each document.
+    
+    Arguments
+    =========
+    
+    index: the inverted index as above
+    
+    idf: dict,
+        Precomputed idf values for the terms.
+    
+    n_docs: int,
+        The total number of documents.
+    
+    Returns
+    =======
+    
+    norms: np.array, size: n_docs
+        norms[i] = the norm of document i.
+    """
+    summation = np.zeros(n_docs)
+    for key, lst in index.items():
+        for (doc_id, count) in lst:
+            try:
+                summation[doc_id] += (count*idf[key])**2
+            except KeyError:
+                pass
+    norm_lst = np.array(list(map(lambda x: math.sqrt(x), list(summation))))
+    return norm_lst
+
+
+
+
+
+
+
 
 @irsystem.route('/', methods=['GET'])
 def search():
@@ -102,12 +224,16 @@ def search():
     
 
 
-        pod_name_to_idx_review_dict = {}
-        for (idx, review) in enumerate(review_lst):
-            try:
-                pod_name_to_idx_review_dict[review["pod_name"]] = pod_name_to_idx_review_dict[review["pod_name"]] + [idx]
-            except KeyError:
-                pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
+        # pod_name_to_idx_review_dict = {}
+        # for (idx, review) in enumerate(review_lst):
+        #     try:
+        #         pod_name_to_idx_review_dict[review["pod_name"]] = pod_name_to_idx_review_dict[review["pod_name"]] + [idx]
+        #     except KeyError:
+        #         pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
+
+        inv_idx = build_inverted_index(podcast_lst)
+        idf = compute_idf(inv_idx, len(podcast_lst))
+        doc_norms = compute_doc_norms(inv_idx)
 
 
         data_dict_list = get_ranked_podcast(getPodcastData(
@@ -115,7 +241,10 @@ def search():
             genre_query,
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
-            advancedQueryDict["min_ep_count"])
+            advancedQueryDict["min_ep_count"],
+            inv_idx,
+            idf, 
+            doc_norms)
 
     # remove querried podcast from showing in result list, and round avg durration and episode count
     index_of_podcast = 0
