@@ -75,15 +75,15 @@ if cur != None:
                     combinedData[name] = newData
                 numReviews += 1
 
-        # print("num Reviews: " + str(numReviews)) = 5889
-        # print(combinedData["The Moth"])
-        # print(len(combinedData["The Moth"]))
+        print("num Reviews: " + str(numReviews))  # = 5889
+        print(combinedData["The Moth"])
+        print(len(combinedData["The Moth"]))
 
         try:
             for key in combinedData.keys():
                 podcast = combinedData[key]
                 podcast = [x if x != '' else None for x in podcast]
-                if (len(podcast) == 19):
+                if (len(podcast) == 20):
                     cur.execute(
                         """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                         (podcast[0], datetime.datetime.now(), datetime.datetime.now(),
