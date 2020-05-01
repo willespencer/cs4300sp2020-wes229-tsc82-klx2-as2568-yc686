@@ -252,6 +252,7 @@ def search():
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
             advancedQueryDict["min_ep_count"])
+        print(data_dict_list)
 
     # remove querried podcast from showing in result list, and round avg durration and episode count
     index_of_podcast = 0
