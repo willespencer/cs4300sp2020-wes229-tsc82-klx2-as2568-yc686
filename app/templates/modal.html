@@ -62,10 +62,12 @@
       </div>
     </div>
     {% endif %}
+    {% if d.reviews[0].rev_text or d.reviews[1].rev_text or d.reviews[2].rev_text or d.reviews[3].rev_text or d.reviews[4].rev_text %}
     <div class="modal-details-reviews">
       <div class="modal-details-reviews-label">Reviews: </div>
       <div class="modal-details-reviews-wrapper">
         {% for r in d.reviews %}
+        {% if r.rev_rating and r.rev_text %}
         <div class="modal-details-review-wrapper">
           <div class="modal-details-reviews-score">
             <span class="fa fa-star
@@ -88,11 +90,15 @@
             {{r.rev_text}}
           </div>
         </div>
+        {% endif %}
         {% endfor %}
       </div>
     </div>
     <div class="fadeout"></div>
     <button class="btn btn-primary modal-details-reviews-button" onclick="toggleReviews(this)" data-podcast-name="{{d.name}}">Read More</button>
+    {% else %}
+    <div class="extra-space"></div>
+    {% endif %}
   </div>
   </div>
 </div>
