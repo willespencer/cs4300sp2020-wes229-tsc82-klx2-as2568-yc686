@@ -6,6 +6,7 @@ class Podcasts(Base):
     __tablename__ = 'podcasts'
 
     name = db.Column(db.String, nullable=False)
+    rating_volume = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String, nullable=False)
     artwork = db.Column(db.VARCHAR, nullable=False)
@@ -28,6 +29,7 @@ class Podcasts(Base):
     def __init__(self, **kwargs):
         super(Podcasts, self).__init__(**kwargs)
         self.name = kwargs.get('name', None)
+        self.rating_volume = kwargs.get('rating_volume', None)
         self.rating = kwargs.get('rating', None)
         self.genres = kwargs.get('genres', None)
         self.description = kwargs.get('description_x', None)

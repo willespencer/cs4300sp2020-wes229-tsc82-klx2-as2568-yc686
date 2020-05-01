@@ -5,7 +5,7 @@ import datetime
 import psycopg2
 from psycopg2 import connect, Error
 
-update_podcasts_and_reviews = False
+update_podcasts_and_reviews = True
 
 try:
     conn = connect(
@@ -52,7 +52,7 @@ if cur != None:
                     sum_ep_dur += val
                 avg_ep_dur = sum_ep_dur * 1.0 / len(row[8])
 
-                podcastData = [row[0], float(row[3]), row[4], row[5],
+                podcastData = [row[0], float(row[2]), float(row[3]), row[4], row[5],
                                genres, int(row[7]), avg_ep_dur, row[9], row[11]]
                 combinedData[name] = podcastData
                 numPodcast += 1
@@ -85,17 +85,17 @@ if cur != None:
                 podcast = [x if x != '' else None for x in podcast]
                 if (len(podcast) == 19):
                     cur.execute(
-                        """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                        """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                         (podcast[0], datetime.datetime.now(), datetime.datetime.now(),
                          key, podcast[1], podcast[2], podcast[3], podcast[4], podcast[5], podcast[6], podcast[7],
                          podcast[8], podcast[9], podcast[10], podcast[11], podcast[12], podcast[13], podcast[14],
-                         podcast[15], podcast[16], podcast[17], podcast[18]))
+                         podcast[15], podcast[16], podcast[17], podcast[18], podcast[19]))
                 else:
                     cur.execute(
-                        """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                        """INSERT INTO podcasts VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                         (podcast[0], datetime.datetime.now(), datetime.datetime.now(),
                          key, podcast[1], podcast[2], podcast[3], podcast[4], podcast[5], podcast[6], podcast[7],
-                         podcast[8]))
+                         podcast[8], podcast[9]))
             conn.commit()
 
             print('\nfinished INSERT INTO execution')
