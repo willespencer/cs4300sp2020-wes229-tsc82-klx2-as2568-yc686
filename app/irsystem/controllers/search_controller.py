@@ -34,6 +34,30 @@ def cleanMinEpCountQuery(min_ep_count_query):
     else:
         return 0
 
+# remove query from result list
+def removeQueryFromData(data_dict_list, query):
+    index_of_podcast = 0
+    found_query = False
+    for i in range(len(data_dict_list)):
+        if(data_dict_list[i]['name'] == query):
+            index_of_podcast = i
+            found_query = True
+    if(found_query):
+        data_dict_list.pop(index_of_podcast)
+    return data_dict_list
+
+# get reviews and round avg durration and episode count
+def cleanData(data_dict_list, review_lst):
+    for i in range(len(data_dict_list)):
+        data_dict_list[i]['reviews'] = list(filter(lambda x: x["pod_name"] == data_dict_list[i]['name'], review_lst))
+        if(data_dict_list[i]["avg_episode_duration"] != "None"):
+            data_dict_list[i]["avg_episode_duration"] = round(
+                float(data_dict_list[i]["avg_episode_duration"]), 2)
+        if(data_dict_list[i]["episode_count"] != "None"):
+            data_dict_list[i]["episode_count"] = round(
+                float(data_dict_list[i]["episode_count"]))
+    return data_dict_list
+
 @irsystem.route('/', methods=['GET'])
 def search():
     # uncleaned user input
@@ -78,6 +102,7 @@ def search():
 
     if not query:
         data_dict_list = []
+        queryPodcastData = []
     else:
         if advancedQueryIsEnabled:
             podcast_lst = advancedPodcastData(genre_query, min_ep_count_query, avg_ep_duration_query[0], avg_ep_duration_query[1])
@@ -94,12 +119,9 @@ def search():
         # accum a list of all reviews for every podcast in podcast_lst and the query podcast
         # initially gets all podcast reviews
         review_lst = getPodcastReviews()
-        
+
         podcast_lst_names = [query] + [podcast["name"] for podcast in podcast_lst]
-        
         review_lst = list(filter(lambda x: x["pod_name"] in podcast_lst_names, review_lst))
-        
-    
 
 
         pod_name_to_idx_review_dict = {}
@@ -109,35 +131,23 @@ def search():
             except KeyError:
                 pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
 
-
-        data_dict_list = get_ranked_podcast(getPodcastData(
-            query)[0], podcast_lst, review_lst, pod_name_to_idx_review_dict,
+        queryPodcastData = getPodcastData(query)
+        data_dict_list = get_ranked_podcast(queryPodcastData[0],
+            podcast_lst, review_lst, pod_name_to_idx_review_dict,
             genre_query,
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
             advancedQueryDict["min_ep_count"])
 
-    # remove querried podcast from showing in result list, and round avg durration and episode count
-    index_of_podcast = 0
-    found_query = False
-    for i in range(len(data_dict_list)):
-
-        data_dict_list[i]['reviews'] = list(filter(lambda x: x["pod_name"] == data_dict_list[i]['name'], review_lst))
-        if(data_dict_list[i]['name'] == query):
-            index_of_podcast = i
-            found_query = True
-        if(data_dict_list[i]["avg_episode_duration"] != "None"):
-            data_dict_list[i]["avg_episode_duration"] = round(
-                float(data_dict_list[i]["avg_episode_duration"]), 2)
-        if(data_dict_list[i]["episode_count"] != "None"):
-            data_dict_list[i]["episode_count"] = round(
-                float(data_dict_list[i]["episode_count"]))
-    if(found_query):
-        data_dict_list.pop(index_of_podcast)
+    data_dict_list = cleanData(data_dict_list, review_lst)
+    if(len(queryPodcastData) > 0):
+        queryPodcastData = cleanData(queryPodcastData, review_lst)
+    data_dict_list = removeQueryFromData(data_dict_list, query)
 
     return render_template('search.html', name=project_name, netid=net_id,
     data=data_dict_list, podcast_names=podcast_names, genres=genres,
     avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts,
     query_feedback=query_uncleaned, genre_feedback=genre_query_uncleaned,
     avg_ep_duration_feedback=avg_ep_duration_query_uncleaned,
-    min_ep_count_feedback=min_ep_count_query_uncleaned, show_modal=True)
+    min_ep_count_feedback=min_ep_count_query_uncleaned,
+    query_podcast_data = queryPodcastData, show_modal=True)
