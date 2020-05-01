@@ -38,7 +38,9 @@
       <div class="modal-details-genres-label">Genres: </div>
       <div class="modal-details-genres-genre-wrapper">
         {% for g in d.genres %}
-        <div class="modal-details-genre">{{g}}</div>
+        <div class="modal-details-genre"
+        {% if g = {{query_podcast_data[0].genres}}} style="background-color: lightgreen;" {% endif %}
+        >{{g}}</div>
         {% endfor %}
       </div>
     </div>
