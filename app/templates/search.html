@@ -319,6 +319,13 @@
       color: black;
     }
 
+    .learn-more-button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      margin-top: -0.375rem;
+    }
+
     .result-details-name {
       font-weight: bold;
       font-size: larger;
@@ -333,11 +340,12 @@
       margin-top: 0rem;
     }
 
-
     .result-details-description {
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
     }
 
     .iTunesLogo {

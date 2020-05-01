@@ -23,14 +23,9 @@
       <span class="result-details-description"> {{d.description}}</span>
     </div>
     <div class="row mb-2 result-details">
-      <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  Similarity: {{d.similarity}}%</span>
+      <span class="result-details-episode">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min  |  {% if d.link != "None" %}<span class="result-details-link">Listen Here: <a href={{d.link}} target="_blank"><span><img class="iTunesLogo" alt="link to iTunes podcast" src="../static/style/iTunesLogo.png" /></span></a></span>{% endif %}</span>
     </div>
-    {% if d.link != "None" %}
-    <div class="row mb-2 result-details">
-      <span class="result-details-link">Listen Here: <a href={{d.link}} target="_blank"><span><img class="iTunesLogo" alt="link to iTunes podcast" src="../static/style/iTunesLogo.png" /></span></a></span>
-    </div>
-    {% endif %}
-    <div class="row mb-2 result-details">
+    <div class="row mb-2 result-details learn-more-button-wrapper">
       <button type="button" class="btn btn-primary result-button" onclick="displayModal(this)" data-podcast-name="{{d.name}}">Learn more</button>
     </div>
   </div>
