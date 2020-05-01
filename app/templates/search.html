@@ -534,6 +534,12 @@
         {% include 'modal.html' %}
       {% endfor %}
       {% endif %}
+
+      {% if query_podcast_data and show_modal %}
+      {% for d in query_podcast_data %}
+        {% include 'modal.html' %}
+      {% endfor %}
+      {% endif %}
     <!-- TODO: Figure out if we need content wrapper div-->
       <div class="content-buttonWrapper">
         <a href="http://pea-podcast-proto1.herokuapp.com/" target="_blank"><button class="btn btn-primary btn-prototype">Prototype 1</button></a>
@@ -624,6 +630,7 @@
         a minimum of <span class="feedback">{{min_ep_count_feedback}}</span>
         {% endif %}.
       </p>
+      <button class="btn btn-primary" onclick="displayModal(this)" data-podcast-name="{{query_podcast_data[0].name}}">Learn More</button>
     </div>
     {% for d in data %}
       {% include 'result.html' %}
