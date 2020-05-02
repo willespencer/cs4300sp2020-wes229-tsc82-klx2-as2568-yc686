@@ -245,34 +245,6 @@ def search():
             except KeyError:
                 pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
 
-
-
-        # inv_idx = {}
-        # with open('data/inv_idx.csv', mode='r') as infile:
-        #     reader = csv.reader(infile)
-        #     for rows in reader:
-        #         term_info = rows[1].replace('\"', '').replace(
-        #             '[', '').replace(']', '').split("), (")
-        #         for x in range(len(term_info)):
-        #             doc_info = term_info[x].replace(
-        #                 '(', '').replace(')', '').split(", ")
-        #             term_info[x] = (int(doc_info[0]), int(doc_info[1]))
-        #         inv_idx[rows[0]] = term_info
-        # # print(inv_idx)
-
-        # idf = {}
-        # with open('data/idf.csv', mode='r') as infile:
-        #     reader = csv.reader(infile)
-        #     idf = {rows[0]: float(rows[1]) for rows in reader}
-
-        # f = open('data/doc_norms.txt', 'r')
-        # doc_norms = f.readlines()
-        # f.close()
-        # doc_norms = doc_norms[0]
-        # doc_norms = doc_norms.replace('[', '').replace(']', '').split(", ")
-        # doc_norms = [float(i) for i in doc_norms]
-        # # print(doc_norms)
-
         # createDocFiles = False
 
         # if createDocFiles:
@@ -292,7 +264,34 @@ def search():
         if advancedQueryIsEnabled:
             inv_idx = build_inverted_index(podcast_lst)  # dict
             idf = compute_idf(inv_idx, len(podcast_lst))  # dict
-            doc_norms = compute_doc_norms(inv_idx, idf, len(podcast_lst))  # list
+            doc_norms = compute_doc_norms(
+                inv_idx, idf, len(podcast_lst))  # list
+        # else:
+        #     inv_idx = {}
+        #     with open('data/inv_idx.csv', mode='r') as infile:
+        #         reader = csv.reader(infile)
+        #         for rows in reader:
+        #             term_info = rows[1].replace('\"', '').replace(
+        #                 '[', '').replace(']', '').split("), (")
+        #             for x in range(len(term_info)):
+        #                 doc_info = term_info[x].replace(
+        #                     '(', '').replace(')', '').split(", ")
+        #                 term_info[x] = (int(doc_info[0]), int(doc_info[1]))
+        #             inv_idx[rows[0]] = term_info
+        #     # print(inv_idx)
+
+        #     idf = {}
+        #     with open('data/idf.csv', mode='r') as infile:
+        #         reader = csv.reader(infile)
+        #         idf = {rows[0]: float(rows[1]) for rows in reader}
+
+        #     f = open('data/doc_norms.txt', 'r')
+        #     doc_norms = f.readlines()
+        #     f.close()
+        #     doc_norms = doc_norms[0]
+        #     doc_norms = doc_norms.replace('[', '').replace(']', '').split(", ")
+        #     doc_norms = [float(i) for i in doc_norms]
+            # print(doc_norms)
 
         data_dict_list = get_ranked_podcast(getPodcastData(
             query)[0], podcast_lst, review_lst, pod_name_to_idx_review_dict,
