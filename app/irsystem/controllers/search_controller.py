@@ -289,6 +289,10 @@ def search():
         #     f.write(str(doc_norms.tolist()))
         #     f.close()
 
+        global inv_idx
+        global idf
+        global doc_norms
+
         if advancedQueryIsEnabled:
             inv_idx = build_inverted_index(podcast_lst)  # dict
             idf = compute_idf(inv_idx, len(podcast_lst))  # dict
