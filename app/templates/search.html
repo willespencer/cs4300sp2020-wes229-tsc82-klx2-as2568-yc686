@@ -285,6 +285,17 @@
       font-weight: 500;
     }
 
+    .feedback-button {
+      max-width: 300px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .form-wrapper {
+      margin-bottom: 5rem;
+    }
+
     .circleicon {
       position: relative;
       width: 4rem;
@@ -573,7 +584,7 @@
         <h1>Find the Pea to your Podcast</h1>
         <p class="lead">Please fill out the form below to find a podcast.</p>
       </div>
-      <div class="col-md-8 order-md-1">
+      <div class="col-md-8 order-md-1{% if not data %} form-wrapper{% endif %}">
         <form class="needs-validation" novalidate="" method="GET" onsubmit="submitPodcast()">
           <div class="mb-3 inputWrapper">
             <label for="podcastInput">I Want to Find a Podcast Like</label>
@@ -634,7 +645,7 @@
       <h2>Recommended Podcasts</h2>
       <hr class="recommended-hr" />
       <p class="lead">You searched for podcasts similar to
-        <span class="feedback">{{query_feedback}}</span>
+        <span class="feedback"><button class="feedback-button btn btn-primary" onclick="displayModal(this)" data-podcast-name="{{query_podcast_data[0].name}}">{{query_feedback}}</button></span>
         {% if genre_feedback or avg_ep_duration_feedback or min_ep_count_feedback %}
         with
         {% endif %}
@@ -654,7 +665,6 @@
         a minimum of <span class="feedback">{{min_ep_count_feedback}}</span>
         {% endif %}.
       </p>
-      <button class="btn btn-primary" onclick="displayModal(this)" data-podcast-name="{{query_podcast_data[0].name}}">Learn More</button>
     </div>
     {% for d in data %}
       {% include 'result.html' %}
