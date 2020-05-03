@@ -198,11 +198,11 @@
       autocomplete(document.getElementById("podcastInput"), podcastTitles);
       autocomplete(document.getElementById("genreInput"), podcastGenres);
     });
-    $(document).ready(function(){
+    function autoscroll(){
       $('html, body').animate({
         scrollTop:('#autoscroll').offset().top
       }, 'slow')
-    });
+    };
 
   </script>
 
@@ -626,7 +626,7 @@
         </form>
     </div>
     {% if data %}
-    <hr class="result-hr" />
+    <hr class="result-hr" onload="autoscroll()"/>
     <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype" id="clear-search-button">Clear Search</button></a>
     <div class="py-5 text-center" id="autoscroll">
       <h2>Recommended Podcasts</h2>
