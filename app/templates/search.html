@@ -197,7 +197,29 @@
     window.addEventListener('load', function () {
       autocomplete(document.getElementById("podcastInput"), podcastTitles);
       autocomplete(document.getElementById("genreInput"), podcastGenres);
-    })
+    });
+    function onReady(callback) {
+      let intervallID = window.setInterval(checkReady,1000);
+
+      function checkReady(){
+        if (document.getElementById('result-hr') !== undefined){
+          window.clearInterval(intervalID);
+          callback.call(this)
+        }
+      }
+    }
+    function show(id, value){
+      document.getElementbyID(id).style.display = value ? 'block' : 'none';
+    }
+
+    onReady(function () {
+      show('page', true)
+      show('loading', false)
+      // $('html, body').animate({
+      //     scrollTop: $('#autoscroll').offset().top
+      // }, 'slow');
+    }
+
   </script>
 
   <title>Home</title>
@@ -539,11 +561,26 @@
     .checked {
       color: orange;
     }
+    #loading{
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index:100; 
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      opacity:.5; 
+      background-image: url('https://cdn-data.motu.com/site/images/loading-bars2.gif')
+    }
+    #page{
+      display: none;
+    }
   </style>
 </head>
 
 <body>
-  <div class="main">
+  <div class="main" id="page">
     <div class="container">
       {% if data and show_modal %}
       {% for d in data %}
@@ -622,7 +659,7 @@
     {% if data %}
     <hr class="result-hr" />
     <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype" id="clear-search-button">Clear Search</button></a>
-    <div class="py-5 text-center">
+    <div class="py-5 text-center" id="autoscroll">
       <h2>Recommended Podcasts</h2>
       <hr class="recommended-hr" />
       <p class="lead">You searched for podcasts similar to
@@ -658,6 +695,7 @@
     </footer> -->
     </div>
   </div>
+  <div id="loading"></div>
 </body>
 
 </html>
