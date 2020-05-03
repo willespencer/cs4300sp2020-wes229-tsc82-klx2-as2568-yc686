@@ -6,9 +6,17 @@ from io import StringIO
 from itertools import groupby
 import pickle
 import math
-
 import numpy as np
 from numpy import linalg as LA
+
+
+
+from inv_idx import *
+from idf import *
+from doc_norms import *
+import time
+
+
 
 project_name = "Find the Pea to your Podcast"
 net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Chan: yc686, Akira Shindo: as2568"
@@ -103,27 +111,62 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     numerator = 0
     denominator = 0
 
+
+    # SECTION 1
+    # start_time = time.time()
     for each_word in query_words_set:
         if each_word in inv_idx.keys():
             query_dict[each_word] = query_words_lst.count(each_word)
+    # print("Section 1 time: ")
+    # print (time.time() - start_time)
 
+    # SECTION 2
+    # start_time = time.time()
     for each_word in query_words_set:
         if each_word in idf:
             query_norm += (query_words_lst.count(each_word)*idf[each_word])**2
-
     query_norm = math.sqrt(query_norm)
+    # print("Section 2 time: ")
+    # print (time.time() - start_time)
+
+
+    # SECTION 3 
+    start_time = time.time()
+    print(query_dict)
+
+
+
 
     for each_token in query_dict:
-        for each_doc in inv_idx[each_token]:
-            if each_token in idf.keys():
-                numerator += (query_dict[each_token]
-                              * each_doc[1]) * (idf[each_token]**2)
+        if len(inv_idx[each_token]) <= 1000:
+            for each_doc in inv_idx[each_token]:
+                if each_token in idf.keys():
+                    numerator += (query_dict[each_token] * each_doc[1]) * (idf[each_token]**2)
+    
+
+
+
+
+    print("Section 3 time: ")
+    print (time.time() - start_time)
+    print()
+
 
     # print(type(query_norm))
     # print(type(doc_norms[doc_id]))
     denominator = query_norm * doc_norms[doc_id]
     score = (numerator + 0.5) / (denominator + 0.5)
     doc_id += 1
+
+    print(score)
+
+
+
+    if score > 1000:
+        score = 0
+    elif score > 100:
+        score = 100
+
     return score
 
 
@@ -229,21 +272,31 @@ def num_ep_sim_score(query, podcast_dict, is_adv_search):
 
 def update_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict, genre_query, genre_search, avepdur_search, minepcount_search, inv_idx, idf, doc_norms):
     total_score = 0
-    description_score = round((description_cosine_sim_score(
-        query, podcast_dict, inv_idx, idf, doc_norms) * 100), 1)
+    # start_time = time.time()
+    description_score = round((description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms)), 1)
+    # print("Description time: ")
+    # print (time.time() - start_time)
     # review_score = round((reviews_cosine_sim_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict) * 100), 1)
     review_score = 0
     # review_score = round((reviews_jaccard_sim_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict) * 100) , 1)
 
-    duration_score = round(
-        (duration_sim_score(query, podcast_dict, avepdur_search) * 100), 1)
-    num_ep_score = round(
-        (num_ep_sim_score(query, podcast_dict, minepcount_search) * 100), 1)
-    genre_score = round(genre_sim_score(query, podcast_dict,
-                                        genre_query, genre_search), 1)  # already 100%
+    # start_time = time.time()
+    duration_score = round((duration_sim_score(query, podcast_dict, avepdur_search) * 100), 1)
+    # print("Duration time: ")
+    # print (time.time() - start_time)
 
-    total_score = round(.45 * genre_score + .3 * description_score + .1 *
-                        duration_score + .1*num_ep_score + .05*review_score)
+    # start_time = time.time()
+    num_ep_score = round((num_ep_sim_score(query, podcast_dict, minepcount_search) * 100), 1)
+    # print("Number of eipsode time: ")
+    # print (time.time() - start_time)
+
+    # start_time = time.time()
+    genre_score = round(genre_sim_score(query, podcast_dict, genre_query, genre_search), 1)  # already 100%
+    # print("Genre time: ")
+    # print (time.time() - start_time)
+    # print()
+
+    total_score = round(.45 * genre_score + .3 * description_score + .1 * duration_score + .1*num_ep_score + .05*review_score)
 
     if np.isnan(total_score):
         total_score = -10000
@@ -287,3 +340,27 @@ def get_ranked_podcast(query, podcast_lst, review_lst, pod_name_to_idx_review_di
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
     return ranked_podcast_lst[:20]
+
+def main():
+    global inv_idx
+    global idf
+    global doc_norms
+    print("The following is the score...")
+    print("The query description is: Hello this is a and and test radio radio")
+    for each_elem in get_ranked_podcast(
+        {"name": 'query', "description": "Hello this is a and and our test radio radio", "episode_count": "5", "avg_episode_duration": "10", "genres": ["Literature"]}, 
+        [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None", "genres": ["Literature"]}, 
+        {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4", "avg_episode_duration": "9", "genres": ["Literature"]}, 
+        {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500", "genres": ["Literature"]}],
+        [{'pod_name': 'query', 'rev_text': "podcast sucks"}, 
+        {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"}, 
+        {'pod_name': 'pod_2', 'rev_text': "this podcast is great"}, 
+        {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}],
+        {},
+        None,
+        inv_idx,
+        idf,
+        doc_norms):
+        print(each_elem)
+
+# main()
