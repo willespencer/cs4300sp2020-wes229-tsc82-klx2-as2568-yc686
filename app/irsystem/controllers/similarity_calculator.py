@@ -208,8 +208,10 @@ def reviews_jaccard_sim_score(query, podcast_dict):
 
     query_word_set = set(query_word_lst)
     podcast_word_set = set(podcast_word_lst)
-    score = len(query_word_set & podcast_word_set) / \
-        len(query_word_set | podcast_word_set)
+    if len(query_word_set | podcast_word_set) != 0:
+        score = len(query_word_set & podcast_word_set) / len(query_word_set | podcast_word_set)
+    else:
+        score = 0
     return score
 
 # deprecated
