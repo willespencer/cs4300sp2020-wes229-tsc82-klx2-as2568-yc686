@@ -72,7 +72,7 @@ def compute_doc_norms(index, idf, n_docs):
     norm_lst = np.array(list(map(lambda x: math.sqrt(x), list(summation))))
     return norm_lst
 
-def main():
+def make_idf_and_doc_norms():
     global inv_idx
 
     idf = compute_idf(inv_idx, 6598, min_df=10, max_df_ratio=0.15)
