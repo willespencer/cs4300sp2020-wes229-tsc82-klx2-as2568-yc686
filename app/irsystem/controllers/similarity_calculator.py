@@ -13,6 +13,7 @@ from numpy import linalg as LA
 from app.irsystem.controllers.query_db import *
 from app.irsystem.controllers.inv_idx import *
 from app.irsystem.controllers.idf import *
+from app.irsystem.controllers.doc_norms import *
 import time
 
 
@@ -126,9 +127,8 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     # print("Section 2 time: ")
     # print (time.time() - start_time)
     # SECTION 3
-    start_time = time.time()
-    print(query_dict)
-
+    # start_time = time.time()
+    # print(query_dict)
 
     for each_token in query_dict:
         if len(inv_idx[each_token]) <= 1000:
@@ -137,10 +137,9 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
                     numerator += (query_dict[each_token]
                                   * each_doc[1]) * (idf[each_token]**2)
 
-
-    print("Section 3 time: ")
-    print(time.time() - start_time)
-    print()
+    # print("Section 3 time: ")
+    # print(time.time() - start_time)
+    # print()
 
     # print(type(query_norm))
     # print(type(doc_norms[doc_id]))
@@ -148,8 +147,7 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     score = (numerator + 0.5) / (denominator + 0.5)
     doc_id += 1
 
-    print(score)
-
+    # print(score)
 
     if score > 1000:
         score = 0
@@ -159,19 +157,21 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     return score
 
 
-def reviews_jaccard_sim_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict):
+def reviews_jaccard_sim_score(query, podcast_dict):
     """Returns the decimal form of the the jaccard similarity between query reviews
     and podcast reviews
     """
     query_word_lst = []
-    for idx in pod_name_to_idx_review_dict[query["name"]]:
-        review_text = review_lst[idx]["rev_text"]
+    query_reviews = getPodcastReviews(query["name"])
+    for review in query_reviews:
+        review_text = review["rev_text"]
         if review_text is not None:
             query_word_lst += tokenize(review_text)
 
     podcast_word_lst = []
-    for idx in pod_name_to_idx_review_dict[podcast_dict["name"]]:
-        review_text = review_lst[idx]["rev_text"]
+    podcast_reviews = getPodcastReviews(podcast_dict["name"])
+    for review in podcast_reviews:
+        review_text = review["rev_text"]
         if review_text is not None:
             podcast_word_lst += tokenize(review_text)
 
@@ -182,7 +182,7 @@ def reviews_jaccard_sim_score(query, podcast_dict, review_lst, pod_name_to_idx_r
     return score
 
 
-def reviews_cosine_sim_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict):
+def reviews_cosine_sim_score(query, podcast_dict, review_lst):
     # query is a dictionary representing the podcast that the user chose
     # podcast_dict is a dictionary that represents a podcast
     # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
@@ -259,16 +259,17 @@ def num_ep_sim_score(query, podcast_dict, is_adv_search):
         return max(0, 1 - (abs(query_count - podcast_count) / query_count))
 
 
-def update_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict, genre_query, genre_search, avepdur_search, minepcount_search, inv_idx, idf, doc_norms):
+def update_score(query, podcast_dict, review_lst, genre_query, genre_search, avepdur_search, minepcount_search, inv_idx, idf, doc_norms):
     total_score = 0
     # start_time = time.time()
     description_score = round((description_cosine_sim_score(
         query, podcast_dict, inv_idx, idf, doc_norms)), 1)
     # print("Description time: ")
     # print (time.time() - start_time)
-    # review_score = round((reviews_cosine_sim_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict) * 100), 1)
-    review_score = 0
-    # review_score = round((reviews_jaccard_sim_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict) * 100) , 1)
+    # review_score = round((reviews_cosine_sim_score(query, podcast_dict) * 100), 1)
+    # review_score = 0
+    review_score = round((reviews_jaccard_sim_score(
+        query, podcast_dict) * 100), 1)
 
     # start_time = time.time()
     duration_score = round(
@@ -301,7 +302,7 @@ def update_score(query, podcast_dict, review_lst, pod_name_to_idx_review_dict, g
     return total_score
 
 
-def get_ranked_podcast(query, podcast_lst, review_lst, pod_name_to_idx_review_dict, genre_query, inv_idx, idf, doc_norms, genre_search=False, avepdur_search=False, minepcount_search=False):
+def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, inv_idx, idf, doc_norms, genre_search=False, avepdur_search=False, minepcount_search=False):
     # query is a dictionary representing the podcast that the user chose
     # podcast_lst is a list of dictionaries, and each dictionary represents a podcast
     # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
@@ -314,7 +315,7 @@ def get_ranked_podcast(query, podcast_lst, review_lst, pod_name_to_idx_review_di
     # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
     global doc_id
     doc_id = 0
-    score_lst = list(map(lambda x: (update_score(query, x, review_lst, pod_name_to_idx_review_dict, genre_query,
+    score_lst = list(map(lambda x: (update_score(query, x, review_lst, genre_query,
                                                  genre_search, avepdur_search, minepcount_search, inv_idx, idf, doc_norms), x), podcast_lst))
 
     # KATHLEEN

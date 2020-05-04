@@ -237,16 +237,15 @@ def search():
         review_lst = list(
             filter(lambda x: x["pod_name"] in podcast_lst_names, review_lst))
 
-        pod_name_to_idx_review_dict = {}
+        # pod_name_to_idx_review_dict = {}
         # for (idx, review) in enumerate(review_lst):
         #     try:
         #         pod_name_to_idx_review_dict[review["pod_name"]
         #                                     ] = pod_name_to_idx_review_dict[review["pod_name"]] + [idx]
         #     except KeyError:
         #         pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
-
-
-
+        # print(pod_name_to_idx_review_dict[query])
+        # print(getPodcastReviews(query))
 
         # inv_idx = {}
         # with open('data/inv_idx.csv', mode='r') as infile:
@@ -327,7 +326,7 @@ def search():
             # print(doc_norms)
 
         data_dict_list = get_ranked_podcast(getPodcastData(
-            query)[0], podcast_lst, review_lst, pod_name_to_idx_review_dict,
+            query)[0], podcast_lst, review_lst,
             genre_query,
             inv_idx,
             idf,
