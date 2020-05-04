@@ -201,7 +201,7 @@
       document.getElementById(id).style.display = value ? 'block' : 'none';
       var autoElt = document.getElementById("autoscroll");
       if (autoElt != null) {
-        autoElt.scrollIntoView();
+        setTimeout(() => {  autoElt.scrollIntoView(); }, 1000);
       }
     }
 
@@ -221,7 +221,6 @@
         document.getElementById("errorMessage").style.display = "block";
         document.getElementById("podcastInput").value = '';
       } else {
-        document.getElementById('page').style.display = 'none';
         document.getElementById('loading').style.display = 'block';
 
         document.getElementById("errorMessage").style.display = "none";
@@ -231,7 +230,6 @@
         // Reset podcast input value to be '' so form doesn't submit
         document.getElementById("podcastInput").value = '';
 
-        document.getElementById('page').style.display = 'block';
         document.getElementById('loading').style.display = 'none';
 
         document.getElementById("genre_errorMessage").style.display = "block";
@@ -242,7 +240,6 @@
     }
 
     function submitLuckyPodcast() {
-      document.getElementById('page').style.display = 'none';
       document.getElementById('loading').style.display = 'block';
     }
 
@@ -693,7 +690,7 @@
       width: 100vw;
       height: 100vh;
       background-color: black;
-      opacity: .5;
+      opacity: .8;
       background-image: url('https://cdn-data.motu.com/site/images/loading-bars2.gif');
       background-repeat: no-repeat;
       background-attachment: fixed;
