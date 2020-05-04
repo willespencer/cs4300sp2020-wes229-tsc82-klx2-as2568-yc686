@@ -2,6 +2,19 @@ from . import *
 from app.irsystem.models.podcasts import Podcasts
 from sqlalchemy.orm import load_only
 from sqlalchemy import func, intersect
+import random
+
+
+def getRandomHighlyRated():
+    highlyRated = Podcasts.query.order_by(
+        Podcasts.rating.desc()).limit(100).all()
+    ratedPodcasts = []
+    for result in highlyRated:
+        ratedPodcasts.extend(getPodcastData(result.name))
+
+    randomPodcast = ratedPodcasts[random.randint(0, 99)]
+
+    return randomPodcast["name"]
 
 
 def getAllGenres():
@@ -77,10 +90,11 @@ def getPodcastData(query="all"):
             'episode_count': result.ep_count,
             'avg_episode_duration': result.ep_durations,
             'link': result.itunes_url,
-            'rating': str(round(float(result.rating), 1)),
-            'rating_volume': result.rating_volume
+            'rating_volume': result.rating_volume,
+            'rating': str(round(float(result.rating), 1))
         }
-        if result.artwork != "None":
+
+        if result.artwork != 'None':
             pod_dict['pic'] = result.artwork
         else:
             pod_dict['pic'] = "placeholder.jpg"
