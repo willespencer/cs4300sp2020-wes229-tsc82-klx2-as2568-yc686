@@ -13,10 +13,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="../static/style/grid.css" rel="stylesheet">
 
-  <!-- <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png"> -->
-
   <script>
     let podcastTitles = JSON.parse('{{podcast_names | tojson }}');
     let podcastGenres = JSON.parse('{{genres | tojson }}');
@@ -830,10 +826,6 @@
         {% endfor %}
         {% endif %}
       </div>
-      <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
-      Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-      <a href="https://icon-library.net/icon/podcast-icon-png-11.html">Podcast Icon Png #109398</a>
-    </footer> -->
     </div>
   </div>
   <div id="loading"></div>
