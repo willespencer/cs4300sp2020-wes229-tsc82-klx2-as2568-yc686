@@ -18,7 +18,7 @@
         <span class="modal-details-author">{{d.author}}</span>
       </div> -->
       <div class="modal-content-top-right-details">
-        <span class="modal-details-episodes">Episodes: {{d.episode_count}}  |  Avg. Duration: {{d.avg_episode_duration}} min</span>
+        <span class="modal-details-episodes">Episodes: {{d.episode_count}}{% if d.avg_episode_duration != "None" and d.avg_episode_duration|float != 0.0 %}  |  Avg. Duration: {{d.avg_episode_duration}} min{% endif %}</span>
       </div>
       <div class="modal-content-top-right-details">
         <span class="modal-details-ratings">{% if d.similarity %}Similarity: {{d.similarity}}%  |  {% endif %}iTunes Rating: {{d.rating}}/5.0</span>
