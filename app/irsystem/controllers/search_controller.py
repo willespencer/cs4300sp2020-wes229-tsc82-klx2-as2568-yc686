@@ -115,7 +115,7 @@ def search():
         db.func.min(Podcasts.ep_count)).scalar()
 
     randomPodcast = getRandomHighlyRated()
-    # print(randomPodcast)
+    print(randomPodcast)
 
     if not query:
         data_dict_list = []
@@ -165,14 +165,10 @@ def search():
             queryPodcastData = cleanData(queryPodcastData, review_lst)
         data_dict_list = removeQueryFromData(data_dict_list, query)
 
-        # if luckyPodcast:
-        #     data_dict_list = getPodcastData(randomPodcast)[0]
-        #     queryPodcastData = []
-
     return render_template('search.html', name=project_name, netid=net_id,
                            data=data_dict_list, podcast_names=podcast_names, genres=genres,
                            avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts,
                            query_feedback=query_uncleaned, genre_feedback=genre_query_uncleaned,
                            avg_ep_duration_feedback=avg_ep_duration_query_uncleaned,
                            min_ep_count_feedback=min_ep_count_query_uncleaned,
-                           query_podcast_data=queryPodcastData, show_modal=True)
+                           query_podcast_data=queryPodcastData, recommendedPodcast=randomPodcast, show_modal=True)
