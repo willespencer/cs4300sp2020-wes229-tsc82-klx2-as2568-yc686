@@ -11,14 +11,14 @@ from numpy import linalg as LA
 
 
 from app.irsystem.controllers.query_db import *
-from app.irsystem.controllers.inv_idx import *
-from app.irsystem.controllers.idf import *
-from app.irsystem.controllers.doc_norms import *
+# from app.irsystem.controllers.inv_idx import *
+# from app.irsystem.controllers.idf import *
+# from app.irsystem.controllers.doc_norms import *
 
 # from inv_idx import inv_idx
 # from idf import idf
 # from doc_norms import doc_norms
-import time
+# import time
 
 
 project_name = "Find the Pea to your Podcast"
@@ -423,27 +423,26 @@ def get_ranked_podcast(query, podcast_lst, genre_query, inv_idx, idf, doc_norms,
     # score_lst = list(map(lambda x: (jaccard_sim_score(query, x, review_lst), x), podcast_lst))
 
 
-def main():
-    global inv_idx
-    global idf
-    global doc_norms
-    print("The following is the score...")
-    print("The query description is: Hello this is a and and test radio radio")
-    for each_elem in get_ranked_podcast(
-        {"name": 'query', "description": "Hello this is a and and our test radio radio",
-            "episode_count": "5", "avg_episode_duration": "10", "genres": ["Literature"]},
-        [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None", "genres": ["Literature"]},
-         {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4",
-             "avg_episode_duration": "9", "genres": ["Literature"]},
-         {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500", "genres": ["Literature"]}],
-        [{'pod_name': 'query', 'rev_text': "podcast sucks"},
-         {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"},
-         {'pod_name': 'pod_2', 'rev_text': "this podcast is great"},
-         {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}],
-        inv_idx,
-        idf,
-            doc_norms):
-        print(each_elem)
-
+# def main():
+#     global inv_idx
+#     global idf
+#     global doc_norms
+#     print("The following is the score...")
+#     print("The query description is: Hello this is a and and test radio radio")
+#     for each_elem in get_ranked_podcast(
+#         {"name": 'query', "description": "Hello this is a and and our test radio radio",
+#             "episode_count": "5", "avg_episode_duration": "10", "genres": ["Literature"]},
+#         [{"name": 'pod_1', "description": "Hello hello this a test is", "episode_count": "6", "avg_episode_duration": "None", "genres": ["Literature"]},
+#          {"name": 'pod_2', "description": "Hello a test.", "episode_count": "4",
+#              "avg_episode_duration": "9", "genres": ["Literature"]},
+#          {"name": 'pod_3', "description": "Hello a", "episode_count": "8", "avg_episode_duration": "500", "genres": ["Literature"]}],
+#         [{'pod_name': 'query', 'rev_text': "podcast sucks"},
+#          {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"},
+#          {'pod_name': 'pod_2', 'rev_text': "this podcast is great"},
+#          {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}],
+#         inv_idx,
+#         idf,
+#             doc_norms):
+#         print(each_elem)
 
 # main()
