@@ -26,26 +26,6 @@
       }
     }
 
-    function submitPodcast() {
-      inputTitle = document.getElementById("podcastInput").value
-      inputGenre = document.getElementById("genreInput").value
-
-      if(!podcastTitles.includes(inputTitle)) {
-        document.getElementById("errorMessage").style.display = "block";
-        document.getElementById("podcastInput").value = '';
-      } else {
-        // TODO: search if the title is valid?
-        document.getElementById("errorMessage").style.display = "none";
-      }
-
-      if((inputGenre !== '') && (!podcastGenres.includes(inputGenre))) {
-        document.getElementById("genre_errorMessage").style.display = "block";
-      } else {
-        document.getElementById("genre_errorMessage").style.display = "none";
-      }
-
-    }
-
     function toggleReviews(nameObj) {
       let name = nameObj.getAttribute("data-podcast-name")
       let text = nameObj.innerHTML
@@ -198,10 +178,62 @@
       autocomplete(document.getElementById("podcastInput"), podcastTitles);
       autocomplete(document.getElementById("genreInput"), podcastGenres);
     });
-    document.addEventListener("DOMContentLoaded", function () {
+
+    // document.addEventListener("DOMContentLoaded", function () {
+    //   var autoElt = document.getElementById("autoscroll");
+    //   autoElt.scrollIntoView();
+    // }, false);
+
+    function onReady(callback) {
+      let intervalID = window.setInterval(checkReady,1000);
+
+      function checkReady(){
+        if (document.getElementById('result-hr') !== undefined){
+          window.clearInterval(intervalID);
+          callback.call(this)
+        }
+      }
+    }
+    function show(id, value){
+      document.getElementById(id).style.display = value ? 'block' : 'none';
       var autoElt = document.getElementById("autoscroll");
-      autoElt.scrollIntoView();
-    }, false);
+      if(autoElt != null) {
+        autoElt.scrollIntoView();
+      }
+    }
+
+    onReady(function () {
+      show('page', true)
+      show('loading', false)
+      // $('html, body').animate({
+      //     scrollTop: $('#autoscroll').offset().top
+      // }, 'slow');
+    });
+
+    function submitPodcast() {
+      inputTitle = document.getElementById("podcastInput").value
+      inputGenre = document.getElementById("genreInput").value
+
+      if(!podcastTitles.includes(inputTitle)) {
+        document.getElementById("errorMessage").style.display = "block";
+        document.getElementById("podcastInput").value = '';
+      } else {
+        document.getElementById('page').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+
+        document.getElementById("errorMessage").style.display = "none";
+      }
+
+      if((inputGenre !== '') && (!podcastGenres.includes(inputGenre))) {
+        document.getElementById('page').style.display = 'block';
+        document.getElementById('loading').style.display = 'none';
+
+        document.getElementById("genre_errorMessage").style.display = "block";
+      } else {
+        document.getElementById("genre_errorMessage").style.display = "none";
+      }
+
+    }
 
   </script>
 
@@ -564,11 +596,29 @@
     .checked {
       color: orange;
     }
+    #loading{
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index:100;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      opacity:.5;
+      background-image: url('https://cdn-data.motu.com/site/images/loading-bars2.gif');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+    }
+    #page{
+      display: none;
+    }
   </style>
 </head>
 
 <body>
-  <div class="main">
+  <div class="main" id="page">
     <div class="container">
       {% if data and show_modal %}
       {% for d in data %}
@@ -683,6 +733,7 @@
     </footer> -->
     </div>
   </div>
+  <div id="loading"></div>
 </body>
 
 </html>
