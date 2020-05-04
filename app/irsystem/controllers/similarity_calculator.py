@@ -24,7 +24,7 @@ import time
 project_name = "Find the Pea to your Podcast"
 net_id = "Will Spencer: wes229, Theresa Cho: tsc82, Kathleen Xu: klx2, Yvonne Chan: yc686, Akira Shindo: as2568"
 
-doc_id = 0
+# doc_id = 0
 
 
 def tokenize(text):
@@ -111,6 +111,8 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     query_norm = 0
     doc_pos_lst = []
     search_results = []
+    search_results_dict = {}
+    # search_results_dict is a dictionary with the doc_id as key and score as value
 
     numerator = 0
     denominator = 0
@@ -149,8 +151,8 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     for x in range(len(doc_pos_lst)):
         denominator = query_norm * doc_norms[doc_pos_lst[x]]
         results = search_results[x]
-        search_results[x] = (results[0] / denominator, results[1])
-    return sorted(search_results, key= lambda x: x[1])
+        search_results_dict[results[1]] = (results[0] / denominator)
+    return search_results_dict
 
 
     # print("Section 3 time: ")
@@ -334,13 +336,16 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, inv_idx, idf
     # description_score_lst is like [(score, 0), (score, 1) ... (score, doc_id)...]
 
     score_lst = []
-    description_score_lst = description_cosine_sim_score(query, {}, inv_idx, idf, doc_norms)
+    description_score_dict = description_cosine_sim_score(query, {}, inv_idx, idf, doc_norms)
 
     for i in range(len(podcast_lst)):
         podcast_dict = podcast_lst[i]
         total_score = 0
         # start_time = time.time()
-        description_score = round(description_score_lst[i][0] * 100, 1)
+        if i in description_score_dict:
+            description_score = round(description_score_dict[i] * 100, 1)
+        else:
+            description_score = 0
         # print("Description time: ")
         # print (time.time() - start_time)
         # review_score = round((reviews_cosine_sim_score(query, podcast_dict) * 100), 1)
