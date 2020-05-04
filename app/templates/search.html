@@ -274,6 +274,21 @@
       border-color: #5F9F9F !important;
     }
 
+    .search-button-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .search-button:first-child {
+      margin-right: 40px;
+    }
+
+
+    .search-button {
+      min-width: 250px;
+    }
+
     .advanced-search-button-wrapper {
       width: 100%;
       text-align: center;
@@ -302,16 +317,19 @@
       border-color: white;
     }
 
-    #clear-search-button {
+    .clear-button {
       border-color: white;
       color: white;
-      margin-left: 1rem;
     }
 
-    #clear-search-button:hover,
-    #clear-search-button:active {
+    .clear-button:hover,
+    .clear-button:active {
       background-color: #79CDCD;
       border-color: #79CDCD;
+    }
+
+    #clear-search-button {
+      margin-left: 1rem;
     }
 
     .recommended-hr {
@@ -673,9 +691,9 @@
       {% endif %}
       <div class="content-buttonWrapper">
         <a href="http://pea-podcast-proto1.herokuapp.com/" target="_blank"><button
-            class="btn btn-primary btn-prototype">Prototype 1</button></a>
+            class="btn btn-prototype clear-button">Prototype 1</button></a>
         <a href="http://pea-podcast-proto2.herokuapp.com/" target="_blank"><button
-            class="btn btn-primary btn-prototype">Prototype 2</button></a>
+            class="btn btn-prototype clear-button">Prototype 2</button></a>
       </div>
       <div class="content-wrapper">
         <div class="py-5 text-center">
@@ -739,21 +757,20 @@
                 </div>
               </div>
             </div>
-            <input type="submit" class="btn btn-primary btn-lg btn-block search-button" value="Search for Podcast" />
-          </form>
-        </div>
-        <div class="col-md-8 order-md-1{% if not data %} form-wrapper{% endif %}">
-          <form method="POST">
-            <button type="submit" class="btn btn-primary btn-lg btn-block search-button" name="recommend_podcast"
-              value="recommend_podcast">
-              Recommend a
-              Random Podcast </button>
+            <div class="search-button-wrapper">
+              <input type="submit" class="btn btn-primary btn-lg search-button" value="Search for Podcast" />
+              <form method="POST">
+                <button type="submit" class="btn btn-primary btn-lg search-button" name="recommend_podcast"
+                  value="recommend_podcast">
+                  Surprise Me </button>
+              </form>
+            </div>
           </form>
         </div>
 
         {% if data %}
         <hr class="result-hr" />
-        <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype"
+        <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype clear-button"
             id="clear-search-button">Clear Search</button></a>
         <div class="py-5 text-center" id="autoscroll">
           <h2>Recommended Podcasts</h2>
