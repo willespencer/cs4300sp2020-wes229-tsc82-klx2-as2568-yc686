@@ -66,14 +66,14 @@ def genre_sim_score(query, podcast_dict, genre_query, genre_search):
     return score * 100
 
 
-def jaccard_sim_score(query, podcast_dict, review_lst):
+def jaccard_sim_score(query, podcast_dict):
     """Returns an int percentage giving the jaccard similarity of 
     Step 1: Make a word blob of all the reviews and description of the query
     Step 2: Make a word blob of all the reviews and description of the podcast_dict
     Step 3: Do a jaccard sim of the two word blobs
     """
-    word_blob_1 = set(make_word_blob(query, review_lst))
-    word_blob_2 = set(make_word_blob(podcast_dict, review_lst))
+    word_blob_1 = set(make_word_blob(query))
+    word_blob_2 = set(make_word_blob(podcast_dict))
     score = round(len(word_blob_1 & word_blob_2) *
                   100/len(word_blob_1 | word_blob_2))
     podcast_dict["similarities"] = [
@@ -183,16 +183,14 @@ def reviews_jaccard_sim_score(query, podcast_dict):
     query_word_lst = []
     query_reviews = [query["review1"], query["review2"],
                      query["review3"], query["review4"], query["review5"]]
-    for review in query_reviews:
-        review_text = review["rev_text"]
+    for review_text in query_reviews:
         if review_text is not None:
             query_word_lst += tokenize(review_text)
 
     podcast_word_lst = []
     podcast_reviews = [podcast_dict["review1"], podcast_dict["review2"],
                        podcast_dict["review3"], podcast_dict["review4"], podcast_dict["review5"]]
-    for review in podcast_reviews:
-        review_text = review["rev_text"]
+    for review_text in podcast_reviews:
         if review_text is not None:
             podcast_word_lst += tokenize(review_text)
 
@@ -346,15 +344,17 @@ def get_ranked_podcast(query, podcast_lst, genre_query, inv_idx, idf, doc_norms,
         podcast_dict = podcast_lst[i]
         total_score = 0
         # start_time = time.time()
-        if i in description_score_dict:
-            description_score = round(description_score_dict[i] * 100, 1)
-        else:
-            description_score = 0
+        # if i in description_score_dict:
+        #     description_score = round(description_score_dict[i] * 100, 1)
+        # else:
+        #     description_score = 0
         # print("Description time: ")
+        description_score = round(jaccard_sim_score(query, podcast_dict))
         # print (time.time() - start_time)
         # review_score = round((reviews_cosine_sim_score(query, podcast_dict) * 100), 1)
-        review_score = 0
-        # review_score = round((reviews_jaccard_sim_score(query, podcast_dict) * 100), 1)
+        # review_score = 0
+        review_score = round(
+            (reviews_jaccard_sim_score(query, podcast_dict) * 100), 1)
 
         # start_time = time.time()
         duration_score = round(

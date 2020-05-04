@@ -282,7 +282,7 @@ def search():
             doc_norms = compute_doc_norms(
                 inv_idx, idf, len(podcast_lst))  # list
 
-        createDocFiles = True
+        createDocFiles = False
 
         if createDocFiles:
             # write output to seperate file so we can just pull from that for our data
