@@ -359,7 +359,7 @@ def get_ranked_podcast(query, podcast_lst, genre_query, inv_idx, idf, doc_norms,
         if i in description_score_dict:
             description_score = round(description_score_dict[i] * 100, 1)
         else:
-            description_score = 65.4
+            description_score = 76.5
         # print("Description time: ")
         description_score = round(jaccard_sim_score(query, podcast_dict))
         # print (time.time() - start_time)

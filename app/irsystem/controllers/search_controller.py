@@ -4,9 +4,9 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.podcasts import Podcasts
 from app.irsystem.controllers.similarity_calculator import *
 from app.irsystem.controllers.query_db import *
-from app.irsystem.controllers.inv_idx import *
-from app.irsystem.controllers.idf import *
-from app.irsystem.controllers.doc_norms import *
+from app.irsystem.controllers.inv_idx_new import *
+from app.irsystem.controllers.idf_new import *
+from app.irsystem.controllers.doc_norms_new import *
 
 import json
 import csv
@@ -279,32 +279,32 @@ def search():
         if advancedQueryIsEnabled:
             inv_idx = build_inverted_index(podcast_lst)  # dict
             idf = compute_idf(inv_idx, len(podcast_lst))  # dict
-            doc_norms = compute_doc_norms(
-                inv_idx, idf, len(podcast_lst))  # list
+            inv_idx = {key: val for key, val in inv_idx.items() if key in idf}   
+            doc_norms = compute_doc_norms(inv_idx, idf, len(podcast_lst))  # list
 
-        createDocFiles = False
+        # createDocFiles = False
 
-        if createDocFiles:
-            # write output to seperate file so we can just pull from that for our data
-            w = csv.writer(open("data/inv_idx.csv", "w"))
-            for key, val in inv_idx.items():
-                w.writerow([key, val])
+        # if createDocFiles:
+        #     # write output to seperate file so we can just pull from that for our data
+        #     w = csv.writer(open("data/inv_idx.csv", "w"))
+        #     for key, val in inv_idx.items():
+        #         w.writerow([key, val])
 
-            h = csv.writer(open("data/idf.csv", "w"))
-            for key, val in idf.items():
-                h.writerow([key, val])
+        #     h = csv.writer(open("data/idf.csv", "w"))
+        #     for key, val in idf.items():
+        #         h.writerow([key, val])
 
-            f = open("data/inv_idx.txt", "w")
-            f.write(str(inv_idx))
-            f.close()
+        #     f = open("data/inv_idx.txt", "w")
+        #     f.write(str(inv_idx))
+        #     f.close()
 
-            f = open("data/idf.txt", "w")
-            f.write(str(idf))
-            f.close()
+        #     f = open("data/idf.txt", "w")
+        #     f.write(str(idf))
+        #     f.close()
 
-            f = open("data/doc_norms.txt", "w")
-            f.write(str(doc_norms.tolist()))
-            f.close()
+        #     f = open("data/doc_norms.txt", "w")
+        #     f.write(str(doc_norms.tolist()))
+        #     f.close()
 
         # else:
         #     inv_idx = {}
