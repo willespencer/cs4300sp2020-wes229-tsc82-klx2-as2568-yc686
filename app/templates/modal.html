@@ -52,9 +52,9 @@
         {% for s in d.similarities %}
         <div class="modal-details-similarity-wrapper">
           <div class="modal-details-similarity-circle"
-          {% if s[1]|int < 30 %} style="border-color: red;" {% endif %}
-          {% if s[1]|int < 60 %} style="border-color: orange;" {% endif %}
-          {% if s[1]|int < 30 %} style="border-color: green;" {% endif %}
+          {% if (s[1]|int) < 30 %} style="border-color: red;" {% endif %}
+          {% if (s[1]|int) < 50 %} style="border-color: orange;" {% endif %}
+          {% if (s[1]|int) >= 50 %} style="border-color: green;" {% endif %}
           >
             <div class="modal-details-similarity-circle-text">{{s[1]}}%</div>
           </div>

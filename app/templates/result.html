@@ -1,8 +1,8 @@
 <div class="row mb-5">
   <div class="circleicon"
-    {% if d.similarity|int < 30 %} style="border-color: red;" {% endif %}
-    {% if d.similarity|int < 60 %} style="border-color: orange;" {% endif %}
-    {% if d.similarity|int < 30 %} style="border-color: green;" {% endif %}
+    {% if (d.similarity|int) < 30 %} style="border-color: red;" {% endif %}
+    {% if (d.similarity|int) < 50 %} style="border-color: orange;" {% endif %}
+    {% if (d.similarity|int) >= 50 %} style="border-color: green;" {% endif %}
   >
     <div class="circleicontext">{{d.similarity}}%</div>
   </div>
