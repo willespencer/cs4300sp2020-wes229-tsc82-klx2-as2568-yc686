@@ -197,7 +197,12 @@
     window.addEventListener('load', function () {
       autocomplete(document.getElementById("podcastInput"), podcastTitles);
       autocomplete(document.getElementById("genreInput"), podcastGenres);
-    })
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      var autoElt = document.getElementById("autoscroll");
+      autoElt.scrollIntoView();
+    }, false);
+
   </script>
 
   <title>Home</title>
@@ -641,9 +646,9 @@
         </form>
     </div>
     {% if data %}
-    <hr class="result-hr" />
+    <hr class="result-hr"/>
     <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype" id="clear-search-button">Clear Search</button></a>
-    <div class="py-5 text-center">
+    <div class="py-5 text-center" id="autoscroll">
       <h2>Recommended Podcasts</h2>
       <hr class="recommended-hr" />
       <p class="lead">You searched for podcasts similar to
