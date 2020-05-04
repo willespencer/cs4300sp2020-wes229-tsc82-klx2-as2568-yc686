@@ -199,7 +199,7 @@
       autocomplete(document.getElementById("genreInput"), podcastGenres);
     });
     function onReady(callback) {
-      let intervallID = window.setInterval(checkReady,1000);
+      let intervalID = window.setInterval(checkReady,1000);
 
       function checkReady(){
         if (document.getElementById('result-hr') !== undefined){
@@ -209,7 +209,7 @@
       }
     }
     function show(id, value){
-      document.getElementbyID(id).style.display = value ? 'block' : 'none';
+      document.getElementById(id).style.display = value ? 'block' : 'none';
     }
 
     onReady(function () {
@@ -218,7 +218,7 @@
       // $('html, body').animate({
       //     scrollTop: $('#autoscroll').offset().top
       // }, 'slow');
-    }
+    });
 
   </script>
 
@@ -566,11 +566,11 @@
       position: absolute;
       top: 0;
       left: 0;
-      z-index:100; 
+      z-index:100;
       width: 100vw;
       height: 100vh;
       background-color: black;
-      opacity:.5; 
+      opacity:.5;
       background-image: url('https://cdn-data.motu.com/site/images/loading-bars2.gif')
     }
     #page{
