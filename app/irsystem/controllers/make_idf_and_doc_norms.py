@@ -75,7 +75,7 @@ def compute_doc_norms(index, idf, n_docs):
 def main():
     global inv_idx
 
-    idf = compute_idf(inv_idx, 6598, min_df=10, max_df_ratio=0.95)
+    idf = compute_idf(inv_idx, 6598, min_df=10, max_df_ratio=0.15)
     inv_idx = {key: val for key, val in inv_idx.items() if key in idf} 
     doc_norms = compute_doc_norms(inv_idx, idf, 6598)
 
@@ -87,10 +87,22 @@ def main():
     g.write("idf = " + repr(idf) + "\n")
     g.close()
 
-    np.savetxt("doc_norms_new.py", doc_norms, fmt = "%f", delimiter=", ", newline=",", header="doc_norms = [", footer="]")
+    h = open("doc_norms_new.py", "w")
+    h.write("import numpy as np\n")
+    h.write("doc_norms = np.array([")
+    for i in range(len(doc_norms)):
+        h.write(repr(doc_norms[i]))
+        if i != len(doc_norms) - 1:
+            h.write(",\n")
+    h.write("])")
+    h.close()
+
+
+
+    # np.savetxt("doc_norms_new.py", doc_norms, fmt = "%f", delimiter=", ", newline=",", header="doc_norms = [", footer="]")
     # h = open("doc_norms_new.py", "w")
     # h.write(np.array_str(doc_norms, max_line_width=20))
     # h.close()
 
-# main()
+main()
 
