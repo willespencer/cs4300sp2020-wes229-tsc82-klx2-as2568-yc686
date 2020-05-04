@@ -30,7 +30,7 @@
       inputTitle = document.getElementById("podcastInput").value
       inputGenre = document.getElementById("genreInput").value
 
-      if(!podcastTitles.includes(inputTitle)) {
+      if (!podcastTitles.includes(inputTitle)) {
         document.getElementById("errorMessage").style.display = "block";
         document.getElementById("podcastInput").value = '';
       } else {
@@ -38,7 +38,7 @@
         document.getElementById("errorMessage").style.display = "none";
       }
 
-      if((inputGenre !== '') && (!podcastGenres.includes(inputGenre))) {
+      if ((inputGenre !== '') && (!podcastGenres.includes(inputGenre))) {
         document.getElementById("genre_errorMessage").style.display = "block";
       } else {
         document.getElementById("genre_errorMessage").style.display = "none";
@@ -50,9 +50,9 @@
       let name = nameObj.getAttribute("data-podcast-name")
       let text = nameObj.innerHTML
       modals = document.getElementsByClassName("modal-content");
-      for(let i = 0; i < modals.length; i++) {
-        if(modals[i].getAttribute("data-podcast-name") == name) {
-          if(text == 'Read More') {
+      for (let i = 0; i < modals.length; i++) {
+        if (modals[i].getAttribute("data-podcast-name") == name) {
+          if (text == 'Read More') {
             nameObj.innerHTML = "Read Less";
             document.getElementsByClassName("modal-details-reviews")[i].style.height = "auto";
             document.getElementsByClassName("fadeout")[i].style.background = "transparent";
@@ -70,8 +70,8 @@
       let name = nameObj.getAttribute("data-podcast-name");
       console.log(name);
       modals = document.getElementsByClassName("modal-content");
-      for(let i = 0; i < modals.length; i++) {
-        if(modals[i].getAttribute("data-podcast-name") == name) {
+      for (let i = 0; i < modals.length; i++) {
+        if (modals[i].getAttribute("data-podcast-name") == name) {
           modals[i].style.display = "flex";
         }
       }
@@ -80,8 +80,8 @@
     function closeModal(nameObj) {
       let name = nameObj.getAttribute("data-podcast-name");
       modals = document.getElementsByClassName("modal-content");
-      for(let i = 0; i < modals.length; i++) {
-        if(modals[i].getAttribute("data-podcast-name") == name) {
+      for (let i = 0; i < modals.length; i++) {
+        if (modals[i].getAttribute("data-podcast-name") == name) {
           modals[i].style.display = "none";
         }
       }
@@ -92,76 +92,76 @@
       the text field element and an array of possible autocompleted values:*/
       var currentFocus;
       /*execute a function when someone writes in the text field:*/
-      inp.addEventListener("input", function(e) {
-          var a, b, i, val = this.value;
-          /*close any already open lists of autocompleted values*/
-          closeAllLists();
-          if (!val) { return false;}
-          currentFocus = -1;
-          /*create a DIV element that will contain the items (values):*/
-          a = document.createElement("DIV");
-          a.setAttribute("id", this.id + "autocomplete-list");
-          a.setAttribute("class", "autocomplete-items");
-          /*append the DIV element as a child of the autocomplete container:*/
-          this.parentNode.appendChild(a);
+      inp.addEventListener("input", function (e) {
+        var a, b, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false; }
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(a);
 
-          /*set a max number of autocomplete suggestions*/
-          maxChildren = 5
-          numChildren = 0
+        /*set a max number of autocomplete suggestions*/
+        maxChildren = 5
+        numChildren = 0
 
-          /*for each item in the array...*/
-          for (i = 0; i < arr.length; i++) {
-            /*check if the item includes the same letters as the text field value:*/
-            if (arr[i].toUpperCase().includes(val.toUpperCase()) && numChildren < maxChildren) {
-              /*create a DIV element for each matching element:*/
-              b = document.createElement("DIV");
-              /*make the matching letters bold:*/
-              valInd = arr[i].toUpperCase().indexOf(val.toUpperCase());
-              b.innerHTML = arr[i].substr(0, valInd);
-              b.innerHTML += "<strong>" + arr[i].substr(valInd, val.length) + "</strong>";
-              b.innerHTML += arr[i].substr(valInd + val.length);
-              /*insert a input field that will hold the current array item's value:*/
-              let newInput = document.createElement("INPUT");
-              newInput.type = 'hidden';
-              newInput.value = arr[i];
-              b.appendChild(newInput);
-              /*execute a function when someone clicks on the item value (DIV element):*/
-                  b.addEventListener("click", function(e) {
-                  /*insert the value for the autocomplete text field:*/
-                  inp.value = this.getElementsByTagName("input")[0].value;
-                  /*close the list of autocompleted values,
-                  (or any other open lists of autocompleted values:*/
-                  closeAllLists();
-              });
-              a.appendChild(b);
-              numChildren+=1;
-            }
+        /*for each item in the array...*/
+        for (i = 0; i < arr.length; i++) {
+          /*check if the item includes the same letters as the text field value:*/
+          if (arr[i].toUpperCase().includes(val.toUpperCase()) && numChildren < maxChildren) {
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            valInd = arr[i].toUpperCase().indexOf(val.toUpperCase());
+            b.innerHTML = arr[i].substr(0, valInd);
+            b.innerHTML += "<strong>" + arr[i].substr(valInd, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(valInd + val.length);
+            /*insert a input field that will hold the current array item's value:*/
+            let newInput = document.createElement("INPUT");
+            newInput.type = 'hidden';
+            newInput.value = arr[i];
+            b.appendChild(newInput);
+            /*execute a function when someone clicks on the item value (DIV element):*/
+            b.addEventListener("click", function (e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+            });
+            a.appendChild(b);
+            numChildren += 1;
           }
+        }
       });
       /*execute a function presses a key on the keyboard:*/
-      inp.addEventListener("keydown", function(e) {
-          var x = document.getElementById(this.id + "autocomplete-list");
-          if (x) x = x.getElementsByTagName("div");
-          if (e.keyCode == 40) {
-            /*If the arrow DOWN key is pressed,
-            increase the currentFocus variable:*/
-            currentFocus++;
-            /*and and make the current item more visible:*/
-            addActive(x);
-          } else if (e.keyCode == 38) { //up
-            /*If the arrow UP key is pressed,
-            decrease the currentFocus variable:*/
-            currentFocus--;
-            /*and and make the current item more visible:*/
-            addActive(x);
-          } else if (e.keyCode == 13) {
-            if (currentFocus > -1) {
-              /*If the ENTER key is pressed, prevent the form from being submitted,*/
-              e.preventDefault();
-              /*and simulate a click on the "active" item:*/
-              if (x) x[currentFocus].click();
-            }
+      inp.addEventListener("keydown", function (e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+          /*If the arrow DOWN key is pressed,
+          increase the currentFocus variable:*/
+          currentFocus++;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 38) { //up
+          /*If the arrow UP key is pressed,
+          decrease the currentFocus variable:*/
+          currentFocus--;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 13) {
+          if (currentFocus > -1) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            /*and simulate a click on the "active" item:*/
+            if (x) x[currentFocus].click();
           }
+        }
       });
       function addActive(x) {
         /*a function to classify an item as "active":*/
@@ -250,7 +250,8 @@
       cursor: pointer;
     }
 
-    #advanced-search-button:hover, #advanced-search-button:active {
+    #advanced-search-button:hover,
+    #advanced-search-button:active {
       border-bottom: 1px solid #ffffff;
       padding-bottom: 0.5px;
       height: 46px;
@@ -270,7 +271,8 @@
       margin-left: 1rem;
     }
 
-    #clear-search-button:hover, #clear-search-button:active {
+    #clear-search-button:hover,
+    #clear-search-button:active {
       background-color: #79CDCD;
       border-color: #79CDCD;
     }
@@ -310,7 +312,7 @@
 
       text-align: center;
       line-height: 4rem;
-      color:black;
+      color: black;
     }
 
     .result-box {
@@ -347,7 +349,7 @@
     }
 
     .result-details-author {
-      font-style:italic;
+      font-style: italic;
       color: gray;
       margin-top: 0rem;
     }
@@ -366,19 +368,25 @@
     }
   </style>
   <style>
-    .modal-content{
+    .modal-content {
       position: fixed;
       z-index: 1;
       display: none;
       left: 0;
       top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0);
+      /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.6);
+      /* Black w/ opacity */
       align-items: center;
     }
+
     .modal-content-inner {
       background-color: #fefefe;
       position: absolute;
@@ -388,24 +396,29 @@
       margin-top: 3rem;
       margin-bottom: 3rem;
     }
+
     .modal-x {
       position: absolute;
       right: 2rem;
       top: .5rem;
       font-size: 35px;
     }
+
     .modal-x:hover {
       cursor: pointer;
       color: #5F9F9F;
     }
+
     .modal-content-top {
-      display:flex;
+      display: flex;
       flex-direction: row;
     }
+
     .modal-content-top-left-img {
       width: 12rem;
       height: 12rem;
     }
+
     .modal-content-top-right {
       display: flex;
       flex-direction: column;
@@ -413,18 +426,22 @@
       justify-content: space-evenly;
       width: 100%
     }
+
     .modal-details-name {
       font-weight: bold;
       font-size: larger;
     }
+
     .modal-details-author {
-      font-style:italic;
+      font-style: italic;
       color: gray;
       margin-top: 0rem;
     }
+
     .modal-content-hr {
       width: 15%;
     }
+
     .modal-content-bottom {
       display: flex;
       flex-direction: column;
@@ -433,16 +450,19 @@
       justify-content: space-evenly;
       margin-bottom: -5rem;
     }
+
     .modal-details-genres {
       display: flex;
       flex-direction: row;
       margin-top: 2%;
     }
+
     .modal-details-genres-genre-wrapper {
-      display:flex;
+      display: flex;
       flex-direction: row;
       width: 100%;
     }
+
     .modal-details-genre {
       width: fit-content;
       border: solid;
@@ -450,24 +470,28 @@
       padding: 1%;
       margin-left: 2%;
     }
+
     .modal-details-similarities {
-      display:flex;
+      display: flex;
       flex-direction: column;
       margin-top: 2%;
     }
+
     .modal-details-similarities-similarity-wrapper {
-      display:flex;
+      display: flex;
       flex-direction: row;
       justify-content: space-around;
       margin-top: .5rem
     }
+
     .modal-details-similarity-wrapper {
-      display:flex;
+      display: flex;
       flex-direction: column;
       text-align: center;
       width: 64px;
       align-items: center;
     }
+
     .modal-details-similarity-circle {
       width: 4rem;
       height: 4rem;
@@ -478,8 +502,9 @@
       text-align: center;
       line-height: 4rem;
     }
+
     .modal-details-reviews {
-      display:flex;
+      display: flex;
       flex-direction: column;
       margin-top: 2%;
 
@@ -487,49 +512,58 @@
       overflow: hidden;
       position: relative;
     }
+
     .modal-details-reviews-wrapper {
-      display:flex;
+      display: flex;
       flex-direction: column;
       margin-top: .5rem
     }
+
     .modal-details-reviews-text {
       font-size: 14px;
     }
+
     .modal-details-reviews-button {
       position: absolute;
       bottom: 1rem;
     }
+
     .modal-details-review-wrapper {
       margin-bottom: 1rem;
     }
+
     .extra-space {
       height: 5rem;
     }
+
     .fadeout {
       position: relative;
       bottom: 8rem;
       height: 8rem;
-      background: -webkit-linear-gradient(
-          rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 1) 100%
-          );
+      background: -webkit-linear-gradient(rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 1) 100%);
     }
+
     .invalid-feedback {
       color: #a53545;
       font-weight: 700;
     }
+
     .inputWrapper {
       display: flex;
       flex-direction: column;
     }
+
     .autocomplete {
       /*the container must be positioned relative:*/
       position: relative;
       display: inline-block;
     }
+
     input[type=submit] {
       background-color: DodgerBlue;
     }
+
     .autocomplete-items {
       position: absolute;
       border: 1px solid #d4d4d4;
@@ -541,6 +575,7 @@
       left: 0;
       right: 0;
     }
+
     .autocomplete-items div {
       padding: 10px;
       cursor: pointer;
@@ -548,14 +583,17 @@
       border-bottom: 1px solid #d4d4d4;
       color: black;
     }
+
     .autocomplete-items div:hover {
       /*when hovering an item:*/
       background-color: #e9e9e9;
     }
+
     .autocomplete-active {
       /*when navigating through the items using the arrow keys:*/
       background-color: #e9e9e9 !important;
     }
+
     .checked {
       color: orange;
     }
@@ -567,113 +605,127 @@
     <div class="container">
       {% if data and show_modal %}
       {% for d in data %}
-        {% include 'modal.html' %}
+      {% include 'modal.html' %}
       {% endfor %}
       {% endif %}
 
       {% if query_podcast_data and show_modal %}
       {% for d in query_podcast_data %}
-        {% include 'modal.html' %}
+      {% include 'modal.html' %}
       {% endfor %}
       {% endif %}
       <div class="content-buttonWrapper">
-        <a href="http://pea-podcast-proto1.herokuapp.com/" target="_blank"><button class="btn btn-primary btn-prototype">Prototype 1</button></a>
-        <a href="http://pea-podcast-proto2.herokuapp.com/" target="_blank"><button class="btn btn-primary btn-prototype">Prototype 2</button></a>
+        <a href="http://pea-podcast-proto1.herokuapp.com/" target="_blank"><button
+            class="btn btn-primary btn-prototype">Prototype 1</button></a>
+        <a href="http://pea-podcast-proto2.herokuapp.com/" target="_blank"><button
+            class="btn btn-primary btn-prototype">Prototype 2</button></a>
       </div>
       <div class="content-wrapper">
-      <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1>Find the Pea to your Podcast</h1>
-        <p class="lead">Please fill out the form below to find a podcast.</p>
-      </div>
-      <div class="col-md-8 order-md-1{% if not data %} form-wrapper{% endif %}">
-        <form class="needs-validation" novalidate="" method="GET" onsubmit="submitPodcast()">
-          <div class="mb-3 inputWrapper">
-            <label for="podcastInput">I Want to Find a Podcast Like</label>
-            <div class="autocomplete">
-              <input id="podcastInput" type="text" class="form-control" placeholder="Myths and Legends" required="" name="podcast_search">
-            </div>
-            <div id="errorMessage" class="invalid-feedback">
-              Please enter a valid podcast name
-            </div>
-          </div>
-          <div class="py-3 advanced-search-button-wrapper">
-            <div id="advanced-search-button" onclick="toggleAdvancedSearch()"><p class="lead">Advanced Search</p></div>
-          </div>
-          <div class="row" id="advanced-search">
-            <div class="col-md-6 mb-3">
-              <div class="mb-3 inputWrapper">
-              <label for="genreInput">Genre</label>
+        <div class="py-5 text-center">
+          <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72"
+            height="72">
+          <h1>Find the Pea to your Podcast</h1>
+          <p class="lead">Please fill out the form below to find a podcast.</p>
+        </div>
+        <div class="col-md-8 order-md-1{% if not data %} form-wrapper{% endif %}">
+          <form class="needs-validation" novalidate="" method="GET" onsubmit="submitPodcast()">
+            <div class="mb-3 inputWrapper">
+              <label for="podcastInput">I Want to Find a Podcast Like</label>
               <div class="autocomplete">
-                <input id="genreInput" type="text" class="form-control" placeholder="Literature" name="genre_search">
+                <input id="podcastInput" type="text" class="form-control" placeholder="Myths and Legends" required=""
+                  name="podcast_search">
               </div>
-              <div id="genre_errorMessage" class="invalid-feedback">
-                Please enter a valid genre
-              </div>
-              </div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <label for="avg_ep_duration">Average Episode Duration</label>
-              <select class="custom-select d-block w-100" id="avg_ep_duration" name="avg_ep_duration">
-                <option value="">Choose...</option>
-                {% for avg_ep_duration in avg_ep_durations %}
-                <option value="{{avg_ep_duration}}">{{avg_ep_duration}}</option>
-                {% endfor %}
-              </select>
-              <div class="invalid-feedback">
-                Please provide a valid duration.
+              <div id="errorMessage" class="invalid-feedback">
+                Please enter a valid podcast name
               </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="min_ep_count">Minimum Episode Count</label>
-              <select class="custom-select d-block w-100" id="min_ep_count" name="min_ep_count">
-                <option value="">Choose...</option>
-                {% for min_ep_count in min_ep_counts %}
-                <option vale="{{min_ep_count}}">{{min_ep_count}}</option>
-                {% endfor %}
-              </select>
-              <div class="invalid-feedback">
-                Please provide a valid minimum number of episodes.
+            <div class="py-3 advanced-search-button-wrapper">
+              <div id="advanced-search-button" onclick="toggleAdvancedSearch()">
+                <p class="lead">Advanced Search</p>
               </div>
             </div>
-          </div>
-          <input type="submit" class="btn btn-primary btn-lg btn-block search-button" value="Search for Podcast" />
-        </form>
-    </div>
-    {% if data %}
-    <hr class="result-hr" />
-    <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype" id="clear-search-button">Clear Search</button></a>
-    <div class="py-5 text-center">
-      <h2>Recommended Podcasts</h2>
-      <hr class="recommended-hr" />
-      <p class="lead">You searched for podcasts similar to
-        <span class="feedback"><button class="feedback-button btn btn-primary" onclick="displayModal(this)" data-podcast-name="{{query_podcast_data[0].name}}">{{query_feedback}}</button></span>
-        {% if genre_feedback or avg_ep_duration_feedback or min_ep_count_feedback %}
-        with
+            <div class="row" id="advanced-search">
+              <div class="col-md-6 mb-3">
+                <div class="mb-3 inputWrapper">
+                  <label for="genreInput">Genre</label>
+                  <div class="autocomplete">
+                    <input id="genreInput" type="text" class="form-control" placeholder="Literature"
+                      name="genre_search">
+                  </div>
+                  <div id="genre_errorMessage" class="invalid-feedback">
+                    Please enter a valid genre
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="avg_ep_duration">Average Episode Duration</label>
+                <select class="custom-select d-block w-100" id="avg_ep_duration" name="avg_ep_duration">
+                  <option value="">Choose...</option>
+                  {% for avg_ep_duration in avg_ep_durations %}
+                  <option value="{{avg_ep_duration}}">{{avg_ep_duration}}</option>
+                  {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid duration.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="min_ep_count">Minimum Episode Count</label>
+                <select class="custom-select d-block w-100" id="min_ep_count" name="min_ep_count">
+                  <option value="">Choose...</option>
+                  {% for min_ep_count in min_ep_counts %}
+                  <option vale="{{min_ep_count}}">{{min_ep_count}}</option>
+                  {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid minimum number of episodes.
+                </div>
+              </div>
+            </div>
+            <input type="submit" class="btn btn-primary btn-lg btn-block search-button" value="Search for Podcast" />
+          </form>
+        </div>
+        <div class="col-md-8 order-md-1{% if not data %} form-wrapper{% endif %}">
+          <a href="{{ url_for('irsystem.random') }}" target="_self"> </a><button type="submit"
+            class="btn btn-primary btn-lg btn-block search-button" value="Recommend a Random Podcast"> Recommend a
+            Random Podcast </button> </a>
+        </div>
+        {% if data %}
+        <hr class="result-hr" />
+        <a href="{{ url_for('irsystem.search') }}" target="_self"><button class="btn btn-prototype"
+            id="clear-search-button">Clear Search</button></a>
+        <div class="py-5 text-center">
+          <h2>Recommended Podcasts</h2>
+          <hr class="recommended-hr" />
+          <p class="lead">You searched for podcasts similar to
+            <span class="feedback"><button class="feedback-button btn btn-primary" onclick="displayModal(this)"
+                data-podcast-name="{{query_podcast_data[0].name}}">{{query_feedback}}</button></span>
+            {% if genre_feedback or avg_ep_duration_feedback or min_ep_count_feedback %}
+            with
+            {% endif %}
+            {% if genre_feedback %}
+            the genre <span class="feedback">{{genre_feedback}}</span>
+            {% endif %}
+            {% if genre_feedback and avg_ep_duration_feedback %}
+            and
+            {% endif %}
+            {% if avg_ep_duration_feedback %}
+            an average episode duration of <span class="feedback">{{avg_ep_duration_feedback}}</span>
+            {% endif %}
+            {% if (genre_feedback or avg_ep_duration_feedback) and min_ep_count_feedback %}
+            and
+            {% endif %}
+            {% if min_ep_count_feedback %}
+            a minimum of <span class="feedback">{{min_ep_count_feedback}}</span>
+            {% endif %}.
+          </p>
+        </div>
+        {% for d in data %}
+        {% include 'result.html' %}
+        {% endfor %}
         {% endif %}
-        {% if genre_feedback %}
-        the genre <span class="feedback">{{genre_feedback}}</span>
-        {% endif %}
-        {% if genre_feedback and avg_ep_duration_feedback %}
-        and
-        {% endif %}
-        {% if avg_ep_duration_feedback %}
-        an average episode duration of <span class="feedback">{{avg_ep_duration_feedback}}</span>
-        {% endif %}
-        {% if (genre_feedback or avg_ep_duration_feedback) and min_ep_count_feedback %}
-        and
-        {% endif %}
-        {% if min_ep_count_feedback %}
-        a minimum of <span class="feedback">{{min_ep_count_feedback}}</span>
-        {% endif %}.
-      </p>
-    </div>
-    {% for d in data %}
-      {% include 'result.html' %}
-    {% endfor %}
-    {% endif %}
-    </div>
-    <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
+      </div>
+      <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
       Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
     </footer> -->
     </div>

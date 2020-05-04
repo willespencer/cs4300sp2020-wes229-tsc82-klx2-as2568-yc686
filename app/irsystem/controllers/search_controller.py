@@ -165,6 +165,10 @@ def search():
             queryPodcastData = cleanData(queryPodcastData, review_lst)
         data_dict_list = removeQueryFromData(data_dict_list, query)
 
+        # if luckyPodcast:
+        #     data_dict_list = getPodcastData(randomPodcast)[0]
+        #     queryPodcastData = []
+
     return render_template('search.html', name=project_name, netid=net_id,
                            data=data_dict_list, podcast_names=podcast_names, genres=genres,
                            avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts,
