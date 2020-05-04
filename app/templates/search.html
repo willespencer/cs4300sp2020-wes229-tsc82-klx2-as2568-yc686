@@ -220,6 +220,11 @@
       // }, 'slow');
     });
 
+    function renderLoading() {
+      document.getElementById('page').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+    }
+
   </script>
 
   <title>Home</title>
@@ -603,7 +608,7 @@
         <p class="lead">Please fill out the form below to find a podcast.</p>
       </div>
       <div class="col-md-8 order-md-1">
-        <form class="needs-validation" novalidate="" method="GET">
+        <form class="needs-validation" novalidate="" method="GET" onsubmit="renderLoading()">
           <div class="mb-3 inputWrapper">
             <label for="podcastInput">I Want to Find a Podcast Like</label>
             <div class="autocomplete">
