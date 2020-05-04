@@ -228,6 +228,9 @@
       }
 
       if ((inputGenre !== '') && (!podcastGenres.includes(inputGenre))) {
+        // Reset podcast input value to be '' so form doesn't submit
+        document.getElementById("podcastInput").value = '';
+
         document.getElementById('page').style.display = 'block';
         document.getElementById('loading').style.display = 'none';
 
@@ -760,15 +763,15 @@
                 </div>
               </div>
             </div>
-            <div class="search-button-wrapper">
-              <input type="submit" class="btn btn-primary btn-lg search-button" value="Search for Podcast" />
+          <div class="search-button-wrapper">
+            <input type="submit" class="btn btn-primary btn-lg search-button" value="Search for Podcast" />
+          </form>
               <form method="POST">
                 <button type="submit" class="btn btn-primary btn-lg search-button" name="recommend_podcast"
                   value="recommend_podcast">
                   Surprise Me </button>
               </form>
-            </div>
-          </form>
+          </div>
         </div>
 
         {% if data %}
