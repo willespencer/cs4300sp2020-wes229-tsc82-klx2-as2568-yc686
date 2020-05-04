@@ -61,23 +61,32 @@ def advancedPodcastData(genre=None, min_ep_count=0, max_ep_duration=None, min_ep
             'avg_episode_duration': result.ep_durations,
             'link': result.itunes_url,
             'rating': str(round(float(result.rating), 1)),
-            'rating_volume': result.rating_volume
+            'review1': result.review_1,
+            'review2': result.review_2,
+            'review3': result.review_3,
+            'review4': result.review_4,
+            'review5': result.review_5,
+            'score1': result.score_1,
+            'score2': result.score_2,
+            'score3': result.score_3,
+            'score4': result.score_4,
+            'score5': result.score_5
         }
         if result.artwork != "None":
             pod_dict['pic'] = result.artwork
         else:
             pod_dict['pic'] = "placeholder.jpg"
-
+        
         pod_dict['genres'] = (result.genres).split(';')
         all_podcasts.append(pod_dict)
-
+    
     return all_podcasts
 
 
 def getPodcastData(query="all"):
     # formatting list of podcast dicts
     if query == "all":
-        query_podcast_info = Podcasts.query.all()
+        query_podcast_info = Podcasts.query.order_by(Podcasts.name).all()
     else:
         query_podcast_info = [Podcasts.query.filter_by(
             name=query).first_or_404()]
@@ -90,8 +99,17 @@ def getPodcastData(query="all"):
             'episode_count': result.ep_count,
             'avg_episode_duration': result.ep_durations,
             'link': result.itunes_url,
-            'rating_volume': result.rating_volume,
-            'rating': str(round(float(result.rating), 1))
+            'rating': str(round(float(result.rating), 1)),
+            'review1': result.review_1,
+            'review2': result.review_2,
+            'review3': result.review_3,
+            'review4': result.review_4,
+            'review5': result.review_5,
+            'score1': result.score_1,
+            'score2': result.score_2,
+            'score3': result.score_3,
+            'score4': result.score_4,
+            'score5': result.score_5
         }
 
         if result.artwork != 'None':
@@ -105,6 +123,7 @@ def getPodcastData(query="all"):
     return all_podcasts
 
 
+# does not end up being used because it takes lots of time to call repeatedly
 def getPodcastReviews(query="all"):
     if query == "all":
         query_result = Podcasts.query.all()
