@@ -153,14 +153,8 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     for x in range(len(doc_pos_lst)):
         denominator = query_norm * doc_norms[doc_pos_lst[x]]
         results = search_results[x]
-<<<<<<< HEAD
-        search_results[x] = (results[0] / denominator, results[1])
-    return sorted(search_results, key=lambda x: x[1])
-=======
         search_results_dict[results[1]] = (results[0] / denominator)
     return search_results_dict
-
->>>>>>> d591c71c33b50ba9f5224c9fafdde17e87b390cd
 
     # print("Section 3 time: ")
     # print(time.time() - start_time)
@@ -345,12 +339,8 @@ def get_ranked_podcast(query, podcast_lst, genre_query, inv_idx, idf, doc_norms,
     # description_score_lst is like [(score, 0), (score, 1) ... (score, doc_id)...]
 
     score_lst = []
-<<<<<<< HEAD
-    description_score_lst = description_cosine_sim_score(
+    description_score_dict = description_cosine_sim_score(
         query, {}, inv_idx, idf, doc_norms)
-=======
-    description_score_dict = description_cosine_sim_score(query, {}, inv_idx, idf, doc_norms)
->>>>>>> d591c71c33b50ba9f5224c9fafdde17e87b390cd
 
     for i in range(len(podcast_lst)):
         podcast_dict = podcast_lst[i]
