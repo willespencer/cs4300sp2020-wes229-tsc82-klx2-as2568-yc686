@@ -137,18 +137,30 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
     # start_time = time.time()
     # print(query_dict)
 
+    # for each_token in query_dict:
+    #     if len(inv_idx[each_token]) <= 1000:
+    #         for each_doc in inv_idx[each_token]:
+    #             if each_token in idf.keys():
+    #                 numerator = (query_dict[each_token]
+    #                              * each_doc[1]) * (idf[each_token]**2)
+    #                 if each_doc[0] not in doc_pos_lst:
+    #                     search_results.append([numerator, each_doc[0]])
+    #                     doc_pos_lst.append(each_doc[0])
+    #                 else:
+    #                     search_results[doc_pos_lst.index(
+    #                         each_doc[0])][0] += numerator
+
+
+
+
     for each_token in query_dict:
-        if len(inv_idx[each_token]) <= 1000:
-            for each_doc in inv_idx[each_token]:
-                if each_token in idf.keys():
-                    numerator = (query_dict[each_token]
-                                 * each_doc[1]) * (idf[each_token]**2)
-                    if each_doc[0] not in doc_pos_lst:
-                        search_results.append([numerator, each_doc[0]])
-                        doc_pos_lst.append(each_doc[0])
-                    else:
-                        search_results[doc_pos_lst.index(
-                            each_doc[0])][0] += numerator
+        for each_doc in inv_idx[each_token]:
+            numerator = (query_dict[each_token] * each_doc[1]) * (idf[each_token]**2)
+            if each_doc[0] not in doc_pos_lst:
+                search_results.append([numerator, each_doc[0]])
+                doc_pos_lst.append(each_doc[0])
+            else:
+                search_results[doc_pos_lst.index(each_doc[0])][0] += numerator
 
     for x in range(len(doc_pos_lst)):
         denominator = query_norm * doc_norms[doc_pos_lst[x]]
@@ -344,10 +356,10 @@ def get_ranked_podcast(query, podcast_lst, genre_query, inv_idx, idf, doc_norms,
         podcast_dict = podcast_lst[i]
         total_score = 0
         # start_time = time.time()
-        # if i in description_score_dict:
-        #     description_score = round(description_score_dict[i] * 100, 1)
-        # else:
-        #     description_score = 0
+        if i in description_score_dict:
+            description_score = round(description_score_dict[i] * 100, 1)
+        else:
+            description_score = 65.4
         # print("Description time: ")
         description_score = round(jaccard_sim_score(query, podcast_dict))
         # print (time.time() - start_time)
@@ -426,7 +438,6 @@ def main():
          {'pod_name': 'pod_1', 'rev_text': "this podcast sucks"},
          {'pod_name': 'pod_2', 'rev_text': "this podcast is great"},
          {'pod_name': 'pod_3', 'rev_text': "this podcast is ok I guess"}],
-        None,
         inv_idx,
         idf,
             doc_norms):
