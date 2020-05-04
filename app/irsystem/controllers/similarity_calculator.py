@@ -40,7 +40,7 @@ def tokenize(text):
     return re.findall("[A-Za-z]+", text.lower())
 
 
-def make_word_blob(podcast_dict, review_lst):
+def make_word_blob(podcast_dict):
     word_blob = []
     word_blob = word_blob + tokenize(podcast_dict["description"])
     # relevant_review_lst = list(filter(lambda x: x["pod_name"] == podcast_dict["name"], review_lst))
@@ -139,19 +139,20 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
         if len(inv_idx[each_token]) <= 1000:
             for each_doc in inv_idx[each_token]:
                 if each_token in idf.keys():
-                    numerator = (query_dict[each_token] * each_doc[1]) * (idf[each_token]**2)
+                    numerator = (query_dict[each_token]
+                                 * each_doc[1]) * (idf[each_token]**2)
                     if each_doc[0] not in doc_pos_lst:
                         search_results.append([numerator, each_doc[0]])
                         doc_pos_lst.append(each_doc[0])
                     else:
-                        search_results[doc_pos_lst.index(each_doc[0])][0] += numerator
-    
+                        search_results[doc_pos_lst.index(
+                            each_doc[0])][0] += numerator
+
     for x in range(len(doc_pos_lst)):
         denominator = query_norm * doc_norms[doc_pos_lst[x]]
         results = search_results[x]
         search_results[x] = (results[0] / denominator, results[1])
-    return sorted(search_results, key= lambda x: x[1])
-
+    return sorted(search_results, key=lambda x: x[1])
 
     # print("Section 3 time: ")
     # print(time.time() - start_time)
@@ -178,14 +179,16 @@ def reviews_jaccard_sim_score(query, podcast_dict):
     and podcast reviews
     """
     query_word_lst = []
-    query_reviews = getPodcastReviews(query["name"])
+    query_reviews = [query["review1"], query["review2"],
+                     query["review3"], query["review4"], query["review5"]]
     for review in query_reviews:
         review_text = review["rev_text"]
         if review_text is not None:
             query_word_lst += tokenize(review_text)
 
     podcast_word_lst = []
-    podcast_reviews = getPodcastReviews(podcast_dict["name"])
+    podcast_reviews = [podcast_dict["review1"], podcast_dict["review2"],
+                       podcast_dict["review3"], podcast_dict["review4"], podcast_dict["review5"]]
     for review in podcast_reviews:
         review_text = review["rev_text"]
         if review_text is not None:
@@ -196,6 +199,8 @@ def reviews_jaccard_sim_score(query, podcast_dict):
     score = len(query_word_set & podcast_word_set) / \
         len(query_word_set | podcast_word_set)
     return score
+
+# deprecated
 
 
 def reviews_cosine_sim_score(query, podcast_dict, review_lst):
@@ -318,10 +323,9 @@ def num_ep_sim_score(query, podcast_dict, is_adv_search):
 #     return total_score
 
 
-def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, inv_idx, idf, doc_norms, genre_search=False, avepdur_search=False, minepcount_search=False):
+def get_ranked_podcast(query, podcast_lst, genre_query, inv_idx, idf, doc_norms, genre_search=False, avepdur_search=False, minepcount_search=False):
     # query is a dictionary representing the podcast that the user chose
     # podcast_lst is a list of dictionaries, and each dictionary represents a podcast
-    # review_lst is a list of dictionaries, and each dictionary represents a review of all podcasts in the database
     # genre_query is the queried genre in advanced search. It is None if the user did not input one.
     # genre_search is a boolean that indicates whether a user is searching for a specific genre
     # avgepdur_search is a boolean that indicates whether a user is searching for a specific episode duration
@@ -330,11 +334,11 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, inv_idx, idf
     # Returns a tuple of (score, podcast_data), so it will be an (int, dict) type
     # description_lst = list(map(lambda x: (x["description"], x), podcast_lst))
 
-
     # description_score_lst is like [(score, 0), (score, 1) ... (score, doc_id)...]
 
     score_lst = []
-    description_score_lst = description_cosine_sim_score(query, {}, inv_idx, idf, doc_norms)
+    description_score_lst = description_cosine_sim_score(
+        query, {}, inv_idx, idf, doc_norms)
 
     for i in range(len(podcast_lst)):
         podcast_dict = podcast_lst[i]
@@ -348,22 +352,26 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, inv_idx, idf
         # review_score = round((reviews_jaccard_sim_score(query, podcast_dict) * 100), 1)
 
         # start_time = time.time()
-        duration_score = round((duration_sim_score(query, podcast_dict, avepdur_search) * 100), 1)
+        duration_score = round(
+            (duration_sim_score(query, podcast_dict, avepdur_search) * 100), 1)
         # print("Duration time: ")
         # print (time.time() - start_time)
 
         # start_time = time.time()
-        num_ep_score = round((num_ep_sim_score(query, podcast_dict, minepcount_search) * 100), 1)
+        num_ep_score = round(
+            (num_ep_sim_score(query, podcast_dict, minepcount_search) * 100), 1)
         # print("Number of eipsode time: ")
         # print (time.time() - start_time)
 
         # start_time = time.time()
-        genre_score = round(genre_sim_score(query, podcast_dict, genre_query, genre_search), 1)  # already 100%
+        genre_score = round(genre_sim_score(
+            query, podcast_dict, genre_query, genre_search), 1)  # already 100%
         # print("Genre time: ")
         # print (time.time() - start_time)
         # print()
 
-        total_score = round(.45 * genre_score + .3 * description_score + .1 * duration_score + .1*num_ep_score + .05*review_score)
+        total_score = round(.45 * genre_score + .3 * description_score + .1 *
+                            duration_score + .1*num_ep_score + .05*review_score)
 
         if np.isnan(total_score):
             total_score = -10000
@@ -372,7 +380,7 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, inv_idx, idf
             genre_score)), ("Description", str(description_score)), ("Reviews", str(review_score))]
         podcast_dict["similarity"] = str(total_score)
         score_lst += [(total_score, podcast_lst[i])]
-    
+
     sorted_lst = sorted(score_lst, key=lambda x: x[0], reverse=True)
     ranked_podcast_lst = list(map(lambda x: x[1], sorted_lst))
     return ranked_podcast_lst[:20]
@@ -394,7 +402,6 @@ def get_ranked_podcast(query, podcast_lst, review_lst, genre_query, inv_idx, idf
     #     podcast["similarity"] = round(total_score)
     #     score_lst.append((total_score, podcast))
     # score_lst = list(map(lambda x: (jaccard_sim_score(query, x, review_lst), x), podcast_lst))
-
 
 
 def main():
@@ -420,4 +427,5 @@ def main():
             doc_norms):
         print(each_elem)
 
-main()
+
+# main()

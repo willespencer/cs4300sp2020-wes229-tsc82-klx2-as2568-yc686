@@ -196,7 +196,6 @@ def search():
     advancedQueryIsEnabled = advancedQueryDict["genre"] or advancedQueryDict[
         "avg_ep_duration"] or advancedQueryDict["min_ep_count"]
 
-    # Note: the order changes everytime it's queried for some reason
     podcast_names = getAllPodcastNames()
     genres = getAllGenres()
 
@@ -219,9 +218,8 @@ def search():
                 genre_query, min_ep_count_query, avg_ep_duration_query[0], avg_ep_duration_query[1])
         else:
             podcast_lst = getPodcastData()
+            # print(podcast_lst[:10])
 
-        # TODO: pass reviews with each podcast so only query once
-        # TODO: sort podcast data so it's in specific order every time
         # TODO: recompute idf, inv_idx, doc_norms based on new order
 
         # if advancedQuery enabled
@@ -235,13 +233,8 @@ def search():
         # accum a list of all reviews for every podcast in podcast_lst and the query podcast
         # initially gets all podcast reviews
 
-        review_lst = getPodcastReviews()
-
         podcast_lst_names = [query] + [podcast["name"]
                                        for podcast in podcast_lst]
-
-        review_lst = list(
-            filter(lambda x: x["pod_name"] in podcast_lst_names, review_lst))
 
         # pod_name_to_idx_review_dict = {}
         # for (idx, review) in enumerate(review_lst):
@@ -279,22 +272,6 @@ def search():
         # doc_norms = [float(i) for i in doc_norms]
         # # print(doc_norms)
 
-        # createDocFiles = False
-
-        # if createDocFiles:
-        #     # write output to seperate file so we can just pull from that for our data
-        #     w = csv.writer(open("data/inv_idx.csv", "w"))
-        #     for key, val in inv_idx.items():
-        #         w.writerow([key, val])
-
-        #     h = csv.writer(open("data/idf.csv", "w"))
-        #     for key, val in idf.items():
-        #         h.writerow([key, val])
-
-        #     f = open("data/doc_norms.txt", "w")
-        #     f.write(str(doc_norms.tolist()))
-        #     f.close()
-
         global inv_idx
         global idf
         global doc_norms
@@ -304,6 +281,31 @@ def search():
             idf = compute_idf(inv_idx, len(podcast_lst))  # dict
             doc_norms = compute_doc_norms(
                 inv_idx, idf, len(podcast_lst))  # list
+
+        createDocFiles = True
+
+        if createDocFiles:
+            # write output to seperate file so we can just pull from that for our data
+            w = csv.writer(open("data/inv_idx.csv", "w"))
+            for key, val in inv_idx.items():
+                w.writerow([key, val])
+
+            h = csv.writer(open("data/idf.csv", "w"))
+            for key, val in idf.items():
+                h.writerow([key, val])
+
+            f = open("data/inv_idx.txt", "w")
+            f.write(str(inv_idx))
+            f.close()
+
+            f = open("data/idf.txt", "w")
+            f.write(str(idf))
+            f.close()
+
+            f = open("data/doc_norms.txt", "w")
+            f.write(str(doc_norms.tolist()))
+            f.close()
+
         # else:
         #     inv_idx = {}
         #     with open('data/inv_idx.csv', mode='r') as infile:
@@ -332,7 +334,7 @@ def search():
             # print(doc_norms)
 
         data_dict_list = get_ranked_podcast(getPodcastData(
-            query)[0], podcast_lst, review_lst,
+            query)[0], podcast_lst,
             genre_query,
             inv_idx,
             idf,
@@ -348,7 +350,7 @@ def search():
     for i in range(len(data_dict_list)):
 
         data_dict_list[i]['reviews'] = list(
-            filter(lambda x: x["pod_name"] == data_dict_list[i]['name'], review_lst))
+            getPodcastReviews(data_dict_list[i]['name']))
         if(data_dict_list[i]['name'] == query):
             index_of_podcast = i
             found_query = True
