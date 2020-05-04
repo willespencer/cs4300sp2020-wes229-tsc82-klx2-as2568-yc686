@@ -182,31 +182,31 @@
     //   autoElt.scrollIntoView();
     // }, false);
 
-    // function onReady(callback) {
-    //   let intervalID = window.setInterval(checkReady, 1000);
-    //
-    //   function checkReady() {
-    //     if (document.getElementById('result-hr') !== undefined) {
-    //       window.clearInterval(intervalID);
-    //       callback.call(this)
-    //     }
-    //   }
-    // }
-    // function show(id, value) {
-    //   document.getElementById(id).style.display = value ? 'block' : 'none';
-    //   var autoElt = document.getElementById("autoscroll");
-    //   if (autoElt != null) {
-    //     setTimeout(() => {  autoElt.scrollIntoView(); }, 1000);
-    //   }
-    // }
-    //
-    // onReady(function () {
-    //   show('page', true)
-    //   show('loading', false)
-    //   // $('html, body').animate({
-    //   //     scrollTop: $('#autoscroll').offset().top
-    //   // }, 'slow');
-    // });
+    function onReady(callback) {
+      let intervalID = window.setInterval(checkReady, 1000);
+    
+      function checkReady() {
+        if (document.getElementById('result-hr') !== undefined) {
+          window.clearInterval(intervalID);
+          callback.call(this)
+        }
+      }
+    }
+    function show(id, value) {
+      document.getElementById(id).style.display = value ? 'block' : 'none';
+      var autoElt = document.getElementById("autoscroll");
+      if (autoElt != null) {
+        setTimeout(() => {  autoElt.scrollIntoView(); }, 1000);
+      }
+    }
+    
+    onReady(function () {
+      show('page', true)
+      show('loading', false)
+      // $('html, body').animate({
+      //     scrollTop: $('#autoscroll').offset().top
+      // }, 'slow');
+    });
 
     function submitPodcast() {
       inputTitle = document.getElementById("podcastInput").value
@@ -676,7 +676,7 @@
       color: orange;
     }
 
-    /*#loading {
+    #loading {
       display: block;
       position: absolute;
       top: 0;
@@ -690,11 +690,11 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-position: center;
-    }*/
+    }
 
-    /*#page {
+    #page {
       display: none;
-    }*/
+    }
   </style>
 </head>
 
