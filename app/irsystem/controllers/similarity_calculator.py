@@ -18,7 +18,7 @@ from app.irsystem.controllers.query_db import *
 # from inv_idx import inv_idx
 # from idf import idf
 # from doc_norms import doc_norms
-import time
+# import time
 
 
 project_name = "Find the Pea to your Podcast"

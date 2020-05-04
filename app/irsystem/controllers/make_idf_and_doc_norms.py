@@ -104,5 +104,5 @@ def main():
     # h.write(np.array_str(doc_norms, max_line_width=20))
     # h.close()
 
-main()
+# main()
 
