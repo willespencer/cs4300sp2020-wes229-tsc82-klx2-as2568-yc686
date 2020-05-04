@@ -219,6 +219,11 @@ def search():
                 genre_query, min_ep_count_query, avg_ep_duration_query[0], avg_ep_duration_query[1])
         else:
             podcast_lst = getPodcastData()
+
+        # TODO: pass reviews with each podcast so only query once
+        # TODO: sort podcast data so it's in specific order every time
+        # TODO: recompute idf, inv_idx, doc_norms based on new order
+
         # if advancedQuery enabled
         # advancedQuery = advancedPodcastData(
         #     "Literature", 10, 10, 5)
@@ -229,6 +234,7 @@ def search():
 
         # accum a list of all reviews for every podcast in podcast_lst and the query podcast
         # initially gets all podcast reviews
+
         review_lst = getPodcastReviews()
 
         podcast_lst_names = [query] + [podcast["name"]
