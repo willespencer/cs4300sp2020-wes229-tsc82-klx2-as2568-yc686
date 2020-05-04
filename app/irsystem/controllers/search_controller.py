@@ -70,7 +70,7 @@ def cleanData(data_dict_list, review_lst):
     return data_dict_list
 
 
-@irsystem.route('/', methods=['GET'])
+@irsystem.route('/', methods=['GET', 'POST'])
 def search():
     # uncleaned user input
     query_uncleaned = request.args.get('podcast_search')
@@ -78,9 +78,16 @@ def search():
     avg_ep_duration_query_uncleaned = request.args.get('avg_ep_duration')
     min_ep_count_query_uncleaned = request.args.get('min_ep_count')
 
+    # handles if user wants us to recommend podcast
+    if request.method == 'POST':
+        answer = request.form.get('recommend_podcast')
+        if answer == 'recommend_podcast':
+            query = getRandomHighlyRated()
+    else:
+        query = query_uncleaned
+
     # user inputs and cleaning.
     # Handles case if genre, avg_ep_duration, min_ep_count not inputted
-    query = query_uncleaned
     genre_query = cleanGenreQuery(genre_query_uncleaned)
     # avg_ep_duration_query is tuple (<max>, <min>)
     avg_ep_duration_query = cleanAvgEpDurationQuery(
@@ -113,9 +120,6 @@ def search():
     max_ep_count = db.session.query(db.func.max(Podcasts.ep_count)).scalar()
     min_ep_count = db.session.query(
         db.func.min(Podcasts.ep_count)).scalar()
-
-    randomPodcast = getRandomHighlyRated()
-    print(randomPodcast)
 
     if not query:
         data_dict_list = []
@@ -168,7 +172,7 @@ def search():
     return render_template('search.html', name=project_name, netid=net_id,
                            data=data_dict_list, podcast_names=podcast_names, genres=genres,
                            avg_ep_durations=avg_ep_durations, min_ep_counts=min_ep_counts,
-                           query_feedback=query_uncleaned, genre_feedback=genre_query_uncleaned,
+                           query_feedback=query, genre_feedback=genre_query_uncleaned,
                            avg_ep_duration_feedback=avg_ep_duration_query_uncleaned,
                            min_ep_count_feedback=min_ep_count_query_uncleaned,
-                           query_podcast_data=queryPodcastData, recommendedPodcast=randomPodcast, show_modal=True)
+                           query_podcast_data=queryPodcastData, show_modal=True)

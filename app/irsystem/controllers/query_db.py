@@ -14,7 +14,7 @@ def getRandomHighlyRated():
 
     randomPodcast = ratedPodcasts[random.randint(0, 99)]
 
-    return randomPodcast
+    return randomPodcast["name"]
 
 
 def getAllGenres():

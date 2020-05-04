@@ -686,9 +686,12 @@
           </form>
         </div>
         <div class="col-md-8 order-md-1{% if not data %} form-wrapper{% endif %}">
-          <button type="submit" class="btn btn-primary btn-lg btn-block search-button"
-            value="Recommend a Random Podcast"> Recommend a
-            Random Podcast </button>
+          <form method="POST">
+            <button type="submit" class="btn btn-primary btn-lg btn-block search-button" name="recommend_podcast"
+              value="recommend_podcast">
+              Recommend a
+              Random Podcast </button>
+          </form>
         </div>
         {% if data %}
         <hr class="result-hr" />
