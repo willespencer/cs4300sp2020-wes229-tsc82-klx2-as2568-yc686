@@ -241,6 +241,11 @@
 
     }
 
+    function submitLuckyPodcast() {
+      document.getElementById('page').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+    }
+
   </script>
 
   <title>Pea Podcast</title>
@@ -786,7 +791,7 @@
           <div class="search-button-wrapper">
             <input type="submit" class="btn btn-primary btn-lg search-button" value="Search for Podcast" />
           </form>
-              <form method="POST">
+              <form method="POST" onsubmit="submitLuckyPodcast()">
                 <button type="submit" class="btn btn-secondary btn-lg search-button" name="recommend_podcast"
                   value="recommend_podcast">
                   Surprise Me </button>
