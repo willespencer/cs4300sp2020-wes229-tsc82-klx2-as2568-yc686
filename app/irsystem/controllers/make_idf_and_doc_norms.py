@@ -96,13 +96,3 @@ def make_idf_and_doc_norms():
             h.write(",\n")
     h.write("])")
     h.close()
-
-
-
-    # np.savetxt("doc_norms_new.py", doc_norms, fmt = "%f", delimiter=", ", newline=",", header="doc_norms = [", footer="]")
-    # h = open("doc_norms_new.py", "w")
-    # h.write(np.array_str(doc_norms, max_line_width=20))
-    # h.close()
-
-# main()
-
