@@ -4,9 +4,9 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.podcasts import Podcasts
 from app.irsystem.controllers.similarity_calculator import *
 from app.irsystem.controllers.query_db import *
-from app.irsystem.controllers.inv_idx_new import *
-from app.irsystem.controllers.idf_new import *
-from app.irsystem.controllers.doc_norms_new import *
+from app.irsystem.controllers.inv_idx_new import inv_idx as inv_idx_new
+from app.irsystem.controllers.idf_new import idf as idf_new
+from app.irsystem.controllers.doc_norms_new import doc_norms as doc_norms_new
 
 import json
 import csv
@@ -286,6 +286,11 @@ def search():
             idf = compute_idf(inv_idx, len(podcast_lst))  # dict
             inv_idx = {key: val for key, val in inv_idx.items() if key in idf}   
             doc_norms = compute_doc_norms(inv_idx, idf, len(podcast_lst))  # list
+
+        else:
+            inv_idx = inv_idx_new
+            idf = idf_new
+            doc_norms = doc_norms_new
 
         queryPodcastData = getPodcastData(query)
         data_dict_list = get_ranked_podcast(queryPodcastData[0], podcast_lst,
