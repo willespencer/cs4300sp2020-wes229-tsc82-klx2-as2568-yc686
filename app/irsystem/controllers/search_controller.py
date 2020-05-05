@@ -277,9 +277,9 @@ def search():
         podcast_lst_names = [query] + [podcast["name"]
                                        for podcast in podcast_lst]
 
-        global inv_idx
-        global idf
-        global doc_norms
+        # global inv_idx
+        # global idf
+        # global doc_norms
 
         if advancedQueryIsEnabled:
             inv_idx = build_inverted_index(podcast_lst)  # dict
