@@ -4,9 +4,9 @@ from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.podcasts import Podcasts
 from app.irsystem.controllers.similarity_calculator import *
 from app.irsystem.controllers.query_db import *
-from app.irsystem.controllers.inv_idx_new import *
-from app.irsystem.controllers.idf_new import *
-from app.irsystem.controllers.doc_norms_new import *
+from app.irsystem.controllers.inv_idx_new import inv_idx as inv_idx_new
+from app.irsystem.controllers.idf_new import idf as idf_new
+from app.irsystem.controllers.doc_norms_new import doc_norms as doc_norms_new
 
 import json
 import csv
@@ -285,12 +285,6 @@ def search():
 
         # TODO: recompute idf, inv_idx, doc_norms based on new order
 
-        # if advancedQuery enabled
-        # advancedQuery = advancedPodcastData(
-        #     "Literature", 10, 10, 5)
-        # print(advancedQuery)
-        # print(len(advancedQuery))
-
         # calculates similarity scores
 
         # accum a list of all reviews for every podcast in podcast_lst and the query podcast
@@ -299,51 +293,20 @@ def search():
         podcast_lst_names = [query] + [podcast["name"]
                                        for podcast in podcast_lst]
 
-        # pod_name_to_idx_review_dict = {}
-        # for (idx, review) in enumerate(review_lst):
-        #     try:
-        #         pod_name_to_idx_review_dict[review["pod_name"]
-        #                                     ] = pod_name_to_idx_review_dict[review["pod_name"]] + [idx]
-        #     except KeyError:
-        #         pod_name_to_idx_review_dict[review["pod_name"]] = [idx]
-        # print(pod_name_to_idx_review_dict[query])
-        # print(getPodcastReviews(query))
 
-        # inv_idx = {}
-        # with open('data/inv_idx.csv', mode='r') as infile:
-        #     reader = csv.reader(infile)
-        #     for rows in reader:
-        #         term_info = rows[1].replace('\"', '').replace(
-        #             '[', '').replace(']', '').split("), (")
-        #         for x in range(len(term_info)):
-        #             doc_info = term_info[x].replace(
-        #                 '(', '').replace(')', '').split(", ")
-        #             term_info[x] = (int(doc_info[0]), int(doc_info[1]))
-        #         inv_idx[rows[0]] = term_info
-        # # print(inv_idx)
-
-        # idf = {}
-        # with open('data/idf.csv', mode='r') as infile:
-        #     reader = csv.reader(infile)
-        #     idf = {rows[0]: float(rows[1]) for rows in reader}
-
-        # f = open('data/doc_norms.txt', 'r')
-        # doc_norms = f.readlines()
-        # f.close()
-        # doc_norms = doc_norms[0]
-        # doc_norms = doc_norms.replace('[', '').replace(']', '').split(", ")
-        # doc_norms = [float(i) for i in doc_norms]
-        # # print(doc_norms)
-
-        global inv_idx
-        global idf
-        global doc_norms
+        # global inv_idx
+        # global idf
+        # global doc_norms
 
         if advancedQueryIsEnabled:
             inv_idx = build_inverted_index(podcast_lst)  # dict
             idf = compute_idf(inv_idx, len(podcast_lst))  # dict
             inv_idx = {key: val for key, val in inv_idx.items() if key in idf}   
             doc_norms = compute_doc_norms(inv_idx, idf, len(podcast_lst))  # list
+        else:
+            inv_idx = inv_idx_new
+            idf = idf_new
+            doc_norms = doc_norms_new
 
         queryPodcastData = getPodcastData(query)
         data_dict_list = get_ranked_podcast(queryPodcastData[0], podcast_lst,
@@ -354,26 +317,6 @@ def search():
             advancedQueryDict["genre"],
             advancedQueryDict["avg_ep_duration"],
             advancedQueryDict["min_ep_count"])
-        # print(data_dict_list)
-
-    # # remove querried podcast from showing in result list, and round avg durration and episode count
-    # index_of_podcast = 0
-    # found_query = False
-    # for i in range(len(data_dict_list)):
-
-    #     data_dict_list[i]['reviews'] = list(
-    #         getPodcastReviews(data_dict_list[i]['name']))
-    #     if(data_dict_list[i]['name'] == query):
-    #         index_of_podcast = i
-    #         found_query = True
-    #     if(data_dict_list[i]["avg_episode_duration"] != "None"):
-    #         data_dict_list[i]["avg_episode_duration"] = round(
-    #             float(data_dict_list[i]["avg_episode_duration"]), 2)
-    #     if(data_dict_list[i]["episode_count"] != "None"):
-    #         data_dict_list[i]["episode_count"] = round(
-    #             float(data_dict_list[i]["episode_count"]))
-    # if(found_query):
-    #     data_dict_list.pop(index_of_podcast)
 
 
         data_dict_list = cleanData(data_dict_list)
