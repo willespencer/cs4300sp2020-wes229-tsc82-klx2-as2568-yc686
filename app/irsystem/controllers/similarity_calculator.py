@@ -163,7 +163,10 @@ def description_cosine_sim_score(query, podcast_dict, inv_idx, idf, doc_norms):
                 search_results[doc_pos_lst.index(each_doc[0])][0] += numerator
 
     for x in range(len(doc_pos_lst)):
-        denominator = query_norm * doc_norms[doc_pos_lst[x]]
+        if doc_pos_lst[x] < len(doc_norms):
+            denominator = query_norm * doc_norms[doc_pos_lst[x]]
+        else:
+            denominator = 1
         results = search_results[x]
         search_results_dict[results[1]] = (results[0] / denominator)
     return search_results_dict
